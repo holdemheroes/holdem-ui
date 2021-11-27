@@ -1,0 +1,21 @@
+.btn {
+    display        : flex;
+    justify-content: center;
+    align-items    : center;
+    border-radius  : 6px;
+    font-family    : Karla, sans-serif;
+}
+
+.btn-connect-wallet {
+    padding         : 15px 22px;
+    font-size       : 17px;
+    font-weight     : 500;
+    color           : white;
+    background-color: #174aff;
+}
+
+.btn-shadow {
+    &:hover {
+        box-shadow: 1px 1px 20px 0 #174aff;
+    }
+}

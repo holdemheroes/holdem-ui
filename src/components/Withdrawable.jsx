@@ -5,7 +5,7 @@ import { useMoralisDapp } from "../providers/MoralisDappProvider/MoralisDappProv
 import { useMoralis } from "react-moralis"
 import abis from "../helpers/contracts"
 import { getTexasHoldemV1Address } from "../helpers/networks"
-import { Button } from "antd"
+// import { Button } from "antd"
 
 function Withdrawable() {
 
@@ -15,7 +15,7 @@ function Withdrawable() {
   const { balance } = useGetUserWithdrawable()
 
   const abi = abis.texas_holdem_v1;
-  const contractAddress = getTexasHoldemV1Address( chainId );
+  const contractAddress = getTexasHoldemV1Address(chainId);
 
   const options = {
     contractAddress, abi,
@@ -42,11 +42,11 @@ function Withdrawable() {
 
   return (
     <>
-      <Button onClick={() => handleWithdraw()}
-           style={{ textAlign: "center", whiteSpace: "nowrap" }}>
+      <button onClick={() => handleWithdraw()}
+        className="btn btn-connect-wallet btn-shadow">
         Withdraw {`${n4.format(
-        Moralis.Units.FromWei(balance, 18)
-      )} ETH`}</Button>
+          Moralis.Units.FromWei(balance, 18)
+        )} ETH`}</button>
     </>
   );
 }

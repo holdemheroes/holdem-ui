@@ -1,0 +1,25 @@
+.explanation_card {
+  width     : 27%;
+  margin-top: 60px;
+
+  &>.title {
+    margin-top    : 10px;
+    font-family   : Redtone, sans-serif;
+    color         : #fff;
+    font-size     : 20px;
+    line-height   : 28px;
+    font-weight   : 400;
+    letter-spacing: 1px;
+  }
+
+  &>.desc {
+    margin-top    : 20px;
+    font-family   : Karla, sans-serif;
+    color         : hsla(0, 0%, 100%, 0.9);
+    font-size     : 16px;
+    line-height   : 26px;
+    font-weight   : 400;
+    text-align    : left;
+    letter-spacing: 0px;
+  }
+}

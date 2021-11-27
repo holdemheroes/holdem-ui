@@ -1,7 +1,7 @@
 import { useEffect, useState } from "react";
 import useChain from "hooks/useChain";
 import { useMoralisDapp } from "providers/MoralisDappProvider/MoralisDappProvider";
-import { Menu, Dropdown, Button } from "antd";
+import { Menu, Dropdown } from "antd";
 import { DownOutlined } from "@ant-design/icons";
 import { ETHLogo } from "./Logos";
 
@@ -74,14 +74,15 @@ function Chains() {
   return (
     <div>
       <Dropdown overlay={menu} trigger={["click"]}>
-        <Button
+        <button
           key={selected?.key}
           icon={selected?.icon}
-          style={{ ...styles.button, ...styles.item }}
+          // style={{ ...styles.button, ...styles.item }}
+          className="btn btn-connect-wallet btn-shadow"
         >
-          <span style={{ marginLeft: "5px" }}>{selected?.value}</span>
+          <span style={{ marginLeft: "5px", marginRight: "5px" }}>{selected?.value}</span>
           <DownOutlined />
-        </Button>
+        </button>
       </Dropdown>
     </div>
   );
