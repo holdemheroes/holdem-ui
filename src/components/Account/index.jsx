@@ -8,7 +8,7 @@ function Account() {
   const { walletAddress } = useMoralisDapp();
 
   return (
-    <button className={`btn btn-connect-wallet btn-shadow`} onClick={!isAuthenticated ? () => authenticate({ signingMessage: "HoldemHeroes!" }) : () => logout()}>
+    <button className={`btn btn-connect-wallet btn-shadow`} onClick={!isAuthenticated ? () => authenticate({ signingMessage: "HoldemHeroes!" }) : () => { logout(); window.location.replace(window.location.origin); }}>
       {!isAuthenticated ? "Connect Wallet" : getEllipsisTxt(walletAddress, 6)}
     </button>
   )

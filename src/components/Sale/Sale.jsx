@@ -14,7 +14,8 @@ export default function Sale() {
     maxPerTxOrOwner,
     pricePerToken,
     totalSupply,
-    dataInitialised} = useNFTSaleInfo()
+    dataInitialised
+  } = useNFTSaleInfo()
 
   const [minted, setMinted] = useState([]);
 
@@ -33,9 +34,9 @@ export default function Sale() {
   );
 
   useEffect(() => {
-    if(mintedRes) {
+    if (mintedRes) {
       const m = []
-      for(let i = 0; i < mintedRes.length;  i += 1) {
+      for (let i = 0; i < mintedRes.length; i += 1) {
         const t = mintedRes[i].get("tokenId")
         m.push(parseInt(t, 10))
       }
@@ -43,8 +44,8 @@ export default function Sale() {
     }
   }, [mintedRes]);
 
-  if(!dataInitialised && nftBalanceIsLoading) {
-    return(<div>LOADING</div>)
+  if (!dataInitialised && nftBalanceIsLoading) {
+    return (<div>LOADING</div>)
   }
 
   const now = Math.floor(Date.now() / 1000)
@@ -59,7 +60,7 @@ export default function Sale() {
     startingIndex={startingIndex}
   />
 
-  if(saleStartDiff > 0) {
+  if (saleStartDiff > 0) {
     return (
       <div>
         {saleHeader}
@@ -69,7 +70,7 @@ export default function Sale() {
     )
   }
 
-  if(saleStartDiff <= 0 && revealTimeDiff > 0 && startIdx === 0) {
+  if (saleStartDiff <= 0 && revealTimeDiff > 0 && startIdx === 0) {
     return (
       <>
         {
@@ -86,7 +87,7 @@ export default function Sale() {
     )
   }
 
-  if(startIdx === 0) {
+  if (startIdx === 0) {
     return (
       <div>
         <h4>NFT Sale</h4>
@@ -95,7 +96,7 @@ export default function Sale() {
     )
   }
 
-  const canMint = ( NFTHands.length < maxPerTxOrOwner )
+  const canMint = (NFTHands.length < maxPerTxOrOwner)
 
   return (
     <PostRevealSale pricePerToken={pricePerToken} canMint={canMint} maxCanOwn={maxPerTxOrOwner} mintedTokens={minted} />
