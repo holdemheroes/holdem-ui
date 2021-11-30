@@ -175,11 +175,7 @@ export const GameHistoryHandsPlayed = ({ gameId, round1Price, round2Price, finis
   }, [totalWinningsInitialised, totalFeesPaidFlop, totalFeesPaidTurn])
 
   if (!handsPlayedInitialisedFlop && !handsPlayedInitialisedTurn && !totalWinningsInitialised) {
-    return (
-      <>
-        <Spin />Loading
-      </>
-    )
+    return <Spin className="spin_loader" />
   }
 
   return (

@@ -129,11 +129,7 @@ export const GameHistoryContainer = ({ gameId, gamesInProgress }) => {
   }
 
   if (gameIsFinished === null || gameIsRefunded === null) {
-    return (
-      <>
-        <Spin />Loading
-      </>
-    )
+    return <Spin className="spin_loader" />
   }
 
   return (

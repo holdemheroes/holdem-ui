@@ -1,0 +1,50 @@
+.sales_page-wrapper {
+    width    : 90%;
+    max-width: 90%;
+    margin   : 50px auto;
+
+    &>* {
+        color: white;
+    }
+
+    .sale_info {
+
+        * {
+            color: white;
+        }
+    }
+
+    .ant-row {
+        display        : flex;
+        justify-content: center;
+        align-items    : center;
+        margin-bottom  : 30px;
+    }
+
+    .nft_list {
+        display        : flex;
+        justify-content: center;
+        align-items    : center;
+        flex-wrap      : wrap;
+
+        .ant-card {
+
+            .ant-card-actions {
+                background-color: #174aff;
+                transition      : all 0.3s ease-in-out;
+
+                a {
+                    color: white;
+                }
+
+                &:hover {
+                    background-color: white;
+
+                    a {
+                        color: #174aff;
+                    }
+                }
+            }
+        }
+    }
+}

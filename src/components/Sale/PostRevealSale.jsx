@@ -30,17 +30,15 @@ export default function PostRevealSale({ pricePerToken, canMint, mintedTokens })
   }
 
   return (
-    <div>
+    <>
       <Row>
         <Col>
-          <h2>Post Reveal Mint Sale</h2>
+          <h2 style={{ color: "white" }}>Post Reveal Mint Sale</h2>
         </Col>
       </Row>
       <Row>
         <Col>
-          <div>
-            <NFTList currentTokens={currentItems} canMint={canMint} mintedTokens={mintedTokens} pricePerToken={pricePerToken} />
-          </div>
+          <NFTList currentTokens={currentItems} canMint={canMint} mintedTokens={mintedTokens} pricePerToken={pricePerToken} />
         </Col>
       </Row>
       <Row>
@@ -55,6 +53,6 @@ export default function PostRevealSale({ pricePerToken, canMint, mintedTokens })
           />
         </Col>
       </Row>
-    </div>
+    </>
   );
 }

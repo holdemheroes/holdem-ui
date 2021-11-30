@@ -26,11 +26,7 @@ function NFTBalance() {
   const contractAddress = getHoldemHeroesAddress(chainId);
 
   if (!NFTHands) {
-    return (
-      <>
-        <Spin />Loading
-      </>
-    )
+    return <Spin className="spin_loader" />
   }
 
   return (

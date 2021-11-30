@@ -76,10 +76,10 @@ export default function PreRevealSale({ pricePerToken, mintedTokens, maxCanOwn, 
   }
 
   return (
-    <div>
+    <>
       <h4>Pre-reveal minting sale - {1326 - mintedTokens.length} left!</h4>
       {block}
-    </div>
+    </>
   )
 
 }

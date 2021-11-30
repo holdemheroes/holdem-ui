@@ -5,6 +5,7 @@ import { useMoralisQuery } from "react-moralis";
 import PreRevealSale from "./PreRevealSale";
 import PostRevealSale from "./PostRevealSale";
 import { useMyNFTHands } from "../../hooks/useMyNFTHands";
+import { Spin } from "antd";
 
 export default function Sale() {
   const {
@@ -15,7 +16,7 @@ export default function Sale() {
     pricePerToken,
     totalSupply,
     dataInitialised
-  } = useNFTSaleInfo()
+  } = useNFTSaleInfo();
 
   const [minted, setMinted] = useState([]);
 
@@ -45,60 +46,59 @@ export default function Sale() {
   }, [mintedRes]);
 
   if (!dataInitialised && nftBalanceIsLoading) {
-    return (<div>LOADING</div>)
+    return <Spin className="spin_loader" />;
   }
 
-  const now = Math.floor(Date.now() / 1000)
+  const now = Math.floor(Date.now() / 1000);
 
-  const saleStartDiff = startTime - now
-  const revealTimeDiff = revealTime - now
-  const startIdx = parseInt(startingIndex, 10)
+  const saleStartDiff = startTime - now;
+  const revealTimeDiff = revealTime - now;
+  const startIdx = parseInt(startingIndex, 10);
 
   const saleHeader = <SaleInfo
     startTime={startTime}
     revealTime={revealTime}
     startingIndex={startingIndex}
-  />
+  />;
+  let mainContent = null;
 
   if (saleStartDiff > 0) {
-    return (
-      <div>
-        {saleHeader}
-        <h4>NFT Sale</h4>
-        Pre-reveal sale not started yet
-      </div>
-    )
+    mainContent = <>
+      {saleHeader}
+      <h4>NFT Sale</h4>
+      Pre-reveal sale not started yet
+    </>;
   }
 
   if (saleStartDiff <= 0 && revealTimeDiff > 0 && startIdx === 0) {
-    return (
-      <>
-        {
-          totalSupply < 1326 ? (
-            <PreRevealSale pricePerToken={pricePerToken} mintedTokens={minted} maxCanOwn={maxPerTxOrOwner} balance={NFTHands.length} totalSupply={totalSupply} />
-          ) : (
-            <div>
-              <h4>Pre-reveal minting sale</h4>
-              Sold out!
-            </div>
-          )
-        }
-      </>
-    )
+    mainContent = <>
+      {
+        totalSupply < 1326 ? (
+          <PreRevealSale pricePerToken={pricePerToken} mintedTokens={minted} maxCanOwn={maxPerTxOrOwner} balance={NFTHands.length} totalSupply={totalSupply} />
+        ) : (
+          <>
+            <h4>Pre-reveal minting sale</h4>
+            Sold out!
+          </>
+        )
+      }
+    </>;
   }
 
   if (startIdx === 0) {
-    return (
-      <div>
-        <h4>NFT Sale</h4>
-        pre-reveal sale ended. Waiting for distribution
-      </div>
-    )
+    mainContent = <>
+      <h4>NFT Sale</h4>
+      pre-reveal sale ended. Waiting for distribution
+    </>;
   }
 
   const canMint = (NFTHands.length < maxPerTxOrOwner)
 
   return (
-    <PostRevealSale pricePerToken={pricePerToken} canMint={canMint} maxCanOwn={maxPerTxOrOwner} mintedTokens={minted} />
-  )
+    <div className="sales_page-wrapper">
+      {
+        mainContent ? mainContent : <PostRevealSale pricePerToken={pricePerToken} canMint={canMint} maxCanOwn={maxPerTxOrOwner} mintedTokens={minted} />
+      }
+    </div>
+  );
 }

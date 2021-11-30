@@ -33,7 +33,7 @@ export const PlayingCard = ({ cardId, width = 50 }) => {
   }, [data]);
 
   if (!cardSvg) {
-    return <Spin />
+    return <Spin className="spin_loader" />
   }
 
   return (

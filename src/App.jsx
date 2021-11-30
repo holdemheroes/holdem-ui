@@ -70,7 +70,7 @@ const App = () => {
             </Menu>
           }
         </Header>
-        <div>
+        <>
           <Switch>
             <Route path="/nftBalance">
               <NFTBalance />
@@ -100,7 +100,7 @@ const App = () => {
           </Switch>
           {/* {isAuthenticated ? <Redirect to="/home" /> : <Redirect to="/nonauthenticated" />} */}
           <Redirect to="/home" />
-        </div>
+        </>
       </Layout>
     </Router>
   );

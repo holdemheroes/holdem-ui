@@ -268,9 +268,7 @@ export const Leaderboard = ({ gameId, showWinnings = false }) => {
     })
 
   if (!leaderboardInitialised || !winningsInitialised) {
-    return (
-      <><Spin />Loading</>
-    )
+    return <Spin className="spin_loader" />
   }
 
   return (

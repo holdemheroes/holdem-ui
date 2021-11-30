@@ -6,7 +6,7 @@ export const GameStatus = ({ status, gameHasEnded }) => {
 
   let spinner = <></>
   if (status === 1 || status === 3 || status === 5) {
-    spinner = <Spin />
+    spinner = <Spin className="spin_loader" />
   }
   return (
     <>

@@ -105,11 +105,7 @@ export const GameHistoryProcessedRefunds = ({ gameId }) => {
   }, [gameId, gameRefundsDataInitialised])
 
   if (!gameRefundsDataInitialised) {
-    return (
-      <>
-        <Spin />Loading
-      </>
-    )
+    return <Spin className="spin_loader" />
   }
 
   return (

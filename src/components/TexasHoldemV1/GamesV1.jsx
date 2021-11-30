@@ -12,9 +12,7 @@ export default function GamesV1() {
   const { maxConcurrentGames, gamesInProgress } = useGameMetadata()
 
   if (!maxConcurrentGames) {
-    return (
-      <><Spin />Loading</>
-    )
+    return <Spin className="spin_loader" />
   }
 
   return (

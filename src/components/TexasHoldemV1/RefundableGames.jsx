@@ -67,11 +67,7 @@ export default function RefundableGames() {
   }, [refundableGames, initialDataFetched, isInitialized]);
 
   if (!refundableGames) {
-    return (
-      <>
-        <Spin />Loading
-      </>
-    )
+    return <Spin className="spin_loader" />;
   }
 
   return (
