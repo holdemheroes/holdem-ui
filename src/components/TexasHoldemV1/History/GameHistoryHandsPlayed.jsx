@@ -242,7 +242,7 @@ export const GameHistoryHandsPlayed = ({ gameId, round1Price, round2Price, finis
           bordered
           size={"small"}
         />
-        : <>No hands played in Turn</>
+        : <p style={{ color: "white" }}>No hands played in Turn</p>
       }
     </div>
   )

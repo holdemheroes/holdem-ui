@@ -1,48 +1,45 @@
-import React, { useEffect, useState } from "react"
-import { useGameMetadata } from "hooks/useGameMetadata"
-import { Col, Pagination, Row, Tabs } from "antd"
-import { GameHistoryContainer } from "./GameHistoryContainer"
-
+import React, { useEffect, useState } from "react";
+import { useGameMetadata } from "../../../hooks/useGameMetadata";
+import { Col, Pagination, Row, Tabs } from "antd";
+import { GameHistoryContainer } from "./GameHistoryContainer";
+import "./style.scss";
 
 export const History = () => {
 
-  const { numGames, gamesInProgress } = useGameMetadata()
+  const { numGames, gamesInProgress } = useGameMetadata();
 
-  const [currentItems, setCurrentItems] = useState([])
-  const [gamesPerPage, setGamesPerPage] = useState(10)
-  const [pageNumber, setPageNumber] = useState(1)
+  const [currentItems, setCurrentItems] = useState([]);
+  const [gamesPerPage, setGamesPerPage] = useState(10);
+  const [pageNumber, setPageNumber] = useState(1);
 
   useEffect(() => {
     if (numGames === 0) {
-      return
+      return;
     }
-    const games = []
-    // for(let i = 1; i <= numGames; i += 1) {
-    //   games.push(i)
-    // }
+    const games = [];
 
     for (let i = numGames; i > 0; i -= 1) {
-      games.push(i)
+      games.push(i);
     }
 
-    const start = (pageNumber - 1) * gamesPerPage
+    const start = (pageNumber - 1) * gamesPerPage;
     const end = start + gamesPerPage;
     setCurrentItems(games.slice(start, end));
   }, [pageNumber, gamesPerPage, numGames]);
 
   const handlePageClick = (pageNumber) => {
-    setPageNumber(pageNumber)
+    setPageNumber(pageNumber);
   };
 
   function onShowSizeChange(pageNumber, pageSize) {
-    setGamesPerPage(pageSize)
-    setPageNumber(pageNumber)
+    setGamesPerPage(pageSize);
+    setPageNumber(pageNumber);
   }
 
   return (
-    <div>
-      <h2>Game History</h2>
-      <Row>
+    <div className="history-wrapper">
+      <h1>Game History</h1>
+      <Row className="tabs-wrapper">
         <Col>
           <Tabs tabPosition={"left"}>
             {currentItems &&
@@ -59,16 +56,24 @@ export const History = () => {
 
       <Row>
         <Col>
-          <Pagination
+          {/* <Pagination
             showQuickJumper
             showSizeChanger
             onShowSizeChange={onShowSizeChange}
             defaultCurrent={1}
             total={numGames}
             onChange={handlePageClick}
+          /> */}
+          <Pagination
+            showQuickJumper
+            showSizeChanger
+            onShowSizeChange={onShowSizeChange}
+            defaultCurrent={1}
+            total={44}
+            onChange={handlePageClick}
           />
         </Col>
       </Row>
     </div>
-  )
+  );
 }

@@ -25,7 +25,7 @@ function NFTBalance() {
   const openSeaUrl = getOpenSeaUrl(chainId)
   const contractAddress = getHoldemHeroesAddress(chainId);
 
-  if (!NFTHands) {
+  if (!NFTHands.length) {
     return <Spin className="spin_loader" />
   }
 

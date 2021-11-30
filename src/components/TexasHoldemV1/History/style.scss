@@ -1,0 +1,41 @@
+.history-wrapper {
+    width    : 90%;
+    max-width: 90%;
+    margin   : 50px auto;
+
+    h1,
+    h2,
+    h3 {
+        text-align   : center;
+        color        : white;
+        margin-bottom: 30px;
+    }
+
+    .ant-row {
+        display        : flex;
+        justify-content: center;
+        align-items    : center;
+        margin-bottom  : 30px;
+
+        &.tabs-wrapper {
+
+            &>.ant-col {
+                width: 90%;
+
+                .ant-tabs-tab-btn {
+                    color: white;
+                }
+
+                .ant-tabs-tab.ant-tabs-tab-active .ant-tabs-tab-btn {
+                    color: #1890ff;
+                }
+
+                .ant-tabs-content-holder {}
+            }
+        }
+    }
+
+    .ant-col {
+        color: white;
+    }
+}

@@ -3,11 +3,17 @@
 }
 
 body {
-  font-family     : Arial, sans-serif;
-  font-size       : 14px;
-  line-height     : 20px;
-  color           : rgb(136, 114, 114);
-  background-color: #242121;
+  height               : unset;
+  font-family          : Arial, sans-serif;
+  font-size            : 14px;
+  line-height          : 20px;
+  color                : rgb(136, 114, 114);
+  background-color     : #242121;
+  background-image     : url("./assets/images/section2bg.png"), url("./assets/images/Texture.png");
+  background-position  : 0% 100%, 0 0;
+  background-size      : cover, auto;
+  background-repeat    : no-repeat, repeat;
+  background-attachment: fixed;
 }
 
 a {

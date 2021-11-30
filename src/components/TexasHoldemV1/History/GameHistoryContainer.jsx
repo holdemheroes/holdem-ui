@@ -134,7 +134,7 @@ export const GameHistoryContainer = ({ gameId, gamesInProgress }) => {
 
   return (
     <div>
-      <h2>Game #{gameId} History</h2>
+      <h3>Game #{gameId} History</h3>
       {
         gameIsFinished && gameStartedData !== null && gameEndedData !== null &&
         <GameHistoryCompleted
@@ -152,7 +152,7 @@ export const GameHistoryContainer = ({ gameId, gamesInProgress }) => {
         />
       }
       {
-        !gameIsFinished && !gameIsRefunded && <p>No players entered this game</p>
+        !gameIsFinished && !gameIsRefunded && <p style={{ color: "white" }}>No players entered this game</p>
       }
     </div>
   )

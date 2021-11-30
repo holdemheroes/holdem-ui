@@ -12,7 +12,7 @@ export const GameHistoryRefunded = ({ gameId, gameStartedData, gameEndedData }) 
 
   return (
     <div>
-      <p>
+      <p style={{ color: "white" }}>
         This game started on{" "}
         <Moment format="YYYY/MM/DD HH:mm:ss">{gameStartedData.timestamp.toString()}</Moment> in
         Tx <a
@@ -22,7 +22,7 @@ export const GameHistoryRefunded = ({ gameId, gameStartedData, gameEndedData }) 
           {getEllipsisTxt(gameStartedData.txHash, 8)}
         </a>.
       </p>
-      <p>
+      <p style={{ color: "white" }}>
         This game did not finish and entered a refundable state on{" "}
         <Moment format="YYYY/MM/DD HH:mm:ss">{gameEndedData.timestamp.toString()}</Moment> in
         Tx <a
