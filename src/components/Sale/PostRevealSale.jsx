@@ -4,29 +4,29 @@ import NFTList from "./NFTList"
 
 export default function PostRevealSale({ pricePerToken, canMint, mintedTokens }) {
 
-  const tokens = []
+  const tokens = [];
   for (let i = 0; i < 1326; i += 1) {
-    tokens.push(i)
+    tokens.push(i);
   }
 
   const [currentItems, setCurrentItems] = useState(null);
   const [tokensPerPage, seTokensPerPage] = useState(10);
-  const [pageNumber, setPageNumber] = useState(1)
+  const [pageNumber, setPageNumber] = useState(1);
 
   useEffect(() => {
-    const start = (pageNumber - 1) * tokensPerPage
+    const start = (pageNumber - 1) * tokensPerPage;
     const end = start + tokensPerPage;
     setCurrentItems(tokens.slice(start, end));
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [pageNumber, tokensPerPage]);
 
   const handlePageClick = (pageNumber) => {
-    setPageNumber(pageNumber)
+    setPageNumber(pageNumber);
   };
 
   function onShowSizeChange(pageNumber, pageSize) {
-    seTokensPerPage(pageSize)
-    setPageNumber(pageNumber)
+    seTokensPerPage(pageSize);
+    setPageNumber(pageNumber);
   }
 
   return (

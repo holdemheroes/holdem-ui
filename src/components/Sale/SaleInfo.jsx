@@ -1,15 +1,14 @@
-import React from "react"
+import React from "react";
 import Countdown from 'react-countdown';
 
 
 export default function SaleInfo(
   { startTime, revealTime, startingIndex }
 ) {
+  const now = Math.floor(Date.now() / 1000);
 
-  const now = Math.floor(Date.now() / 1000)
-
-  const saleStartDiff = startTime - now
-  const revealTimeDiff = revealTime - now
+  const saleStartDiff = startTime - now;
+  const revealTimeDiff = revealTime - now;
 
   let saleInfo = null;
 
@@ -37,5 +36,5 @@ export default function SaleInfo(
     <div className="sale_info">
       {saleInfo ? saleInfo : "Hands distributed!"}
     </div>
-  )
+  );
 }

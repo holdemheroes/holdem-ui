@@ -1,18 +1,18 @@
-import React from "react"
-import { Spin, Tabs } from "antd"
-import StartNewGame from "./StartNewGame"
-import Game from "./Game"
-import { useMoralisDapp } from "../../providers/MoralisDappProvider/MoralisDappProvider"
-import { useGameMetadata } from "../../hooks/useGameMetadata"
+import React from "react";
+import { Spin, Tabs } from "antd";
+import StartNewGame from "./StartNewGame";
+import Game from "./Game";
+import { useMoralisDapp } from "../../providers/MoralisDappProvider/MoralisDappProvider";
+import { useGameMetadata } from "../../hooks/useGameMetadata";
 
 
 export default function GamesV1() {
   const { walletAddress } = useMoralisDapp();
 
-  const { maxConcurrentGames, gamesInProgress } = useGameMetadata()
+  const { maxConcurrentGames, gamesInProgress } = useGameMetadata();
 
   if (!maxConcurrentGames) {
-    return <Spin className="spin_loader" />
+    return <Spin className="spin_loader" />;
   }
 
   return (
@@ -31,7 +31,6 @@ export default function GamesV1() {
           ))
         }
       </Tabs>
-
     </div>
-  )
+  );
 }

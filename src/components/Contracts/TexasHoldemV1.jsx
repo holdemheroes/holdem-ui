@@ -1,10 +1,10 @@
 import { Button, Card, Input, Typography, Form, notification } from "antd";
 import { useMemo, useState } from "react";
-import abis from "helpers/contracts"
-import Address from "components/Address/Address";
+import abis from "../../helpers/contracts"
+import Address from "../Address/Address";
 import { useMoralis } from "react-moralis";
-import { getTexasHoldemV1Address } from "../../helpers/networks"
-import { useMoralisDapp } from "../../providers/MoralisDappProvider/MoralisDappProvider"
+import { getTexasHoldemV1Address } from "../../helpers/networks";
+import { useMoralisDapp } from "../../providers/MoralisDappProvider/MoralisDappProvider";
 
 const { Text } = Typography;
 
@@ -12,7 +12,7 @@ export default function TexasHoldemV1() {
   const { Moralis } = useMoralis();
   const { chainId } = useMoralisDapp();
   const abi = abis.texas_holdem_v1;
-  const contractName = "TexasHoldemV1"
+  const contractName = "TexasHoldemV1";
   const [responses, setResponses] = useState({});
   const contractAddress = getTexasHoldemV1Address(chainId);
 

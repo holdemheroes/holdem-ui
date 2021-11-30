@@ -1,16 +1,16 @@
-import { useGameData } from "../../hooks/useGameData"
-import { Button, Checkbox, Col, Divider, Form, Radio, Row, Space } from "antd"
-import React, { useState } from "react"
-import { PlayingCard } from "../PlayingCards/PlayingCard"
-import { useMoralis } from "react-moralis"
-import { openNotification } from "../../helpers/notifications"
-import { Leaderboard } from "./Leaderboard"
-import { RankName } from "./RankName"
-import { Hand } from "./Hand"
-import { useMoralisDapp } from "../../providers/MoralisDappProvider/MoralisDappProvider"
-import abis from "../../helpers/contracts"
-import { getTexasHoldemV1Address } from "../../helpers/networks"
-import { GameMetaData } from "./GameMetaData"
+import { useGameData } from "../../hooks/useGameData";
+import { Button, Checkbox, Col, Divider, Form, Radio, Row, Space } from "antd";
+import React, { useState } from "react";
+import { PlayingCard } from "../PlayingCards/PlayingCard";
+import { useMoralis } from "react-moralis";
+import { openNotification } from "../../helpers/notifications";
+import { Leaderboard } from "./Leaderboard";
+import { RankName } from "./RankName";
+import { Hand } from "./Hand";
+import { useMoralisDapp } from "../../providers/MoralisDappProvider/MoralisDappProvider";
+import abis from "../../helpers/contracts";
+import { getTexasHoldemV1Address } from "../../helpers/networks";
+import { GameMetaData } from "./GameMetaData";
 
 const styles = {
   NFTs: {
@@ -27,14 +27,14 @@ const styles = {
 export default function Game({ gameId }) {
 
   const { chainId } = useMoralisDapp();
-  const { Moralis } = useMoralis()
+  const { Moralis } = useMoralis();
 
   const abi = abis.texas_holdem_v1;
   const contractAddress = getTexasHoldemV1Address(chainId);
 
   const options = {
     contractAddress, abi,
-  }
+  };
 
   const {
     gameData,
@@ -47,19 +47,19 @@ export default function Game({ gameId }) {
     numHands,
     numFinalHands,
     finalHand,
-    gameHasEnded } = useGameData(gameId)
+    gameHasEnded } = useGameData(gameId);
 
-  const [potentialFinalRiver, setPotentialFinalRiver] = useState([])
-  const [potentialFinalToken, setPotentialFinalToken] = useState([])
-  const [potentialFinalHand, setPotentialFinalHand] = useState([])
-  const [potentialFinalHandScore, setPotentialFinalHandScore] = useState(-1)
+  const [potentialFinalRiver, setPotentialFinalRiver] = useState([]);
+  const [potentialFinalToken, setPotentialFinalToken] = useState([]);
+  const [potentialFinalHand, setPotentialFinalHand] = useState([]);
+  const [potentialFinalHandScore, setPotentialFinalHandScore] = useState(-1);
 
   const handleHandPlayed = async (t) => {
-    let cost = gameData.round1Price
-    let functionName = "addNFTFlop"
+    let cost = gameData.round1Price;
+    let functionName = "addNFTFlop";
     if (gameData.status === 4) {
-      cost = gameData.round2Price
-      functionName = "addNFTTurn"
+      cost = gameData.round2Price;
+      functionName = "addNFTTurn";
     }
     const opts = {
       ...options,
@@ -69,7 +69,7 @@ export default function Game({ gameId }) {
         _tokenId: String(t),
         _gameId: String(gameId),
       },
-    }
+    };
 
     const tx = await Moralis.executeFunction({ awaitReceipt: false, ...opts });
     tx.on("transactionHash", (hash) => {
@@ -87,7 +87,7 @@ export default function Game({ gameId }) {
         });
         console.log(error);
       });
-  }
+  };
 
   const handlePlayFinalHand = async (values) => {
 
@@ -96,8 +96,8 @@ export default function Game({ gameId }) {
         message: "🔊 Error",
         description: `📃 Require 3 River cards!`,
         type: "error"
-      })
-      return
+      });
+      return;
     }
 
     if (values.river_cards.length !== 3) {
@@ -105,8 +105,8 @@ export default function Game({ gameId }) {
         message: "🔊 Error",
         description: `📃 Supplied ${values.river_cards.length} River cards. Require 3!`,
         type: "error"
-      })
-      return
+      });
+      return;
     }
 
     if (!values.final_token) {
@@ -114,8 +114,8 @@ export default function Game({ gameId }) {
         message: "🔊 Error",
         description: `📃 Final Token required!`,
         type: "error"
-      })
-      return
+      });
+      return;
     }
 
     const opts = {
@@ -126,7 +126,7 @@ export default function Game({ gameId }) {
         _gameId: String(gameId),
         cardIds: values.river_cards,
       },
-    }
+    };
 
     const tx = await Moralis.executeFunction({ awaitReceipt: false, ...opts });
     tx.on("transactionHash", (hash) => {
@@ -135,7 +135,6 @@ export default function Game({ gameId }) {
         description: `📃 Tx Hash: ${hash}`,
         type: "success"
       });
-
     })
       .on("error", (error) => {
         openNotification({
@@ -145,7 +144,7 @@ export default function Game({ gameId }) {
         });
         console.log(error);
       });
-  }
+  };
 
   const handleEndGame = async () => {
     const opts = {
@@ -154,7 +153,7 @@ export default function Game({ gameId }) {
       params: {
         _gameId: String(gameId),
       },
-    }
+    };
 
     const tx = await Moralis.executeFunction({ awaitReceipt: false, ...opts });
     tx.on("transactionHash", (hash) => {
@@ -167,10 +166,10 @@ export default function Game({ gameId }) {
       .on("error", (error) => {
         console.log(error);
       });
-  }
+  };
 
   const handlePotentialFinalHandScore = async () => {
-    setPotentialFinalHandScore(-1)
+    setPotentialFinalHandScore(-1);
     if (potentialFinalToken.length === 2 && potentialFinalRiver.length === 3) {
       const hand = [
         String(potentialFinalToken[0]),
@@ -178,9 +177,9 @@ export default function Game({ gameId }) {
         String(potentialFinalRiver[0]),
         String(potentialFinalRiver[1]),
         String(potentialFinalRiver[2])
-      ]
+      ];
 
-      setPotentialFinalHand(hand.sort((a, b) => a - b))
+      setPotentialFinalHand(hand.sort((a, b) => a - b));
 
       const rank = await Moralis.executeFunction({
         functionName: "calculateHandRank",
@@ -190,25 +189,25 @@ export default function Game({ gameId }) {
         ...options
       })
         .then((result) => result)
-        .catch((e) => console.log(e.message))
+        .catch((e) => console.log(e.message));
 
-      setPotentialFinalHandScore(rank)
+      setPotentialFinalHandScore(rank);
     }
   }
 
   const handleFinalTokenChange = list => {
-    setPotentialFinalToken(list)
-  }
+    setPotentialFinalToken(list);
+  };
   const handleRiverCheckboxChange = list => {
-    setPotentialFinalRiver(list)
+    setPotentialFinalRiver(list);
   };
 
   if (!gameData) {
-    return <>Loading</>
+    return <>Loading</>;
   }
 
   if (gameData?.status === 0) {
-    return <>Initialising on chain data</>
+    return <>Initialising on chain data</>;
   }
 
   return (
@@ -421,5 +420,5 @@ export default function Game({ gameId }) {
         </Col>
       </Row>
     </div>
-  )
+  );
 }

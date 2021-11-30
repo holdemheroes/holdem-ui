@@ -1,11 +1,11 @@
-import { Leaderboard } from "../Leaderboard"
-import React from "react"
-import { Col, Row, } from "antd"
-import { GameHistoryHandsPlayed } from "./GameHistoryHandsPlayed"
-import Moment from "react-moment"
-import { getExplorer } from "../../../helpers/networks"
-import { getEllipsisTxt } from "../../../helpers/formatters"
-import { useMoralisDapp } from "../../../providers/MoralisDappProvider/MoralisDappProvider"
+import { Leaderboard } from "../Leaderboard";
+import React from "react";
+import { Col, Row, } from "antd";
+import { GameHistoryHandsPlayed } from "./GameHistoryHandsPlayed";
+import Moment from "react-moment";
+import { getExplorer } from "../../../helpers/networks";
+import { getEllipsisTxt } from "../../../helpers/formatters";
+import { useMoralisDapp } from "../../../providers/MoralisDappProvider/MoralisDappProvider";
 
 export const GameHistoryCompleted = ({ gameId, gameStartedData, gameEndedData }) => {
 
@@ -49,7 +49,6 @@ export const GameHistoryCompleted = ({ gameId, gameStartedData, gameEndedData })
           />
         </Col>
       </Row>
-
     </div>
-  )
+  );
 }

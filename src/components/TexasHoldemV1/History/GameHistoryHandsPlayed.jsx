@@ -1,29 +1,29 @@
-import { useMoralis } from "react-moralis"
-import React, { useEffect, useState } from "react"
-import { getDealRequestedText, getEllipsisTxt } from "../../../helpers/formatters"
-import { Col, Row, Spin, Table } from "antd"
-import { PlayingCard } from "../../PlayingCards/PlayingCard"
-import BN from "bn.js"
-import Moment from "react-moment"
-import { getExplorer } from "../../../helpers/networks"
-import { useMoralisDapp } from "../../../providers/MoralisDappProvider/MoralisDappProvider"
+import { useMoralis } from "react-moralis";
+import React, { useEffect, useState } from "react";
+import { getDealRequestedText, getEllipsisTxt } from "../../../helpers/formatters";
+import { Col, Row, Spin, Table } from "antd";
+import { PlayingCard } from "../../PlayingCards/PlayingCard";
+import BN from "bn.js";
+import Moment from "react-moment";
+import { getExplorer } from "../../../helpers/networks";
+import { useMoralisDapp } from "../../../providers/MoralisDappProvider/MoralisDappProvider";
 
 export const GameHistoryHandsPlayed = ({ gameId, round1Price, round2Price, finished = false }) => {
 
-  const { Moralis } = useMoralis()
+  const { Moralis } = useMoralis();
   const { chainId } = useMoralisDapp();
 
-  const [totalFeesPaidFlop, setTotalFeesPaidFlop] = useState("0")
-  const [totalFeesPaidTurn, setTotalFeesPaidTurn] = useState("0")
-  const [totalFeesPaid, setTotalFeesPaid] = useState("0")
-  const [totalWinnings, setTotalWinnings] = useState("0")
-  const [houseCut, setHouseCut] = useState("0")
-  const [totalWinningsInitialised, setTotalWinningsInitialised] = useState(false)
-  const [handsPlayedFlop, setHandsPlayedFlop] = useState([])
-  const [handsPlayedInitialisedFlop, setHandsPlayedInitialisedFlop] = useState(false)
-  const [handsPlayedTurn, setHandsPlayedTurn] = useState([])
-  const [handsPlayedInitialisedTurn, setHandsPlayedInitialisedTurn] = useState(false)
-  const [highestRoundPlayed, setHighestRoundPlayed] = useState(0)
+  const [totalFeesPaidFlop, setTotalFeesPaidFlop] = useState("0");
+  const [totalFeesPaidTurn, setTotalFeesPaidTurn] = useState("0");
+  const [totalFeesPaid, setTotalFeesPaid] = useState("0");
+  const [totalWinnings, setTotalWinnings] = useState("0");
+  const [houseCut, setHouseCut] = useState("0");
+  const [totalWinningsInitialised, setTotalWinningsInitialised] = useState(false);
+  const [handsPlayedFlop, setHandsPlayedFlop] = useState([]);
+  const [handsPlayedInitialisedFlop, setHandsPlayedInitialisedFlop] = useState(false);
+  const [handsPlayedTurn, setHandsPlayedTurn] = useState([]);
+  const [handsPlayedInitialisedTurn, setHandsPlayedInitialisedTurn] = useState(false);
+  const [highestRoundPlayed, setHighestRoundPlayed] = useState(0);
 
   const columns = [
     {
@@ -56,39 +56,39 @@ export const GameHistoryHandsPlayed = ({ gameId, round1Price, round2Price, finis
       dataIndex: 'tx_hash',
       key: 'tx_hash',
     },
-  ]
+  ];
 
   const fetchHandsPlayedInRound = async (round) => {
-    const THHandAdded = Moralis.Object.extend("THHandAdded")
-    const queryTHHandAdded = new Moralis.Query(THHandAdded)
+    const THHandAdded = Moralis.Object.extend("THHandAdded");
+    const queryTHHandAdded = new Moralis.Query(THHandAdded);
     queryTHHandAdded
       .equalTo("gameId", String(gameId))
       .equalTo("round", round)
-      .ascending(["block_timestamp", "transaction_index"])
-    return queryTHHandAdded.find()
-  }
+      .ascending(["block_timestamp", "transaction_index"]);
+    return queryTHHandAdded.find();
+  };
 
   async function getHandsPlayed(round) {
-    const resultsTHHandAdded = await fetchHandsPlayedInRound(round)
-    const roundPrice = round === "2" ? round1Price : round2Price
+    const resultsTHHandAdded = await fetchHandsPlayedInRound(round);
+    const roundPrice = round === "2" ? round1Price : round2Price;
 
-    let roundTotal = new BN("0")
+    let roundTotal = new BN("0");
 
-    const hands = []
+    const hands = [];
     for (let i = 0; i < resultsTHHandAdded.length; i += 1) {
       if (parseInt(round, 10) > highestRoundPlayed) {
-        setHighestRoundPlayed(parseInt(round, 10))
+        setHighestRoundPlayed(parseInt(round, 10));
       }
-      roundTotal = roundTotal.add(new BN(roundPrice))
-      const res = resultsTHHandAdded[i]
-      const player = res.get("player")
-      const txHash = res.get("transaction_hash")
-      const date = res.get("block_timestamp")
+      roundTotal = roundTotal.add(new BN(roundPrice));
+      const res = resultsTHHandAdded[i];
+      const player = res.get("player");
+      const txHash = res.get("transaction_hash");
+      const date = res.get("block_timestamp");
 
       const hand = <>
         <PlayingCard cardId={res.get("card1")} key={`flop_${i}_${player}_${gameId}_card1`} width={35} />
         <PlayingCard cardId={res.get("card2")} key={`flop_${i}_${player}_${gameId}_card2`} width={35} />
-      </>
+      </>;
       const hd = {
         key: `hands_played_history_${round}_${i}`,
         hand_num: i + 1,
@@ -107,9 +107,9 @@ export const GameHistoryHandsPlayed = ({ gameId, round1Price, round2Price, finis
         </a>,
         timestamp: <Moment format="YYYY/MM/DD HH:mm:ss">{date.toString()}</Moment>,
         bet: Moralis.Units.FromWei(roundPrice, 18),
-      }
+      };
 
-      hands.push(hd)
+      hands.push(hd);
     }
 
     if (resultsTHHandAdded.length > 0) {
@@ -117,65 +117,65 @@ export const GameHistoryHandsPlayed = ({ gameId, round1Price, round2Price, finis
         key: resultsTHHandAdded.length,
         player: <strong>Total</strong>,
         bet: <strong>{Moralis.Units.FromWei(roundTotal.toString(), 18)}</strong>
-      })
+      });
     }
 
     if (round === "2") {
-      setHandsPlayedFlop(hands)
-      setTotalFeesPaidFlop(roundTotal.toString())
+      setHandsPlayedFlop(hands);
+      setTotalFeesPaidFlop(roundTotal.toString());
     }
     if (round === "4") {
-      setHandsPlayedTurn(hands)
-      setTotalFeesPaidTurn(roundTotal.toString())
+      setHandsPlayedTurn(hands);
+      setTotalFeesPaidTurn(roundTotal.toString());
     }
   }
 
   useEffect(() => {
     if (!handsPlayedInitialisedFlop) {
-      setHandsPlayedInitialisedFlop(true)
-      getHandsPlayed("2")
+      setHandsPlayedInitialisedFlop(true);
+      getHandsPlayed("2");
     }
 
     if (!handsPlayedInitialisedTurn) {
-      setHandsPlayedInitialisedTurn(true)
-      getHandsPlayed("4")
+      setHandsPlayedInitialisedTurn(true);
+      getHandsPlayed("4");
     }
     // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [gameId, handsPlayedInitialisedFlop, handsPlayedInitialisedTurn])
+  }, [gameId, handsPlayedInitialisedFlop, handsPlayedInitialisedTurn]);
 
   useEffect(() => {
 
     async function getTotalWinnings() {
-      const THWinningsCalculated = Moralis.Object.extend("THWinningsCalculated")
-      const query = new Moralis.Query(THWinningsCalculated)
+      const THWinningsCalculated = Moralis.Object.extend("THWinningsCalculated");
+      const query = new Moralis.Query(THWinningsCalculated);
       query
-        .equalTo("gameId", String(gameId))
-      const results = await query.find()
+        .equalTo("gameId", String(gameId));
+      const results = await query.find();
 
-      let total = new BN("0")
+      let total = new BN("0");
       for (let i = 0; i < results.length; i += 1) {
-        total = total.add(new BN(results[i].get("amount")))
+        total = total.add(new BN(results[i].get("amount")));
       }
-      setTotalWinnings(total.toString())
+      setTotalWinnings(total.toString());
 
       if (finished) {
-        const house = totalFees.sub(total)
-        setHouseCut(house.toString())
+        const house = totalFees.sub(total);
+        setHouseCut(house.toString());
       }
     }
 
     if (!totalWinningsInitialised && totalFeesPaidFlop !== "0" && totalFeesPaidTurn !== "0") {
-      setTotalWinningsInitialised(true)
-      getTotalWinnings()
+      setTotalWinningsInitialised(true);
+      getTotalWinnings();
     }
 
-    const totalFees = new BN(totalFeesPaidFlop).add(new BN(totalFeesPaidTurn))
-    setTotalFeesPaid(totalFees.toString())
+    const totalFees = new BN(totalFeesPaidFlop).add(new BN(totalFeesPaidTurn));
+    setTotalFeesPaid(totalFees.toString());
     // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [totalWinningsInitialised, totalFeesPaidFlop, totalFeesPaidTurn])
+  }, [totalWinningsInitialised, totalFeesPaidFlop, totalFeesPaidTurn]);
 
   if (!handsPlayedInitialisedFlop && !handsPlayedInitialisedTurn && !totalWinningsInitialised) {
-    return <Spin className="spin_loader" />
+    return <Spin className="spin_loader" />;
   }
 
   return (
@@ -219,8 +219,6 @@ export const GameHistoryHandsPlayed = ({ gameId, round1Price, round2Price, finis
         </Row>
       }
 
-
-
       <h3>Hands played in Flop</h3>
 
       <Table
@@ -230,7 +228,6 @@ export const GameHistoryHandsPlayed = ({ gameId, round1Price, round2Price, finis
         bordered
         size={"small"}
       />
-
 
       <h3>Hands played in Turn</h3>
 
@@ -245,6 +242,5 @@ export const GameHistoryHandsPlayed = ({ gameId, round1Price, round2Price, finis
         : <p style={{ color: "white" }}>No hands played in Turn</p>
       }
     </div>
-  )
-
+  );
 }

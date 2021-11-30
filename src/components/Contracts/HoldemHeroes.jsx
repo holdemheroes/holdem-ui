@@ -1,10 +1,10 @@
 import { Button, Card, Input, Typography, Form, notification } from "antd";
 import { useMemo, useState } from "react";
-import abis from "helpers/contracts"
-import Address from "components/Address/Address";
+import abis from "../../helpers/contracts"
+import Address from "../Address/Address";
 import { useMoralis } from "react-moralis";
-import { getHoldemHeroesAddress } from "../../helpers/networks"
-import { useMoralisDapp } from "../../providers/MoralisDappProvider/MoralisDappProvider"
+import { getHoldemHeroesAddress } from "../../helpers/networks";
+import { useMoralisDapp } from "../../providers/MoralisDappProvider/MoralisDappProvider";
 
 const { Text } = Typography;
 
@@ -12,7 +12,7 @@ export default function HoldemHeroes() {
   const { Moralis } = useMoralis();
   const { chainId } = useMoralisDapp();
   const abi = abis.heh_nft;
-  const contractName = "HoldemHeroes"
+  const contractName = "HoldemHeroes";
   const [responses, setResponses] = useState({});
   const contractAddress = getHoldemHeroesAddress(chainId);
 
@@ -62,7 +62,7 @@ export default function HoldemHeroes() {
               params,
             };
 
-            console.log(options)
+            console.log(options);
 
             if (!isView) {
               const tx = await Moralis.executeFunction({ awaitReceipt: false, ...options });

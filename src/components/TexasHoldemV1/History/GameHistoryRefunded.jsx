@@ -1,11 +1,11 @@
-import React from "react"
-import { Col, Row } from "antd"
-import { GameHistoryHandsPlayed } from "./GameHistoryHandsPlayed"
-import { GameHistoryProcessedRefunds } from "./GameHistoryProcessedRefunds"
-import Moment from "react-moment"
-import { getExplorer } from "../../../helpers/networks"
-import { getEllipsisTxt } from "../../../helpers/formatters"
-import { useMoralisDapp } from "../../../providers/MoralisDappProvider/MoralisDappProvider"
+import React from "react";
+import { Col, Row } from "antd";
+import { GameHistoryHandsPlayed } from "./GameHistoryHandsPlayed";
+import { GameHistoryProcessedRefunds } from "./GameHistoryProcessedRefunds";
+import Moment from "react-moment";
+import { getExplorer } from "../../../helpers/networks";
+import { getEllipsisTxt } from "../../../helpers/formatters";
+import { useMoralisDapp } from "../../../providers/MoralisDappProvider/MoralisDappProvider";
 
 export const GameHistoryRefunded = ({ gameId, gameStartedData, gameEndedData }) => {
   const { chainId } = useMoralisDapp();
@@ -45,5 +45,5 @@ export const GameHistoryRefunded = ({ gameId, gameStartedData, gameEndedData }) 
       </Row>
 
     </div>
-  )
+  );
 }
