@@ -7,7 +7,7 @@ import { getExplorer } from "../../../helpers/networks"
 import { getEllipsisTxt } from "../../../helpers/formatters"
 import { useMoralisDapp } from "../../../providers/MoralisDappProvider/MoralisDappProvider"
 
-export const GameHistoryCompleted = ( {gameId, gameStartedData, gameEndedData }) => {
+export const GameHistoryCompleted = ({ gameId, gameStartedData, gameEndedData }) => {
 
   const { chainId } = useMoralisDapp();
 
@@ -17,21 +17,21 @@ export const GameHistoryCompleted = ( {gameId, gameStartedData, gameEndedData })
         This game started on{" "}
         <Moment format="YYYY/MM/DD HH:mm:ss">{gameStartedData.timestamp.toString()}</Moment> in
         Tx <a
-        href={`${getExplorer(chainId)}/tx/${gameStartedData.txHash}`}
-        target={"_blank"}
-        rel={"noreferrer"}>
-        {getEllipsisTxt( gameStartedData.txHash, 8 )}
-      </a>.
+          href={`${getExplorer(chainId)}/tx/${gameStartedData.txHash}`}
+          target={"_blank"}
+          rel={"noreferrer"}>
+          {getEllipsisTxt(gameStartedData.txHash, 8)}
+        </a>.
       </p>
       <p>
         This game ended and the winnings paid out on{" "}
         <Moment format="YYYY/MM/DD HH:mm:ss">{gameEndedData.timestamp.toString()}</Moment> in
         Tx <a
-        href={`${getExplorer(chainId)}/tx/${gameEndedData.txHash}`}
-        target={"_blank"}
-        rel={"noreferrer"}>
-        {getEllipsisTxt( gameEndedData.txHash, 8 )}
-      </a>.
+          href={`${getExplorer(chainId)}/tx/${gameEndedData.txHash}`}
+          target={"_blank"}
+          rel={"noreferrer"}>
+          {getEllipsisTxt(gameEndedData.txHash, 8)}
+        </a>.
       </p>
       <Row>
         <Col>

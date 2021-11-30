@@ -8,12 +8,12 @@ export const History = () => {
 
   const { numGames, gamesInProgress } = useGameMetadata()
 
-  const [currentItems, setCurrentItems ] = useState([])
+  const [currentItems, setCurrentItems] = useState([])
   const [gamesPerPage, setGamesPerPage] = useState(10)
-  const [pageNumber, setPageNumber ] = useState(1)
+  const [pageNumber, setPageNumber] = useState(1)
 
   useEffect(() => {
-    if(numGames === 0) {
+    if (numGames === 0) {
       return
     }
     const games = []
@@ -21,7 +21,7 @@ export const History = () => {
     //   games.push(i)
     // }
 
-    for(let i = numGames; i > 0; i -= 1) {
+    for (let i = numGames; i > 0; i -= 1) {
       games.push(i)
     }
 
@@ -46,13 +46,13 @@ export const History = () => {
         <Col>
           <Tabs tabPosition={"left"}>
             {currentItems &&
-            currentItems.map(( item) => (
-              <Tabs.TabPane tab={`Game #${item}`} key={`game_history_tab_${item}`}>
-                <div>
-                  <GameHistoryContainer gameId={item} key={`game_history_container_${item}`} gamesInProgress={gamesInProgress} />
-                </div>
-              </Tabs.TabPane>
-            ))}
+              currentItems.map((item) => (
+                <Tabs.TabPane tab={`Game #${item}`} key={`game_history_tab_${item}`}>
+                  <div>
+                    <GameHistoryContainer gameId={item} key={`game_history_container_${item}`} gamesInProgress={gamesInProgress} />
+                  </div>
+                </Tabs.TabPane>
+              ))}
           </Tabs>
         </Col>
       </Row>

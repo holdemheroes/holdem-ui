@@ -6,7 +6,7 @@ import { getHoldemHeroesAddress } from "../../helpers/networks"
 import { svgToImgSrc } from "../../helpers/nft"
 import { Image, Spin } from 'antd'
 
-export const PlayingCard = ({cardId, width = 50}) => {
+export const PlayingCard = ({ cardId, width = 50 }) => {
 
   const { chainId } = useMoralisDapp();
   const abi = abis.heh_nft;
@@ -24,7 +24,7 @@ export const PlayingCard = ({cardId, width = 50}) => {
   });
 
   useEffect(() => {
-    if(!data) {
+    if (!data) {
       fetch()
     } else {
       setCardSvg(data)
@@ -32,7 +32,7 @@ export const PlayingCard = ({cardId, width = 50}) => {
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [data]);
 
-  if(!cardSvg) {
+  if (!cardSvg) {
     return <Spin />
   }
 

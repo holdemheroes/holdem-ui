@@ -29,28 +29,28 @@ export const sortFinalHand = (c1, c2, c3, c4, c5) => {
 }
 
 export const getRoundStatusText = (status) => {
-    switch(parseInt(status, 10)) {
-      case 0:
-        return "Does not exist!"
-      case 1:
-        return "Waiting for Flop"
-      case 2:
-        return "Flop Dealt"
-      case 3:
-        return "Waiting for Turn"
-      case 4:
-        return "Turn Dealt"
-      case 5:
-        return "Waiting for River"
-      case 6:
-        return "River Dealt"
-      default:
-        return "Unknown"
-    }
+  switch (parseInt(status, 10)) {
+    case 0:
+      return "Does not exist!"
+    case 1:
+      return "Waiting for Flop"
+    case 2:
+      return "Flop Dealt"
+    case 3:
+      return "Waiting for Turn"
+    case 4:
+      return "Turn Dealt"
+    case 5:
+      return "Waiting for River"
+    case 6:
+      return "River Dealt"
+    default:
+      return "Unknown"
+  }
 }
 
 export const getDealRequestedText = (round) => {
-  switch(parseInt(round, 10)) {
+  switch (parseInt(round, 10)) {
     case 1:
     case 2:
       return "Flop"

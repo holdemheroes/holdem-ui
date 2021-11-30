@@ -15,16 +15,16 @@ export const useGameData = (gameId) => {
   const { NFTHands } = useMyNFTHands()
 
   const abi = abis.texas_holdem_v1;
-  const contractAddress = getTexasHoldemV1Address( chainId );
+  const contractAddress = getTexasHoldemV1Address(chainId);
 
   const options = {
     contractAddress, abi,
   }
 
-  const [ gameData, setGameData ] = useState(null)
-  const [ refetchGameData, setRefetchGameData ] = useState(false)
-  const [ cardsDealt, setCardsDealt ] = useState([])
-  const [ handsPlayed, setHandsPlayed ] = useState( {
+  const [gameData, setGameData] = useState(null)
+  const [refetchGameData, setRefetchGameData] = useState(false)
+  const [cardsDealt, setCardsDealt] = useState([])
+  const [handsPlayed, setHandsPlayed] = useState({
     2: {
       hands: [],
       tokenRefs: []
@@ -34,31 +34,31 @@ export const useGameData = (gameId) => {
       tokenRefs: []
     }
   })
-  const [ handsPlayedFetched, setHandsPlayedFetched ] = useState(false)
-  const [ handsPlayedLoading, setHandsPlayedLoading ] = useState(false)
+  const [handsPlayedFetched, setHandsPlayedFetched] = useState(false)
+  const [handsPlayedLoading, setHandsPlayedLoading] = useState(false)
 
-  const [ playableHands, setPlayableHands ] = useState([])
-  const [ lastRoundPlayed, setLastRoundPlayed ] = useState(0)
+  const [playableHands, setPlayableHands] = useState([])
+  const [lastRoundPlayed, setLastRoundPlayed] = useState(0)
 
-  const [ feesPaid, setFeesPaid ] = useState({
+  const [feesPaid, setFeesPaid] = useState({
     2: { me: "0", total: "0" },
     4: { me: "0", total: "0" },
   })
-  const [ feesPaidFetched, setFeesPaidFetched ] = useState(false)
-  const [ feesPaidLoading, setFeesPaidLoading ] = useState(false)
+  const [feesPaidFetched, setFeesPaidFetched] = useState(false)
+  const [feesPaidLoading, setFeesPaidLoading] = useState(false)
 
-  const [ playersPerRound, setPlayersPerRound] = useState({
+  const [playersPerRound, setPlayersPerRound] = useState({
     2: [],
     4: [],
   })
 
-  const [ numHands, setNumHands ] = useState({
+  const [numHands, setNumHands] = useState({
     2: 0,
     4: 0,
   })
-  const [ numFinalHands, setNumFinalHands ] = useState(0)
+  const [numFinalHands, setNumFinalHands] = useState(0)
 
-  const [ finalHand, setFinalHand ] = useState({
+  const [finalHand, setFinalHand] = useState({
     card1: -1,
     card2: -1,
     card3: -1,
@@ -66,14 +66,14 @@ export const useGameData = (gameId) => {
     card5: -1,
     rank: -1,
   })
-  const [ finalHandFetched, setFinalHandFetched ] = useState(false)
-  const [ finalHandLoading, setFinalHandLoading ] = useState(false)
+  const [finalHandFetched, setFinalHandFetched] = useState(false)
+  const [finalHandLoading, setFinalHandLoading] = useState(false)
 
-  const [ gameHasEnded, setGameHasEnded ] = useState(false)
+  const [gameHasEnded, setGameHasEnded] = useState(false)
 
   function handMatchesPlayed(h, round) {
-    for(let j = 0; j < handsPlayed[round].tokenRefs.length; j += 1) {
-      if(parseInt(h.token_id, 10) === handsPlayed[round].tokenRefs[j]) {
+    for (let j = 0; j < handsPlayed[round].tokenRefs.length; j += 1) {
+      if (parseInt(h.token_id, 10) === handsPlayed[round].tokenRefs[j]) {
         return true
       }
     }
@@ -81,8 +81,8 @@ export const useGameData = (gameId) => {
   }
 
   function handMatchesDealt(h) {
-    for ( let j = 0; j < cardsDealt.length; j += 1 ) {
-      if ( h.card1 === cardsDealt[j] || h.card2 === cardsDealt[j] ) {
+    for (let j = 0; j < cardsDealt.length; j += 1) {
+      if (h.card1 === cardsDealt[j] || h.card2 === cardsDealt[j]) {
         return true
       }
     }
@@ -92,40 +92,40 @@ export const useGameData = (gameId) => {
   function processPlayableHands() {
     const playable = []
     // handle initial playable hands
-    switch ( gameData?.status ) {
+    switch (gameData?.status) {
       case 2:
         // can use any of my NFTs that have not yet been dealt or played
-        for ( let i = 0; i < NFTHands.length; i += 1 ) {
+        for (let i = 0; i < NFTHands.length; i += 1) {
           const h = NFTHands[i]
           const isDealt = handMatchesDealt(h)
           const playedInFlop = handMatchesPlayed(h, 2)
-          if ( !isDealt && !playedInFlop ) {
-            playable.push( h )
+          if (!isDealt && !playedInFlop) {
+            playable.push(h)
           }
         }
         break
       case 4:
         // can only play hands already added to Flop
-        for ( let i = 0; i < NFTHands.length; i += 1 ) {
+        for (let i = 0; i < NFTHands.length; i += 1) {
           const h = NFTHands[i]
           const isDealt = handMatchesDealt(h)
           const playedInFlop = handMatchesPlayed(h, 2)
           const playedInTurn = handMatchesPlayed(h, 4)
 
-          if(!isDealt && playedInFlop && !playedInTurn) {
-            playable.push( h )
+          if (!isDealt && playedInFlop && !playedInTurn) {
+            playable.push(h)
           }
         }
         break
       case 6:
         // can only play hands already added to Turn
-        for ( let i = 0; i < NFTHands.length; i += 1 ) {
+        for (let i = 0; i < NFTHands.length; i += 1) {
           const h = NFTHands[i]
           const isDealt = handMatchesDealt(h)
           const playedInTurn = handMatchesPlayed(h, 4)
 
-          if(!isDealt && playedInTurn) {
-            playable.push( h )
+          if (!isDealt && playedInTurn) {
+            playable.push(h)
           }
         }
         break
@@ -133,7 +133,7 @@ export const useGameData = (gameId) => {
         break
     }
 
-    setPlayableHands( playable )
+    setPlayableHands(playable)
   }
 
   function handleOnChainGameData(data) {
@@ -155,120 +155,120 @@ export const useGameData = (gameId) => {
 
   function handleOnChainCardsDealt(cards) {
     const cardsAsInts = []
-    for ( let i = 0; i < cards.length; i += 1 ) {
-      cardsAsInts.push( parseInt( cards[i], 10 ) )
+    for (let i = 0; i < cards.length; i += 1) {
+      cardsAsInts.push(parseInt(cards[i], 10))
     }
-    setCardsDealt( cardsAsInts )
+    setCardsDealt(cardsAsInts)
     processPlayableHands()
   }
 
   function handleCardDealRequestedEvent(data) {
     const round = parseInt(data.attributes.turnRequested, 10)
-    setGameData( { ...gameData, status: round } )
+    setGameData({ ...gameData, status: round })
 
     setPlayableHands([])
 
     setRefetchGameData(true)
 
-    openNotification( {
+    openNotification({
       message: "🔊 Deal Requested!",
       description: `${getDealRequestedText(round)} requested in game #${gameId}`,
       type: "info"
-    } )
+    })
   }
 
   function handleCardDealtEvent(data) {
     const round = parseInt(data.attributes.round, 10)
     const cardId = parseInt(data.attributes.cardId, 10)
-    const blockTimestamp = new Date( data.attributes.block_timestamp) / 1000
+    const blockTimestamp = new Date(data.attributes.block_timestamp) / 1000
 
     const newCardsDealt = []
 
-    setGameData( { ...gameData, status: round, roundEndTime: blockTimestamp + gameData.gameRoundTimeSeconds } )
+    setGameData({ ...gameData, status: round, roundEndTime: blockTimestamp + gameData.gameRoundTimeSeconds })
 
-    for(let i = 0; i < cardsDealt.length; i += 1) {
-      if(!newCardsDealt.includes(cardsDealt[i])) {
+    for (let i = 0; i < cardsDealt.length; i += 1) {
+      if (!newCardsDealt.includes(cardsDealt[i])) {
         newCardsDealt.push(cardsDealt[i])
       }
     }
     newCardsDealt.push(cardId)
 
-    setCardsDealt( newCardsDealt)
+    setCardsDealt(newCardsDealt)
 
     processPlayableHands()
     setRefetchGameData(true)
 
-    openNotification( {
+    openNotification({
       message: "🔊 Card Dealt!",
       description: `${getDealRequestedText(round)} dealt in game #${gameId}`,
       type: "info"
-    } )
+    })
   }
 
   function handleHandAddedEvent(data) {
 
-    const round = parseInt( data.attributes.round, 10 )
-    const tokenId = parseInt( data.attributes.tokenId, 10 )
-    const handId = parseInt( data.attributes.handId, 10 )
-    const card1 = parseInt( data.attributes.card1, 10 )
-    const card2 = parseInt(data.attributes.card2, 10 )
+    const round = parseInt(data.attributes.round, 10)
+    const tokenId = parseInt(data.attributes.tokenId, 10)
+    const handId = parseInt(data.attributes.handId, 10)
+    const card1 = parseInt(data.attributes.card1, 10)
+    const card2 = parseInt(data.attributes.card2, 10)
 
     const newHandsPlayed = { ...handsPlayed }
     const hand = {
       round, tokenId, handId, card1, card2
     }
 
-    newHandsPlayed[round].hands.push( hand )
-    newHandsPlayed[round].tokenRefs.push( tokenId )
+    newHandsPlayed[round].hands.push(hand)
+    newHandsPlayed[round].tokenRefs.push(tokenId)
 
-    setHandsPlayed( newHandsPlayed )
-    if(round > lastRoundPlayed) {
+    setHandsPlayed(newHandsPlayed)
+    if (round > lastRoundPlayed) {
       setLastRoundPlayed(round)
     }
 
     processPlayableHands()
     setRefetchGameData(true)
 
-    openNotification( {
+    openNotification({
       message: "🔊 Hand added!",
       description: `You hand was added to ${getDealRequestedText(round)} in game #${gameId}`,
       type: "success"
-    } )
+    })
   }
 
   function handleFeePaidEvent(data) {
-    const round = parseInt( data.attributes.round, 10 )
-    const amount = new BN( data.attributes.amount )
+    const round = parseInt(data.attributes.round, 10)
+    const amount = new BN(data.attributes.amount)
     const player = data.attributes.player
 
     // total
-    if(gameData?.totalPaidIn) {
-      const newTotal = new BN( gameData.totalPaidIn ).add( amount )
-      setGameData( { ...gameData, totalPaidIn: newTotal.toString() } )
+    if (gameData?.totalPaidIn) {
+      const newTotal = new BN(gameData.totalPaidIn).add(amount)
+      setGameData({ ...gameData, totalPaidIn: newTotal.toString() })
     }
 
     const newFeesPaid = { ...feesPaid }
     const newPlayersPerRound = { ...playersPerRound }
     const newNumHands = { ...numHands }
 
-    if ( player === walletAddress ) {
-      const newAmnt = new BN( feesPaid[round].me ).add( amount )
+    if (player === walletAddress) {
+      const newAmnt = new BN(feesPaid[round].me).add(amount)
       newFeesPaid[round].me = newAmnt.toString()
-      if(round > lastRoundPlayed) {
+      if (round > lastRoundPlayed) {
         setLastRoundPlayed(round)
       }
     }
 
-    const newRoundTotal = new BN( feesPaid[round].total ).add( amount )
+    const newRoundTotal = new BN(feesPaid[round].total).add(amount)
     newFeesPaid[round].total = newRoundTotal.toString()
 
-    if(!newPlayersPerRound[round].includes(player)) {
+    if (!newPlayersPerRound[round].includes(player)) {
       newPlayersPerRound[round].push(player)
     }
 
     newNumHands[round] += 1
 
-    setFeesPaid( newFeesPaid )
+    setFeesPaid(newFeesPaid)
     setPlayersPerRound(newPlayersPerRound)
     setNumHands(newNumHands)
 
@@ -278,14 +278,14 @@ export const useGameData = (gameId) => {
 
   function handleFinalHandPlayedEvent(data) {
 
-    if(data.attributes.player === walletAddress) {
+    if (data.attributes.player === walletAddress) {
       const newFinalHand = {}
       const cTmp = sortFinalHand(
-        parseInt( data.attributes.card1, 10 ),
-        parseInt( data.attributes.card2, 10 ),
-        parseInt( data.attributes.card3, 10 ),
-        parseInt( data.attributes.card4, 10 ),
-        parseInt( data.attributes.card5, 10 )
+        parseInt(data.attributes.card1, 10),
+        parseInt(data.attributes.card2, 10),
+        parseInt(data.attributes.card3, 10),
+        parseInt(data.attributes.card4, 10),
+        parseInt(data.attributes.card5, 10)
       )
 
       newFinalHand.card1 = cTmp[0]
@@ -293,18 +293,18 @@ export const useGameData = (gameId) => {
       newFinalHand.card3 = cTmp[2]
       newFinalHand.card4 = cTmp[3]
       newFinalHand.card5 = cTmp[4]
-      newFinalHand.rank = parseInt( data.attributes.rank, 10 )
-      setFinalHand( newFinalHand )
+      newFinalHand.rank = parseInt(data.attributes.rank, 10)
+      setFinalHand(newFinalHand)
       setLastRoundPlayed(6)
 
-      openNotification( {
+      openNotification({
         message: "🔊 Final Hand Played!",
         description: `You Final Hand was successfully played in game #${gameId}`,
         type: "success"
-      } )
+      })
     }
 
-    setNumFinalHands(numFinalHands+1)
+    setNumFinalHands(numFinalHands + 1)
   }
 
   function handleHandsPlayedData(results) {
@@ -319,22 +319,22 @@ export const useGameData = (gameId) => {
         tokenRefs: []
       }
     }
-    if(results.length > 0) {
+    if (results.length > 0) {
       // console.log("got hands played")
-      for ( let i = 0; i < results.length; i++ ) {
+      for (let i = 0; i < results.length; i++) {
         const res = results[i]
-        const round = parseInt( res.get( "round" ), 10 )
-        const tokenId = parseInt( res.get( "tokenId" ), 10 )
-        const handId = parseInt( res.get( "handId" ), 10 )
-        const card1 = parseInt( res.get( "card1" ), 10 )
-        const card2 = parseInt( res.get( "card2" ), 10 )
+        const round = parseInt(res.get("round"), 10)
+        const tokenId = parseInt(res.get("tokenId"), 10)
+        const handId = parseInt(res.get("handId"), 10)
+        const card1 = parseInt(res.get("card1"), 10)
+        const card2 = parseInt(res.get("card2"), 10)
         const hand = {
           round, tokenId, handId, card1, card2
         }
 
-        newHandsPlayed[round].hands.push( hand )
-        newHandsPlayed[round].tokenRefs.push( tokenId )
-        if(round > lastRoundPlayed) {
+        newHandsPlayed[round].hands.push(hand)
+        newHandsPlayed[round].tokenRefs.push(tokenId)
+        if (round > lastRoundPlayed) {
           setLastRoundPlayed(round)
         }
       }
@@ -360,27 +360,27 @@ export const useGameData = (gameId) => {
       4: 0,
     }
 
-    for ( let i = 0; i < results.length; i++ ) {
+    for (let i = 0; i < results.length; i++) {
       const res = results[i]
       const player = res.get("player")
-      const round = parseInt( res.get( "round" ), 10 )
-      const amount = new BN( res.get( "amount" ) )
-      if(player === walletAddress) {
-        const newMeAmnt = new BN( newFeesPaid[round].me ).add( amount )
+      const round = parseInt(res.get("round"), 10)
+      const amount = new BN(res.get("amount"))
+      if (player === walletAddress) {
+        const newMeAmnt = new BN(newFeesPaid[round].me).add(amount)
         newFeesPaid[round].me = newMeAmnt.toString()
       }
 
-      const newTotalAmnt = new BN( newFeesPaid[round].total ).add( amount )
+      const newTotalAmnt = new BN(newFeesPaid[round].total).add(amount)
       newFeesPaid[round].total = newTotalAmnt.toString()
 
-      if(!newPlayersPerRound[round].includes(player)) {
+      if (!newPlayersPerRound[round].includes(player)) {
         newPlayersPerRound[round].push(player)
       }
 
       newNumHands[round] += 1
     }
 
-    setFeesPaid( newFeesPaid )
+    setFeesPaid(newFeesPaid)
     setPlayersPerRound(newPlayersPerRound)
     setNumHands(newNumHands)
   }
@@ -396,16 +396,16 @@ export const useGameData = (gameId) => {
       rank: -1,
     }
 
-    for(let i = 0; i < results.length; i += 1) {
+    for (let i = 0; i < results.length; i += 1) {
       const res = results[i]
       const player = res.get("player")
-      if(player === walletAddress) {
+      if (player === walletAddress) {
         const cTmp = sortFinalHand(
-          parseInt(res.get( "card1" ), 10),
-          parseInt(res.get( "card2" ), 10),
-          parseInt(res.get( "card3" ), 10),
-          parseInt(res.get( "card4" ), 10),
-          parseInt(res.get( "card5" ), 10)
+          parseInt(res.get("card1"), 10),
+          parseInt(res.get("card2"), 10),
+          parseInt(res.get("card3"), 10),
+          parseInt(res.get("card4"), 10),
+          parseInt(res.get("card5"), 10)
         )
 
         newFinalHand.card1 = cTmp[0]
@@ -413,24 +413,24 @@ export const useGameData = (gameId) => {
         newFinalHand.card3 = cTmp[2]
         newFinalHand.card4 = cTmp[3]
         newFinalHand.card5 = cTmp[4]
-        newFinalHand.rank = parseInt(res.get( "rank" ), 10)
+        newFinalHand.rank = parseInt(res.get("rank"), 10)
         setLastRoundPlayed(6)
       }
-      setNumFinalHands(numFinalHands+1)
+      setNumFinalHands(numFinalHands + 1)
     }
     setFinalHand(newFinalHand)
   }
 
   function fetchCardsDealt() {
-    Moralis.executeFunction( {
+    Moralis.executeFunction({
       functionName: "getCardsDealt",
       params: {
         "_gameId": gameId,
       },
       ...options
-    } )
-      .then( ( result ) => handleOnChainCardsDealt(result) )
-      .catch( ( e ) => console.log( e.message ) )
+    })
+      .then((result) => handleOnChainCardsDealt(result))
+      .catch((e) => console.log(e.message))
   }
 
   function fetchOnChainGameData() {
@@ -451,10 +451,10 @@ export const useGameData = (gameId) => {
     // console.log(`fetchHandsPlayed ${walletAddress} ${gameId}`)
     setHandsPlayedLoading(true)
     // get any hands already played
-    const THHandAdded = Moralis.Object.extend( "THHandAdded" )
-    const queryTHHandAdded = new Moralis.Query( THHandAdded )
-    queryTHHandAdded.equalTo( "gameId", String( gameId ) )
-    queryTHHandAdded.equalTo( "player", walletAddress )
+    const THHandAdded = Moralis.Object.extend("THHandAdded")
+    const queryTHHandAdded = new Moralis.Query(THHandAdded)
+    queryTHHandAdded.equalTo("gameId", String(gameId))
+    queryTHHandAdded.equalTo("player", walletAddress)
     queryTHHandAdded.find()
       .then((result) => handleHandsPlayedData(result))
       .catch((e) => console.log(e.message))
@@ -462,9 +462,9 @@ export const useGameData = (gameId) => {
 
   function fetchFeesPaid() {
     setFeesPaidLoading(true)
-    const THFeePaid = Moralis.Object.extend( "THFeePaid" )
-    const queryTHFeePaid = new Moralis.Query( THFeePaid )
-    queryTHFeePaid.equalTo( "gameId", String( gameId ) )
+    const THFeePaid = Moralis.Object.extend("THFeePaid")
+    const queryTHFeePaid = new Moralis.Query(THFeePaid)
+    queryTHFeePaid.equalTo("gameId", String(gameId))
     queryTHFeePaid.find()
       .then((result) => handleFeesPaidData(result))
       .catch((e) => console.log(e.message))
@@ -472,9 +472,9 @@ export const useGameData = (gameId) => {
 
   function fetchFinalHand() {
     setFinalHandLoading(true)
-    const THFinalHandPlayed = Moralis.Object.extend( "THFinalHandPlayed" )
-    const queryTHFinalHandPlayed = new Moralis.Query( THFinalHandPlayed )
-    queryTHFinalHandPlayed.equalTo( "gameId", String( gameId ) )
+    const THFinalHandPlayed = Moralis.Object.extend("THFinalHandPlayed")
+    const queryTHFinalHandPlayed = new Moralis.Query(THFinalHandPlayed)
+    queryTHFinalHandPlayed.equalTo("gameId", String(gameId))
     queryTHFinalHandPlayed.find()
       .then((result) => handleFinalHandData(result))
       .catch((e) => console.log(e.message))
@@ -486,7 +486,7 @@ export const useGameData = (gameId) => {
   useEffect(() => {
     // console.log(`get initial game data, status === 0 ${gameId}`)
     let timeout
-    if(!gameData || gameData?.status === 0) {
+    if (!gameData || gameData?.status === 0) {
       timeout = setTimeout(() => {
         fetchOnChainGameData()
       }, 1000)
@@ -504,7 +504,7 @@ export const useGameData = (gameId) => {
     // console.log(`get initial cards dealt, status > 1 ${gameId}`)
     // get initial cards dealt
     let timeout
-    if(cardsDealt.length === 0 && gameData?.status > 1) {
+    if (cardsDealt.length === 0 && gameData?.status > 1) {
       timeout = setTimeout(() => {
         fetchCardsDealt()
       }, 1000)
@@ -519,7 +519,7 @@ export const useGameData = (gameId) => {
   // get any hands already played if status >= 2
   useEffect(() => {
     // console.log(`check initial hands played ${gameId}`)
-    if(gameData?.status >= 2 && !handsPlayedFetched && !handsPlayedLoading) {
+    if (gameData?.status >= 2 && !handsPlayedFetched && !handsPlayedLoading) {
       fetchHandsPlayed()
     }
     // eslint-disable-next-line react-hooks/exhaustive-deps
@@ -528,7 +528,7 @@ export const useGameData = (gameId) => {
   // get fees paid if status >= 2
   useEffect(() => {
     // console.log(`check initial fees paid ${gameId}`)
-    if(gameData?.status >= 2 && !feesPaidFetched && !feesPaidLoading) {
+    if (gameData?.status >= 2 && !feesPaidFetched && !feesPaidLoading) {
       fetchFeesPaid()
     }
     // eslint-disable-next-line react-hooks/exhaustive-deps
@@ -537,7 +537,7 @@ export const useGameData = (gameId) => {
   // fetch final hand if status == 6
   useEffect(() => {
     // console.log(`check initial final hand ${gameId}`)
-    if(gameData?.status === 6 && !finalHandFetched && !finalHandLoading) {
+    if (gameData?.status === 6 && !finalHandFetched && !finalHandLoading) {
       fetchFinalHand()
     }
     // eslint-disable-next-line react-hooks/exhaustive-deps
@@ -557,7 +557,7 @@ export const useGameData = (gameId) => {
   useEffect(() => {
     // console.log(`refresh game data every block ${gameId}`)
     let timeout
-    if(gameData?.status > 0 && !gameHasEnded) {
+    if (gameData?.status > 0 && !gameHasEnded) {
       timeout = setTimeout(() => {
         fetchOnChainGameData()
       }, 15000)
@@ -574,10 +574,10 @@ export const useGameData = (gameId) => {
   useEffect(() => {
     // console.log(`check game ended ${gameId}`)
     let timeout
-    if(gameData?.status === 6 && !gameHasEnded) {
+    if (gameData?.status === 6 && !gameHasEnded) {
       timeout = setTimeout(() => {
         const now = Math.floor(new Date() / 1000)
-        if(gameData.roundEndTime < now) {
+        if (gameData.roundEndTime < now) {
           setGameHasEnded(true)
         }
       }, 1000)
@@ -592,13 +592,13 @@ export const useGameData = (gameId) => {
   // periodically process playable cards
   useEffect(() => {
     let timeout
-    if(gameData?.status === 2 || gameData?.status === 4 || gameData?.status === 6) {
+    if (gameData?.status === 2 || gameData?.status === 4 || gameData?.status === 6) {
       timeout = setTimeout(() => {
         processPlayableHands()
       }, 1000)
     }
 
-    if(gameData?.status === 1 || gameData?.status === 3 || gameData?.status === 5) {
+    if (gameData?.status === 1 || gameData?.status === 3 || gameData?.status === 5) {
       timeout = setTimeout(() => {
         setPlayableHands([])
       }, 1000)
@@ -614,7 +614,7 @@ export const useGameData = (gameId) => {
   useEffect(() => {
     let timeout
 
-    if(refetchGameData) {
+    if (refetchGameData) {
       setRefetchGameData(false)
       timeout = setTimeout(() => {
         fetchOnChainGameData()

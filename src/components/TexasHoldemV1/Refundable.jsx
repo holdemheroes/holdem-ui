@@ -6,18 +6,18 @@ import { useMoralis } from "react-moralis"
 import { Button } from "antd"
 import { openNotification } from "../../helpers/notifications"
 
-export default function Refundable({gameId, amount}) {
+export default function Refundable({ gameId, amount }) {
   const { chainId } = useMoralisDapp();
   const { Moralis } = useMoralis()
 
   const abi = abis.texas_holdem_v1;
-  const contractAddress = getTexasHoldemV1Address( chainId );
+  const contractAddress = getTexasHoldemV1Address(chainId);
 
   const options = {
     contractAddress, abi,
   }
 
-  const handleClaimRefund = async() => {
+  const handleClaimRefund = async () => {
     const opts = {
       ...options,
       functionName: "claimRefund",
@@ -43,7 +43,7 @@ export default function Refundable({gameId, amount}) {
     <div>
       <h4>Game #{gameId}</h4>
       <Button onClick={() => handleClaimRefund()}>
-      Claim {Moralis.Units.FromWei(amount, 18)} ETH
+        Claim {Moralis.Units.FromWei(amount, 18)} ETH
       </Button>
     </div>
   )

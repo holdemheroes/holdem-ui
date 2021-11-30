@@ -11,7 +11,7 @@ export default function GamesV1() {
 
   const { maxConcurrentGames, gamesInProgress } = useGameMetadata()
 
-  if(!maxConcurrentGames) {
+  if (!maxConcurrentGames) {
     return (
       <><Spin />Loading</>
     )
@@ -24,13 +24,13 @@ export default function GamesV1() {
 
       <Tabs>
         {gamesInProgress &&
-        gamesInProgress.map((item) => (
-          <Tabs.TabPane tab={`Game #${item}`} key={`game_tab_${item}_${walletAddress}`}>
-            <div>
-              <Game gameId={item} key={`game_outer_container_${item}_${walletAddress}`} />
-            </div>
-          </Tabs.TabPane>
-        ))
+          gamesInProgress.map((item) => (
+            <Tabs.TabPane tab={`Game #${item}`} key={`game_tab_${item}_${walletAddress}`}>
+              <div>
+                <Game gameId={item} key={`game_outer_container_${item}_${walletAddress}`} />
+              </div>
+            </Tabs.TabPane>
+          ))
         }
       </Tabs>
 

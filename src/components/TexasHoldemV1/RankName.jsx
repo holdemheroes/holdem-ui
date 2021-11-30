@@ -4,21 +4,21 @@ import { useMoralis } from "react-moralis"
 import abis from "../../helpers/contracts"
 import { getTexasHoldemV1Address } from "../../helpers/networks"
 
-export const RankName = ({rank}) => {
+export const RankName = ({ rank }) => {
 
   const { chainId } = useMoralisDapp();
   const { Moralis } = useMoralis()
 
   const abi = abis.texas_holdem_v1;
-  const contractAddress = getTexasHoldemV1Address( chainId );
+  const contractAddress = getTexasHoldemV1Address(chainId);
 
   const options = {
     contractAddress, abi,
   }
 
-  const [ rankName, setRankName ] = useState(null)
+  const [rankName, setRankName] = useState(null)
 
-  useEffect( () => {
+  useEffect(() => {
 
     async function getRankName() {
       const rId = await Moralis.executeFunction({
@@ -44,11 +44,11 @@ export const RankName = ({rank}) => {
       setRankName(r)
     }
 
-    if(!rankName) {
+    if (!rankName) {
       getRankName()
     }
     // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [rankName, rank] );
+  }, [rankName, rank]);
 
   return (
     <span>{rankName}</span>

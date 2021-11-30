@@ -8,17 +8,17 @@ import { RankName } from "./RankName"
 import { getExplorer } from "../../helpers/networks"
 import Moment from "react-moment"
 
-export const Leaderboard = ({gameId, showWinnings=false}) => {
+export const Leaderboard = ({ gameId, showWinnings = false }) => {
   const { walletAddress } = useMoralisDapp();
   const { Moralis } = useMoralis()
   const { chainId } = useMoralisDapp();
 
-  const [ leaderboard, setLeaderboard ] = useState([])
-  const [ leaderboardTableData, setLeaderboardTableData ] = useState([])
-  const [ leaderboardInitialised, setLeaderboardInitialised ] = useState(false)
+  const [leaderboard, setLeaderboard] = useState([])
+  const [leaderboardTableData, setLeaderboardTableData] = useState([])
+  const [leaderboardInitialised, setLeaderboardInitialised] = useState(false)
 
-  const [ winnings, setWinnings ] = useState({})
-  const [ winningsInitialised, setWinningsInitialised ] = useState(false)
+  const [winnings, setWinnings] = useState({})
+  const [winningsInitialised, setWinningsInitialised] = useState(false)
 
   const columns = [
     {
@@ -58,7 +58,7 @@ export const Leaderboard = ({gameId, showWinnings=false}) => {
     },
   ]
 
-  if(showWinnings) {
+  if (showWinnings) {
     columns.push(
       {
         title: 'Winnings',
@@ -94,34 +94,34 @@ export const Leaderboard = ({gameId, showWinnings=false}) => {
 
   const sortLeaderboard = (lb) => {
     let newLb = []
-    if(lb.length > 0) {
-      newLb = [...lb].sort( compareValues("rank", "asc"))
+    if (lb.length > 0) {
+      newLb = [...lb].sort(compareValues("rank", "asc"))
     }
     return newLb
   }
 
-  useEffect( () => {
+  useEffect(() => {
     async function getLeaderboard() {
-      const THFinalHandPlayed = Moralis.Object.extend( "THFinalHandPlayed" )
-      const queryTHFinalHandPlayed = new Moralis.Query( THFinalHandPlayed )
+      const THFinalHandPlayed = Moralis.Object.extend("THFinalHandPlayed")
+      const queryTHFinalHandPlayed = new Moralis.Query(THFinalHandPlayed)
       queryTHFinalHandPlayed
-        .equalTo( "gameId", String( gameId ) )
+        .equalTo("gameId", String(gameId))
       const resultsTHFinalHandPlayed = await queryTHFinalHandPlayed.find()
 
       const lb = []
-      for(let i = 0; i < resultsTHFinalHandPlayed.length; i += 1) {
+      for (let i = 0; i < resultsTHFinalHandPlayed.length; i += 1) {
         const res = resultsTHFinalHandPlayed[i]
         const fh = {}
         const cTmp = sortFinalHand(
-          res.get( "card1"), res.get( "card2"), res.get( "card3"), res.get( "card4"), res.get( "card5")
+          res.get("card1"), res.get("card2"), res.get("card3"), res.get("card4"), res.get("card5")
         )
-        fh.player = res.get( "player")
+        fh.player = res.get("player")
         fh.card1 = cTmp[0]
         fh.card2 = cTmp[1]
         fh.card3 = cTmp[2]
         fh.card4 = cTmp[3]
         fh.card5 = cTmp[4]
-        fh.rank = parseInt(res.get( "rank" ), 10)
+        fh.rank = parseInt(res.get("rank"), 10)
         fh.txHash = res.get("transaction_hash")
         fh.timestamp = res.get("block_timestamp")
         lb.push(fh)
@@ -130,35 +130,35 @@ export const Leaderboard = ({gameId, showWinnings=false}) => {
       setLeaderboard(sortLeaderboard(lb))
     }
 
-    if(!leaderboardInitialised) {
+    if (!leaderboardInitialised) {
       setLeaderboardInitialised(true)
       getLeaderboard()
     }
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [gameId, leaderboardInitialised])
 
-  useEffect( () => {
+  useEffect(() => {
 
     async function getWinnings() {
-      const THWinningsCalculated = Moralis.Object.extend( "THWinningsCalculated" )
-      const queryTHWinningsCalculated = new Moralis.Query( THWinningsCalculated )
+      const THWinningsCalculated = Moralis.Object.extend("THWinningsCalculated")
+      const queryTHWinningsCalculated = new Moralis.Query(THWinningsCalculated)
       queryTHWinningsCalculated
-        .equalTo( "gameId", String( gameId ) )
+        .equalTo("gameId", String(gameId))
       const resultsTHWinningsCalculated = await queryTHWinningsCalculated.find()
 
       const w = {}
-      for(let i = 0; i < resultsTHWinningsCalculated.length; i += 1) {
+      for (let i = 0; i < resultsTHWinningsCalculated.length; i += 1) {
         const res = resultsTHWinningsCalculated[i]
-        const player = res.get( "player")
-        const amount = res.get( "amount")
+        const player = res.get("player")
+        const amount = res.get("amount")
         w[player] = amount
       }
       setWinnings(w)
     }
 
-    if(!winningsInitialised) {
+    if (!winningsInitialised) {
       setWinningsInitialised(true)
-      if(showWinnings) {
+      if (showWinnings) {
         getWinnings()
       }
     }
@@ -167,10 +167,10 @@ export const Leaderboard = ({gameId, showWinnings=false}) => {
 
   function handleFinalHandPlayed(data) {
 
-    const gId = parseInt( data.attributes.gameId, 10 )
+    const gId = parseInt(data.attributes.gameId, 10)
     const newLb = [...leaderboard]
 
-    if(gId === parseInt(gameId, 10)) {
+    if (gId === parseInt(gameId, 10)) {
       const fh = {}
       const cTmp = sortFinalHand(
         data.attributes.card1,
@@ -185,7 +185,7 @@ export const Leaderboard = ({gameId, showWinnings=false}) => {
       fh.card3 = cTmp[2]
       fh.card4 = cTmp[3]
       fh.card5 = cTmp[4]
-      fh.rank = parseInt( data.attributes.rank, 10 )
+      fh.rank = parseInt(data.attributes.rank, 10)
 
       newLb.push(fh)
     }
@@ -195,8 +195,8 @@ export const Leaderboard = ({gameId, showWinnings=false}) => {
   useEffect(() => {
 
     const data = []
-    if(winningsInitialised && leaderboardInitialised) {
-      for(let i = 0; i < leaderboard.length; i += 1) {
+    if (winningsInitialised && leaderboardInitialised) {
+      for (let i = 0; i < leaderboard.length; i += 1) {
         const h = <>
           <PlayingCard cardId={leaderboard[i].card1} key={`leaderboard_${i}_${leaderboard[i].player}_${gameId}_card1`} width={35} />
           <PlayingCard cardId={leaderboard[i].card2} key={`leaderboard_${i}_${leaderboard[i].player}_${gameId}_card2`} width={35} />
@@ -210,7 +210,7 @@ export const Leaderboard = ({gameId, showWinnings=false}) => {
 
         const d = {
           key: i,
-          position: leaderboard[i].player === walletAddress ? <strong>{i+1}</strong> : i+1,
+          position: leaderboard[i].player === walletAddress ? <strong>{i + 1}</strong> : i + 1,
           hand: h,
           player: leaderboard[i].player === walletAddress ?
             <strong>
@@ -247,7 +247,7 @@ export const Leaderboard = ({gameId, showWinnings=false}) => {
           timestamp: <Moment format="YYYY/MM/DD HH:mm:ss">{leaderboard[i].timestamp.toString()}</Moment>,
         }
 
-        if(showWinnings) {
+        if (showWinnings) {
           const w = Moralis.Units.FromWei(winnings[leaderboard[i].player], 18)
           d.winnings = leaderboard[i].player === walletAddress ? <strong>{w} ETH</strong> : <>{w} ETH</>
         }
@@ -267,13 +267,13 @@ export const Leaderboard = ({gameId, showWinnings=false}) => {
       onCreate: data => handleFinalHandPlayed(data),
     })
 
-  if(!leaderboardInitialised || !winningsInitialised) {
+  if (!leaderboardInitialised || !winningsInitialised) {
     return (
       <><Spin />Loading</>
     )
   }
 
-  return(
+  return (
     <>
       <Table
         dataSource={leaderboardTableData}

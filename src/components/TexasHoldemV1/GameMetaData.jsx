@@ -5,7 +5,7 @@ import { GameStatus } from "./GameStatus"
 import Countdown from "react-countdown"
 import { getDealRequestedText } from "helpers/formatters"
 
-export const GameMetaData = ({gameId, gameData, feesPaid, playersPerRound, numFinalHands, numHands, gameHasEnded}) => {
+export const GameMetaData = ({ gameId, gameData, feesPaid, playersPerRound, numFinalHands, numHands, gameHasEnded }) => {
 
   const { Moralis } = useMoralis()
 
@@ -84,7 +84,7 @@ export const GameMetaData = ({gameId, gameData, feesPaid, playersPerRound, numFi
       </Descriptions>
 
       <h4>
-          <GameStatus status={gameData.status} gameHasEnded={gameHasEnded} key={`game_status_${gameId}`} />
+        <GameStatus status={gameData.status} gameHasEnded={gameHasEnded} key={`game_status_${gameId}`} />
 
         {
           (gameData.status === 1 || gameData.status === 3 || gameData.status === 5) && gameData.gameStartTime > 0 &&

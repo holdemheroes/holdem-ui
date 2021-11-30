@@ -10,23 +10,23 @@ export const useGameMetadata = () => {
   const { Moralis } = useMoralis()
 
   const abi = abis.texas_holdem_v1;
-  const contractAddress = getTexasHoldemV1Address( chainId );
+  const contractAddress = getTexasHoldemV1Address(chainId);
 
   const options = {
     contractAddress, abi,
   }
 
-  const [ maxConcurrentGames, setMaxConcurrentGames ] = useState(null)
-  const [ maxConcurrentGamesLoading, setMaxConcurrentGamesLoading ] = useState(false)
-  const [ maxConcurrentGamesFetched, setMaxConcurrentGamesFetched ] = useState(false)
+  const [maxConcurrentGames, setMaxConcurrentGames] = useState(null)
+  const [maxConcurrentGamesLoading, setMaxConcurrentGamesLoading] = useState(false)
+  const [maxConcurrentGamesFetched, setMaxConcurrentGamesFetched] = useState(false)
 
-  const [ gamesInProgress, setGamesInProgress ] = useState([])
-  const [ gamesInProgressLoading, setGamesInProgressLoading ] = useState(false)
-  const [ gamesInProgressFetched, setGamesInProgressFetched ] = useState(false)
+  const [gamesInProgress, setGamesInProgress] = useState([])
+  const [gamesInProgressLoading, setGamesInProgressLoading] = useState(false)
+  const [gamesInProgressFetched, setGamesInProgressFetched] = useState(false)
 
-  const [ numGames, setNumGames ] = useState(0)
-  const [ numGamesLoading, setNumGamesLoading ] = useState(false)
-  const [ numGamesFetched, setNumGamesFetched ] = useState(false)
+  const [numGames, setNumGames] = useState(0)
+  const [numGamesLoading, setNumGamesLoading] = useState(false)
+  const [numGamesFetched, setNumGamesFetched] = useState(false)
 
   function handleOnChainMaxConcurrentGames(result) {
     setMaxConcurrentGamesFetched(true)
@@ -45,14 +45,14 @@ export const useGameMetadata = () => {
 
   function handleGameCreated(data) {
     const newGameId = data.attributes.gameId
-    if(!gamesInProgress.includes(newGameId)) {
+    if (!gamesInProgress.includes(newGameId)) {
       const newGames = [...gamesInProgress, newGameId]
 
-      openNotification( {
+      openNotification({
         message: "🔊 New Game!",
         description: `New game started: #${newGameId}`,
         type: "info"
-      } );
+      });
 
       setGamesInProgress(newGames)
     }
@@ -64,11 +64,11 @@ export const useGameMetadata = () => {
     const newGames = gamesInProgress.filter(e => e !== deletedGameId)
     setGamesInProgress(newGames)
 
-    openNotification( {
+    openNotification({
       message: "🔊 Game Ended",
       description: `Game #${deletedGameId} ended`,
       type: "info"
-    } );
+    });
   }
 
   function fetchOnChainMaxConcurrentGames() {
@@ -104,7 +104,7 @@ export const useGameMetadata = () => {
 
   //get initial maxConcurrentGames
   useEffect(() => {
-    if(!maxConcurrentGames && !maxConcurrentGamesLoading && !maxConcurrentGamesFetched) {
+    if (!maxConcurrentGames && !maxConcurrentGamesLoading && !maxConcurrentGamesFetched) {
       fetchOnChainMaxConcurrentGames()
     }
     // eslint-disable-next-line react-hooks/exhaustive-deps
@@ -112,7 +112,7 @@ export const useGameMetadata = () => {
 
   //get initial gamesInProgress
   useEffect(() => {
-    if(!gamesInProgressLoading && !gamesInProgressFetched) {
+    if (!gamesInProgressLoading && !gamesInProgressFetched) {
       fetchOnChainGamesInProgress()
     }
     // eslint-disable-next-line react-hooks/exhaustive-deps
@@ -120,7 +120,7 @@ export const useGameMetadata = () => {
 
   //get initial gamesNumGames
   useEffect(() => {
-    if(!numGamesLoading && !numGamesFetched) {
+    if (!numGamesLoading && !numGamesFetched) {
       fetchOnChainNumGames()
     }
     // eslint-disable-next-line react-hooks/exhaustive-deps

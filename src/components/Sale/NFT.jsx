@@ -1,4 +1,4 @@
-import React, {useState, useEffect} from "react";
+import React, { useState, useEffect } from "react";
 import { useMoralis } from "react-moralis"
 import { useMoralisDapp } from "../../providers/MoralisDappProvider/MoralisDappProvider"
 import abis from "../../helpers/contracts"
@@ -23,7 +23,7 @@ export default function NFT({ tokenId, canMint, mintedTokens, pricePerToken }) {
     contractAddress,
   }
 
-  Moralis.executeFunction( {
+  Moralis.executeFunction({
     functionName: "tokenURI",
     params: {
       _tokenId: String(tokenId),
@@ -34,31 +34,31 @@ export default function NFT({ tokenId, canMint, mintedTokens, pricePerToken }) {
   );
 
   useEffect(() => {
-    if(mintedTokens.includes(tokenId)) {
-      if(!nftOwner || nftOwner === "no") {
-        Moralis.executeFunction( {
+    if (mintedTokens.includes(tokenId)) {
+      if (!nftOwner || nftOwner === "no") {
+        Moralis.executeFunction({
           functionName: "ownerOf",
           params: {
-            tokenId: String( tokenId ),
+            tokenId: String(tokenId),
           },
           ...options
-        } ).then( ( response ) =>
-          setNftOwner( response )
-        ).catch( ( error ) => {
-            setError( error )
-          }
+        }).then((response) =>
+          setNftOwner(response)
+        ).catch((error) => {
+          setError(error)
+        }
         );
       }
     } else {
-      setNftOwner( "no" )
+      setNftOwner("no")
     }
 
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [mintedTokens, tokenId, nftOwner]);
 
 
-  if(!nftData || !nftOwner) {
-    return(<>token {tokenId}</>)
+  if (!nftData || !nftOwner) {
+    return (<>token {tokenId}</>)
   }
 
   const nft = decodeNftUriToJson(nftData)
@@ -100,10 +100,10 @@ export default function NFT({ tokenId, canMint, mintedTokens, pricePerToken }) {
   }
 
   let block
-  if(nftOwner === "no") {
-    if(canMint) {
+  if (nftOwner === "no") {
+    if (canMint) {
       block = <Tooltip title={`Mint NFT #${tokenId}`}>
-        <ShoppingCartOutlined onClick={() => postRevealMint(tokenId)}/>
+        <ShoppingCartOutlined onClick={() => postRevealMint(tokenId)} />
       </Tooltip>
     } else {
       block = <p>Mint limit reached. Wait for open market</p>

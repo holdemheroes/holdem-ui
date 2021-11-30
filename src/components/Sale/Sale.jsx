@@ -1,10 +1,10 @@
-import React, { useState, useEffect } from "react"
-import SaleInfo from "./SaleInfo"
-import { useNFTSaleInfo } from "../../hooks/useNFTSaleInfo"
+import React, { useState, useEffect } from "react";
+import SaleInfo from "./SaleInfo";
+import { useNFTSaleInfo } from "../../hooks/useNFTSaleInfo";
 import { useMoralisQuery } from "react-moralis";
-import PreRevealSale from "./PreRevealSale"
-import PostRevealSale from "./PostRevealSale"
-import { useMyNFTHands } from "../../hooks/useMyNFTHands"
+import PreRevealSale from "./PreRevealSale";
+import PostRevealSale from "./PostRevealSale";
+import { useMyNFTHands } from "../../hooks/useMyNFTHands";
 
 export default function Sale() {
   const {

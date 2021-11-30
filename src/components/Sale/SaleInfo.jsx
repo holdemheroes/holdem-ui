@@ -11,17 +11,17 @@ export default function SaleInfo(
   const saleStartDiff = startTime - now
   const revealTimeDiff = revealTime - now
 
-  if(saleStartDiff > 0) {
+  if (saleStartDiff > 0) {
     return (
       <div>
         Pre-reveal Sale starts in: <Countdown date={startTime * 1000} />
-        <br/>
+        <br />
         Revealed in: <Countdown date={revealTime * 1000} />
       </div>
     )
   }
 
-  if(revealTimeDiff > 0) {
+  if (revealTimeDiff > 0) {
     return (
       <div>
         Revealed & distributed in: <Countdown date={revealTime * 1000} />
@@ -29,7 +29,7 @@ export default function SaleInfo(
     )
   }
 
-  if(revealTimeDiff <= 0 && startingIndex === 0) {
+  if (revealTimeDiff <= 0 && startingIndex === 0) {
     return (
       <div>
         pre-reveal sale ended. Waiting for distribution

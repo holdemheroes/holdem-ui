@@ -12,13 +12,13 @@ export default function RefundableGames() {
   const contractAddress = getTexasHoldemV1Address(chainId);
   const { Moralis, isInitialized } = useMoralis()
 
-  const [ refundableGames, setRefundableGames ] = useState(null)
-  const [ initialDataFetched, setInitialDataFetched ] = useState(false)
+  const [refundableGames, setRefundableGames] = useState(null)
+  const [initialDataFetched, setInitialDataFetched] = useState(false)
 
-  useEffect( () => {
+  useEffect(() => {
 
     const fetchPaidIn = async (gameId) => {
-      return await  Moralis.executeFunction({
+      return await Moralis.executeFunction({
         contractAddress,
         functionName: "getPlayerAmountPaidIn",
         abi,
@@ -32,7 +32,7 @@ export default function RefundableGames() {
     };
 
     async function fetchRefundableGames() {
-      if(!isInitialized) {
+      if (!isInitialized) {
         return
       }
 
@@ -44,10 +44,10 @@ export default function RefundableGames() {
 
       const rs = []
 
-      for(let i = 0; i < results.length; i += 1) {
+      for (let i = 0; i < results.length; i += 1) {
         const gameId = results[i].get("gameId")
         const amount = await fetchPaidIn(gameId)
-        if(amount && amount !== "0" && !rs.includes({
+        if (amount && amount !== "0" && !rs.includes({
           gameId, amount
         })) {
           rs.push({
@@ -60,13 +60,13 @@ export default function RefundableGames() {
 
     }
 
-    if(!initialDataFetched) {
+    if (!initialDataFetched) {
       fetchRefundableGames()
     }
     // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [ refundableGames, initialDataFetched, isInitialized ] );
+  }, [refundableGames, initialDataFetched, isInitialized]);
 
-  if(!refundableGames) {
+  if (!refundableGames) {
     return (
       <>
         <Spin />Loading
@@ -78,9 +78,9 @@ export default function RefundableGames() {
     <div>
       <h2>Refundable Games</h2>
       {refundableGames &&
-      refundableGames.map((item) => (
-        <Refundable gameId={item.gameId} amount={item.amount} key={`refundable_game_${item.gameId}`} />
-      ))
+        refundableGames.map((item) => (
+          <Refundable gameId={item.gameId} amount={item.amount} key={`refundable_game_${item.gameId}`} />
+        ))
       }
 
     </div>

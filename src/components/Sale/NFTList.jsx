@@ -18,9 +18,9 @@ export default function NFTList({ currentTokens, canMint, mintedTokens, pricePer
   return (
     <div style={styles.NFTs}>
       {currentTokens &&
-      currentTokens.map(( item) => (
-        <NFT key={`nft_id_${item}`} tokenId={item} canMint={canMint} mintedTokens={mintedTokens} pricePerToken={pricePerToken} />
-      ))}
+        currentTokens.map((item) => (
+          <NFT key={`nft_id_${item}`} tokenId={item} canMint={canMint} mintedTokens={mintedTokens} pricePerToken={pricePerToken} />
+        ))}
     </div>
   );
 }

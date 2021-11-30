@@ -10,8 +10,8 @@ export const useNFTSaleInfo = () => {
   const abi = abis.heh_nft;
   const contractAddress = getHoldemHeroesAddress(chainId);
 
-  const [ fetched, setFetched ] = useState(false)
-  const [ dataInitialised, setDataInitialised ] = useState(false)
+  const [fetched, setFetched] = useState(false)
+  const [dataInitialised, setDataInitialised] = useState(false)
 
   const options = {
     contractAddress, abi,
@@ -65,14 +65,14 @@ export const useNFTSaleInfo = () => {
     functionName: "totalSupply",
   })
 
-  useEffect( () => {
+  useEffect(() => {
 
-    if(isInitialized && !fetched) {
+    if (isInitialized && !fetched) {
       setFetched(true)
       refresh()
     }
 
-    if(startTime !== null &&
+    if (startTime !== null &&
       revealTime !== null &&
       startingIndex !== null &&
       maxPerTxOrOwner !== null &&

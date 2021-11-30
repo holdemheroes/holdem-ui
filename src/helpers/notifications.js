@@ -1,7 +1,7 @@
 import { notification } from "antd"
 
 export const openNotification = ({ message, description, type }) => {
-  switch(type) {
+  switch (type) {
     case "success":
       notification.success({
         placement: "bottomRight",

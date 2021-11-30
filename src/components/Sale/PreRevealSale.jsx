@@ -8,7 +8,7 @@ import { openNotification } from "helpers/notifications"
 const BN = require('bn.js')
 
 export default function PreRevealSale({ pricePerToken, mintedTokens, maxCanOwn, balance, totalSupply }) {
-  const { chainId }  = useMoralisDapp();
+  const { chainId } = useMoralisDapp();
   const { Moralis } = useMoralis();
   const abi = abis.heh_nft;
   const contractAddress = getHoldemHeroesAddress(chainId);
@@ -41,12 +41,12 @@ export default function PreRevealSale({ pricePerToken, mintedTokens, maxCanOwn, 
       });
     })
       .on("receipt", (receipt) => {
-      openNotification({
-        message: "🔊 New Receipt",
-        description: `📃 Receipt: ${receipt.transactionHash}`,
-        type: "success"
-      });
-    })
+        openNotification({
+          message: "🔊 New Receipt",
+          description: `📃 Receipt: ${receipt.transactionHash}`,
+          type: "success"
+        });
+      })
       .on("error", (error) => {
         openNotification({
           message: "🔊 Error",
@@ -59,12 +59,12 @@ export default function PreRevealSale({ pricePerToken, mintedTokens, maxCanOwn, 
 
   const canMint = Math.min((maxCanOwn - balance, MAX_TOTAL_SUPPLY - totalSupply), 5)
   const options = []
-  for(let i = 1; i <= canMint; i += 1) {
+  for (let i = 1; i <= canMint; i += 1) {
     options.push(<option value={i} key={`mint_option_${i}`}>{i}</option>)
   }
 
   let block = <>Minted max of {maxCanOwn.toString()} already</>
-  if(options.length > 0) {
+  if (options.length > 0) {
     block = <form onSubmit={(e) => preRevealMint(e)}>
       Mint{" "}
       <select name={"mint_amount"}>

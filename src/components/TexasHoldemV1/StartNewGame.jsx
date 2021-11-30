@@ -6,13 +6,13 @@ import { getTexasHoldemV1Address } from "../../helpers/networks"
 import { useMoralis } from "react-moralis"
 import { Form, Input, Button, Collapse } from 'antd';
 
-export default function StartNewGame({gameIdsInProgress, maxConcurrentGames}) {
+export default function StartNewGame({ gameIdsInProgress, maxConcurrentGames }) {
   const { Moralis } = useMoralis();
   const { chainId } = useMoralisDapp();
   const abi = abis.texas_holdem_v1;
   const contractAddress = getTexasHoldemV1Address(chainId);
 
-  if(!gameIdsInProgress || !maxConcurrentGames) {
+  if (!gameIdsInProgress || !maxConcurrentGames) {
     return <div>LOADING</div>
   }
 
@@ -21,7 +21,7 @@ export default function StartNewGame({gameIdsInProgress, maxConcurrentGames}) {
     const round1Price = Moralis.Units.ETH(values.round_1_price.trim())
     const round2Price = Moralis.Units.ETH(values.round_2_price.trim())
 
-    if(roundTime <= 0) {
+    if (roundTime <= 0) {
       openNotification({
         message: "🔊 Error",
         description: "round time cannot be 0",
@@ -29,7 +29,7 @@ export default function StartNewGame({gameIdsInProgress, maxConcurrentGames}) {
       })
       return
     }
-    if(round1Price === "0") {
+    if (round1Price === "0") {
       openNotification({
         message: "🔊 Error",
         description: "flop bet cannot be 0",
@@ -37,7 +37,7 @@ export default function StartNewGame({gameIdsInProgress, maxConcurrentGames}) {
       })
       return
     }
-    if(round2Price === "0") {
+    if (round2Price === "0") {
       openNotification({
         message: "🔊 Error",
         description: "turn bet cannot be 0",
@@ -82,7 +82,7 @@ export default function StartNewGame({gameIdsInProgress, maxConcurrentGames}) {
       });
   }
 
-  if(gameIdsInProgress.length === maxConcurrentGames) {
+  if (gameIdsInProgress.length === maxConcurrentGames) {
     return (
       <><p>Max number of concurrent games already in progress</p></>
     )

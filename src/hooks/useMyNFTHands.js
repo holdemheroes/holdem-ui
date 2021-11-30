@@ -26,13 +26,13 @@ export const useMyNFTHands = (options) => {
       const NFTs = data.result;
       for (let NFT of NFTs) {
         if (NFT?.metadata) {
-          NFT.metadata = JSON.parse( NFT.metadata );
+          NFT.metadata = JSON.parse(NFT.metadata);
           NFT.image = resolveLink(NFT.metadata?.image);
         }
         if (NFT?.token_id) {
           fetchHandData(NFT.token_id)
             .then((d) => {
-              if(d?.card1 && d?.card2 && d?.handId) {
+              if (d?.card1 && d?.card2 && d?.handId) {
                 NFT.card1 = parseInt(d.card1, 10)
                 NFT.card2 = parseInt(d.card2, 10)
                 NFT.handId = parseInt(d.handId, 10)
@@ -48,13 +48,13 @@ export const useMyNFTHands = (options) => {
 
   const fetchHandData = async (tokenId) => {
     return await Moralis.executeFunction({
-        contractAddress: texasHoldemAddress,
-        functionName: "getTokenDataWithHandId",
-        abi: thAbi,
-        params: {
-          "_tokenId": String(tokenId),
-        },
-      })
+      contractAddress: texasHoldemAddress,
+      functionName: "getTokenDataWithHandId",
+      abi: thAbi,
+      params: {
+        "_tokenId": String(tokenId),
+      },
+    })
       .then((result) => result)
       .catch((e) => console.log(e.message));
   };

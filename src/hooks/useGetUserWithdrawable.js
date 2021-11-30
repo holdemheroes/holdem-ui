@@ -9,13 +9,13 @@ export const useGetUserWithdrawable = () => {
   const { Moralis, isWeb3Enabled } = useMoralis();
   const { chainId, walletAddress } = useMoralisDapp();
 
-  const [ balance, setBalance ] = useState(null);
-  const [ balanceLoading, setBalanceLoading ] = useState(false)
-  const [ balanceFetched, setBalanceFetched ] = useState(false)
-  const [ refetch, setRefetch ] = useState(false)
+  const [balance, setBalance] = useState(null);
+  const [balanceLoading, setBalanceLoading] = useState(false)
+  const [balanceFetched, setBalanceFetched] = useState(false)
+  const [refetch, setRefetch] = useState(false)
 
   const abi = abis.texas_holdem_v1;
-  const contractAddress = getTexasHoldemV1Address( chainId );
+  const contractAddress = getTexasHoldemV1Address(chainId);
 
   const options = {
     contractAddress, abi,
@@ -41,7 +41,7 @@ export const useGetUserWithdrawable = () => {
 
   //get initial balance
   useEffect(() => {
-    if(balance === null && !balanceFetched && !balanceLoading && isWeb3Enabled) {
+    if (balance === null && !balanceFetched && !balanceLoading && isWeb3Enabled) {
       fetchOnChainWithdrawable()
     }
     // eslint-disable-next-line react-hooks/exhaustive-deps
@@ -50,7 +50,7 @@ export const useGetUserWithdrawable = () => {
   // check refetch
   useEffect(() => {
     let timeout
-    if(refetch) {
+    if (refetch) {
       setRefetch(false)
       timeout = setTimeout(() => {
         fetchOnChainWithdrawable()

@@ -2,16 +2,16 @@ import React, { useState, useEffect } from "react";
 import { Pagination, Row, Col } from 'antd';
 import NFTList from "./NFTList"
 
-export default function PostRevealSale({pricePerToken, canMint, mintedTokens }) {
+export default function PostRevealSale({ pricePerToken, canMint, mintedTokens }) {
 
   const tokens = []
-  for(let i = 0; i < 1326; i += 1) {
+  for (let i = 0; i < 1326; i += 1) {
     tokens.push(i)
   }
 
   const [currentItems, setCurrentItems] = useState(null);
   const [tokensPerPage, seTokensPerPage] = useState(10);
-  const [pageNumber, setPageNumber ] = useState(1)
+  const [pageNumber, setPageNumber] = useState(1)
 
   useEffect(() => {
     const start = (pageNumber - 1) * tokensPerPage
