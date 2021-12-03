@@ -1,13 +1,12 @@
 import { useEffect } from "react";
-import { useMoralis } from "react-moralis";
 import { BrowserRouter as Router, Switch, Route, NavLink, Redirect } from "react-router-dom";
+import { useMoralis } from "react-moralis";
+import { Menu, Layout } from "antd";
+import "antd/dist/antd.css";
 import Account from "./components/Account";
 import Chains from "./components/Chains";
 import NFTBalance from "./components/NFTBalance";
-import { Menu, Layout } from "antd";
-import "antd/dist/antd.css";
 import Blockie from "./components/Blockie";
-import "./App.scss";
 import Sale from "./components/Sale";
 import GamesV1 from "./components/TexasHoldemV1";
 import Withdrawable from "./components/Withdrawable";
@@ -15,7 +14,9 @@ import RefundableGames from "./components/TexasHoldemV1/RefundableGames";
 import { History } from "./components/TexasHoldemV1/History/History";
 import Home from "./pages/Home";
 import GamePlay from "./pages/GamePlay";
+import "./App.scss";
 import logo from "./assets/images/hhlogo.png";
+
 const { Header } = Layout;
 
 const App = () => {

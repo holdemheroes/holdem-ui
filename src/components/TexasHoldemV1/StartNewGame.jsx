@@ -1,10 +1,10 @@
-import React from "react"
-import { openNotification } from "helpers/notifications"
-import { useMoralisDapp } from "../../providers/MoralisDappProvider/MoralisDappProvider"
-import abis from "../../helpers/contracts"
-import { getTexasHoldemV1Address } from "../../helpers/networks"
-import { useMoralis } from "react-moralis"
-import { Form, Input, Button, Collapse } from 'antd';
+import React from "react";
+import { useMoralis } from "react-moralis";
+import { Form, Input, Button, Collapse, Spin } from 'antd';
+import { useMoralisDapp } from "../../providers/MoralisDappProvider/MoralisDappProvider";
+import { openNotification } from "../../helpers/notifications";
+import abis from "../../helpers/contracts";
+import { getTexasHoldemV1Address } from "../../helpers/networks";
 
 export default function StartNewGame({ gameIdsInProgress, maxConcurrentGames }) {
   const { Moralis } = useMoralis();
@@ -13,37 +13,38 @@ export default function StartNewGame({ gameIdsInProgress, maxConcurrentGames }) 
   const contractAddress = getTexasHoldemV1Address(chainId);
 
   if (!gameIdsInProgress || !maxConcurrentGames) {
-    return <div>LOADING</div>
+    // return <div>LOADING</div>;
+    return <Spin className="spin_loader" />;
   }
 
   async function startNewCustomGame(values) {
-    const roundTime = parseInt(values.round_timer, 10) * 60
-    const round1Price = Moralis.Units.ETH(values.round_1_price.trim())
-    const round2Price = Moralis.Units.ETH(values.round_2_price.trim())
+    const roundTime = parseInt(values.round_timer, 10) * 60;
+    const round1Price = Moralis.Units.ETH(values.round_1_price.trim());
+    const round2Price = Moralis.Units.ETH(values.round_2_price.trim());
 
     if (roundTime <= 0) {
       openNotification({
         message: "🔊 Error",
         description: "round time cannot be 0",
         type: "error"
-      })
-      return
+      });
+      return;
     }
     if (round1Price === "0") {
       openNotification({
         message: "🔊 Error",
         description: "flop bet cannot be 0",
         type: "error"
-      })
-      return
+      });
+      return;
     }
     if (round2Price === "0") {
       openNotification({
         message: "🔊 Error",
         description: "turn bet cannot be 0",
         type: "error"
-      })
-      return
+      });
+      return;
     }
 
     const options = {
@@ -55,7 +56,7 @@ export default function StartNewGame({ gameIdsInProgress, maxConcurrentGames }) 
         _round1Price: round1Price,
         _round2Price: round2Price,
       }
-    }
+    };
 
     const tx = await Moralis.executeFunction({ awaitReceipt: false, ...options });
     tx.on("transactionHash", (hash) => {
@@ -75,7 +76,8 @@ export default function StartNewGame({ gameIdsInProgress, maxConcurrentGames }) 
       .on("error", (error) => {
         openNotification({
           message: "🔊 Error",
-          description: `📃 Receipt: ${error.toString()}`,
+          // description: `📃 Receipt: ${error.toString()}`,
+          description: `📃 Receipt: ${error.message}`,
           type: "error"
         });
         console.log(error);
@@ -84,8 +86,8 @@ export default function StartNewGame({ gameIdsInProgress, maxConcurrentGames }) 
 
   if (gameIdsInProgress.length === maxConcurrentGames) {
     return (
-      <><p>Max number of concurrent games already in progress</p></>
-    )
+      <p>Max number of concurrent games already in progress</p>
+    );
   }
 
   return (
@@ -137,5 +139,5 @@ export default function StartNewGame({ gameIdsInProgress, maxConcurrentGames }) 
         </div>
       </Collapse.Panel>
     </Collapse>
-  )
+  );
 }

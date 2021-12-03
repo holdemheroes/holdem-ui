@@ -56,20 +56,12 @@ export const History = () => {
 
       <Row>
         <Col>
-          {/* <Pagination
-            showQuickJumper
-            showSizeChanger
-            onShowSizeChange={onShowSizeChange}
-            defaultCurrent={1}
-            total={numGames}
-            onChange={handlePageClick}
-          /> */}
           <Pagination
             showQuickJumper
             showSizeChanger
             onShowSizeChange={onShowSizeChange}
             defaultCurrent={1}
-            total={44}
+            total={numGames}
             onChange={handlePageClick}
           />
         </Col>

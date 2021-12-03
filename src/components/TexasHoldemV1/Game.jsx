@@ -1,16 +1,16 @@
-import { useGameData } from "../../hooks/useGameData";
-import { Button, Checkbox, Col, Divider, Form, Radio, Row, Space } from "antd";
 import React, { useState } from "react";
-import { PlayingCard } from "../PlayingCards/PlayingCard";
 import { useMoralis } from "react-moralis";
-import { openNotification } from "../../helpers/notifications";
+import { Button, Checkbox, Col, Divider, Form, Radio, Row, Space } from "antd";
+import { useMoralisDapp } from "../../providers/MoralisDappProvider/MoralisDappProvider";
+import { PlayingCard } from "../PlayingCards/PlayingCard";
 import { Leaderboard } from "./Leaderboard";
 import { RankName } from "./RankName";
 import { Hand } from "./Hand";
-import { useMoralisDapp } from "../../providers/MoralisDappProvider/MoralisDappProvider";
-import abis from "../../helpers/contracts";
-import { getTexasHoldemV1Address } from "../../helpers/networks";
 import { GameMetaData } from "./GameMetaData";
+import { useGameData } from "../../hooks/useGameData";
+import abis from "../../helpers/contracts";
+import { openNotification } from "../../helpers/notifications";
+import { getTexasHoldemV1Address } from "../../helpers/networks";
 
 const styles = {
   NFTs: {
@@ -193,11 +193,12 @@ export default function Game({ gameId }) {
 
       setPotentialFinalHandScore(rank);
     }
-  }
+  };
 
   const handleFinalTokenChange = list => {
     setPotentialFinalToken(list);
   };
+
   const handleRiverCheckboxChange = list => {
     setPotentialFinalRiver(list);
   };
@@ -345,7 +346,6 @@ export default function Game({ gameId }) {
               </Row>
             </div>
             {!gameHasEnded && lastRoundPlayed !== 6 &&
-
               <>
                 <h4>Available Hands</h4>
 
@@ -379,12 +379,10 @@ export default function Game({ gameId }) {
                             </>
                           </Hand>
                         ))}
-                    }
                     </div>
                   </Radio.Group>
                 </Form.Item>
               </>
-
             }
             <>
               {gameData.status === 6 && !gameHasEnded && lastRoundPlayed !== 6 && <>

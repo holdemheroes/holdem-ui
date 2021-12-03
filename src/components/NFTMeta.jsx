@@ -3,13 +3,13 @@ import { Card } from "antd";
 
 export default function NFTMeta({ metadata }) {
 
-  const traits = []
+  const traits = [];
   for (let i = 0; i < metadata.attributes.length; i += 1) {
-    const attr = metadata.attributes[i]
-    traits.push(<li key={`nft_meta${i}_${attr.trait_type}`}>{attr.trait_type}: {attr.value}<br /></li>)
+    const attr = metadata.attributes[i];
+    traits.push(<li key={`nft_meta${i}_${attr.trait_type}`}>{attr.trait_type}: {attr.value}<br /></li>);
   }
 
-  const attributes = <ul>{traits}</ul>
+  const attributes = <ul>{traits}</ul>;
 
   return (
     <Card title={metadata.name}>

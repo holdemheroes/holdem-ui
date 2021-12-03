@@ -1,6 +1,6 @@
 import { useEffect, useState } from "react";
-import useChain from "hooks/useChain";
-import { useMoralisDapp } from "providers/MoralisDappProvider/MoralisDappProvider";
+import useChain from "../../hooks/useChain";
+import { useMoralisDapp } from "../../providers/MoralisDappProvider/MoralisDappProvider";
 import { Menu, Dropdown } from "antd";
 import { DownOutlined } from "@ant-design/icons";
 import { ETHLogo } from "./Logos";

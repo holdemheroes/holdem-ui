@@ -1,17 +1,17 @@
-import { useMoralisDapp } from "providers/MoralisDappProvider/MoralisDappProvider";
 import { useEffect, useState } from "react";
-import { useMoralis, useMoralisWeb3Api, useMoralisWeb3ApiCall } from "react-moralis"
+import { useMoralis, useMoralisWeb3Api, useMoralisWeb3ApiCall } from "react-moralis";
+import { useMoralisDapp } from "../providers/MoralisDappProvider/MoralisDappProvider";
 import { useIPFS } from "./useIPFS";
-import { getHoldemHeroesAddress, getTexasHoldemV1Address } from "../helpers/networks"
-import abis from "../helpers/contracts"
+import { getHoldemHeroesAddress, getTexasHoldemV1Address } from "../helpers/networks";
+import abis from "../helpers/contracts";
 
 export const useMyNFTHands = (options) => {
   const { account } = useMoralisWeb3Api();
-  const { Moralis } = useMoralis()
+  const { Moralis } = useMoralis();
   const { chainId, walletAddress } = useMoralisDapp();
   const hehContractAddress = getHoldemHeroesAddress(chainId);
   const texasHoldemAddress = getTexasHoldemV1Address(chainId)
-  const thAbi = abis.texas_holdem_v1
+  const thAbi = abis.texas_holdem_v1;
   const { resolveLink } = useIPFS();
   const [NFTHands, setNFTHands] = useState([]);
   const {
@@ -33,9 +33,9 @@ export const useMyNFTHands = (options) => {
           fetchHandData(NFT.token_id)
             .then((d) => {
               if (d?.card1 && d?.card2 && d?.handId) {
-                NFT.card1 = parseInt(d.card1, 10)
-                NFT.card2 = parseInt(d.card2, 10)
-                NFT.handId = parseInt(d.handId, 10)
+                NFT.card1 = parseInt(d.card1, 10);
+                NFT.card2 = parseInt(d.card2, 10);
+                NFT.handId = parseInt(d.handId, 10);
               }
             })
             .catch((e) => console.log(e.message));

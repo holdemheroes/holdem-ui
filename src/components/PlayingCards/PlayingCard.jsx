@@ -1,10 +1,10 @@
 import React, { useEffect, useState } from "react";
 import { useWeb3ExecuteFunction } from "react-moralis";
+import { Image, Spin } from 'antd';
 import { useMoralisDapp } from "../../providers/MoralisDappProvider/MoralisDappProvider";
 import abis from "../../helpers/contracts";
 import { getHoldemHeroesAddress } from "../../helpers/networks";
 import { svgToImgSrc } from "../../helpers/nft";
-import { Image, Spin } from 'antd';
 
 export const PlayingCard = ({ cardId, width = 50 }) => {
 

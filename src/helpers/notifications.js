@@ -8,20 +8,20 @@ export const openNotification = ({ message, description, type }) => {
         message,
         description,
       });
-      break
+      break;
     case "error":
       notification.error({
         placement: "bottomRight",
         message,
         description,
       });
-      break
+      break;
     default:
       notification.open({
         placement: "bottomRight",
         message,
         description,
       });
-      break
+      break;
   }
 };
