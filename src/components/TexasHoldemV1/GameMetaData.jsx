@@ -1,13 +1,13 @@
-import { Descriptions, Table } from "antd"
-import React from "react"
-import { useMoralis } from "react-moralis"
-import { GameStatus } from "./GameStatus"
-import Countdown from "react-countdown"
-import { getDealRequestedText } from "helpers/formatters"
+import { Descriptions, Table } from "antd";
+import React from "react";
+import { useMoralis } from "react-moralis";
+import { GameStatus } from "./GameStatus";
+import Countdown from "react-countdown";
+import { getDealRequestedText } from "helpers/formatters";
 
 export const GameMetaData = ({ gameId, gameData, feesPaid, playersPerRound, numFinalHands, numHands, gameHasEnded }) => {
 
-  const { Moralis } = useMoralis()
+  const { Moralis } = useMoralis();
 
   const columns = [
     {
@@ -35,7 +35,7 @@ export const GameMetaData = ({ gameId, gameData, feesPaid, playersPerRound, numF
       dataIndex: 'total_bet',
       key: 'total_bet',
     },
-  ]
+  ];
 
   const dataSource = [
     {
@@ -70,7 +70,7 @@ export const GameMetaData = ({ gameId, gameData, feesPaid, playersPerRound, numF
       num_players: "",
       num_hands: "",
     },
-  ]
+  ];
 
   return (
     <>
@@ -107,7 +107,6 @@ export const GameMetaData = ({ gameId, gameData, feesPaid, playersPerRound, numF
             <Countdown date={(gameData.roundEndTime * 1000)} />
           </div>
         }
-
       </h4>
 
       <Table
@@ -117,7 +116,6 @@ export const GameMetaData = ({ gameId, gameData, feesPaid, playersPerRound, numF
         bordered
         size={"small"}
       />
-
     </>
-  )
+  );
 }

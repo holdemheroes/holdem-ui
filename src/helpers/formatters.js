@@ -3,6 +3,7 @@ export const n6 = new Intl.NumberFormat("en-us", {
   minimumFractionDigits: 0,
   maximumFractionDigits: 6,
 });
+
 export const n4 = new Intl.NumberFormat("en-us", {
   style: "decimal",
   minimumFractionDigits: 0,
@@ -23,47 +24,47 @@ export const sortFinalHand = (c1, c2, c3, c4, c5) => {
     parseInt(c3, 10),
     parseInt(c4, 10),
     parseInt(c5, 10)
-  ]
+  ];
 
-  return cTmp.sort((a, b) => a - b)
-}
+  return cTmp.sort((a, b) => a - b);
+};
 
 export const getRoundStatusText = (status) => {
   switch (parseInt(status, 10)) {
     case 0:
-      return "Does not exist!"
+      return "Does not exist!";
     case 1:
-      return "Waiting for Flop"
+      return "Waiting for Flop";
     case 2:
-      return "Flop Dealt"
+      return "Flop Dealt";
     case 3:
-      return "Waiting for Turn"
+      return "Waiting for Turn";
     case 4:
-      return "Turn Dealt"
+      return "Turn Dealt";
     case 5:
-      return "Waiting for River"
+      return "Waiting for River";
     case 6:
-      return "River Dealt"
+      return "River Dealt";
     default:
-      return "Unknown"
+      return "Unknown";
   }
-}
+};
 
 export const getDealRequestedText = (round) => {
   switch (parseInt(round, 10)) {
     case 1:
     case 2:
-      return "Flop"
+      return "Flop";
     case 3:
     case 4:
-      return "Turn"
+      return "Turn";
     case 5:
     case 6:
-      return "River"
+      return "River";
     default:
-      return "Unknown"
+      return "Unknown";
   }
-}
+};
 
 /**
  * Returns a string of form "abc...xyz"

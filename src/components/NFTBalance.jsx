@@ -22,11 +22,11 @@ function NFTBalance() {
   const { NFTHands } = useMyNFTHands();
   const { chainId } = useMoralisDapp();
 
-  const openSeaUrl = getOpenSeaUrl(chainId)
+  const openSeaUrl = getOpenSeaUrl(chainId);
   const contractAddress = getHoldemHeroesAddress(chainId);
 
   if (!NFTHands.length) {
-    return <Spin className="spin_loader" />
+    return <Spin className="spin_loader" />;
   }
 
   return (

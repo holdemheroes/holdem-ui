@@ -224,7 +224,6 @@ export default function Game({ gameId }) {
             numHands={numHands}
             numFinalHands={numFinalHands}
             gameHasEnded={gameHasEnded} />
-
         </Col>
         <Col>
           {
