@@ -86,4 +86,4 @@ export const getExplorer = (chain) => networkConfigs[chain]?.blockExplorerUrl;
 export const getHoldemHeroesAddress = (chain) => networkConfigs[chain]?.holdemHeroesAddress;
 export const getTexasHoldemV1Address = (chain) => networkConfigs[chain]?.texasHoldemV1Address;
 
-export const getOpenSeaUrl = (chain) => networkConfigs[chain]?.openSeaUrl
+export const getOpenSeaUrl = (chain) => networkConfigs[chain]?.openSeaUrl;

@@ -1,6 +1,6 @@
 import React, { useState } from "react";
 import { useMoralis } from "react-moralis";
-import { Button, Checkbox, Col, Divider, Form, Radio, Row, Space } from "antd";
+import { Button, Checkbox, Col, Divider, Form, Radio, Row, Space, Spin } from "antd";
 import { useMoralisDapp } from "../../providers/MoralisDappProvider/MoralisDappProvider";
 import { PlayingCard } from "../PlayingCards/PlayingCard";
 import { Leaderboard } from "./Leaderboard";
@@ -204,7 +204,8 @@ export default function Game({ gameId }) {
   };
 
   if (!gameData) {
-    return <>Loading</>;
+    // return <>Loading</>;
+    return <Spin className="spin_loader" />;
   }
 
   if (gameData?.status === 0) {

@@ -73,9 +73,6 @@ const App = () => {
         </Header>
         <>
           <Switch>
-            <Route path="/nftBalance">
-              <NFTBalance />
-            </Route>
             <Route path="/home">
               <Home />
             </Route>
@@ -84,6 +81,9 @@ const App = () => {
             </Route>
             <Route path="/game-play">
               <GamePlay />
+            </Route>
+            <Route path="/nftBalance">
+              <NFTBalance />
             </Route>
             <Route path="/play-v1">
               <GamesV1 />

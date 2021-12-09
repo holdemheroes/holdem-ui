@@ -1,25 +1,24 @@
-import React, { useEffect, useState } from "react"
-import { useMoralisDapp } from "../../providers/MoralisDappProvider/MoralisDappProvider"
-import { useMoralis } from "react-moralis"
-import abis from "../../helpers/contracts"
-import { getTexasHoldemV1Address } from "../../helpers/networks"
+import React, { useEffect, useState } from "react";
+import { useMoralisDapp } from "../../providers/MoralisDappProvider/MoralisDappProvider";
+import { useMoralis } from "react-moralis";
+import abis from "../../helpers/contracts";
+import { getTexasHoldemV1Address } from "../../helpers/networks";
 
 export const RankName = ({ rank }) => {
 
   const { chainId } = useMoralisDapp();
-  const { Moralis } = useMoralis()
+  const { Moralis } = useMoralis();
 
   const abi = abis.texas_holdem_v1;
   const contractAddress = getTexasHoldemV1Address(chainId);
 
   const options = {
     contractAddress, abi,
-  }
+  };
 
-  const [rankName, setRankName] = useState(null)
+  const [rankName, setRankName] = useState(null);
 
   useEffect(() => {
-
     async function getRankName() {
       const rId = await Moralis.executeFunction({
         functionName: "getRankId",
@@ -29,7 +28,7 @@ export const RankName = ({ rank }) => {
         ...options
       })
         .then((result) => result)
-        .catch((e) => console.log(e.message))
+        .catch((e) => console.log(e.message));
 
       const r = await Moralis.executeFunction({
         functionName: "getRankName",
@@ -39,19 +38,18 @@ export const RankName = ({ rank }) => {
         ...options
       })
         .then((result) => result)
-        .catch((e) => console.log(e.message))
+        .catch((e) => console.log(e.message));
 
-      setRankName(r)
+      setRankName(r);
     }
 
     if (!rankName) {
-      getRankName()
+      getRankName();
     }
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [rankName, rank]);
 
   return (
     <span>{rankName}</span>
-  )
-
+  );
 }

@@ -1,12 +1,12 @@
-import React from "react"
-import { getRoundStatusText } from "../../helpers/formatters"
-import { Spin } from "antd"
+import React from "react";
+import { getRoundStatusText } from "../../helpers/formatters";
+import { Spin } from "antd";
 
 export const GameStatus = ({ status, gameHasEnded }) => {
 
-  let spinner = <></>
+  let spinner = <></>;
   if (status === 1 || status === 3 || status === 5) {
-    spinner = <Spin className="spin_loader" />
+    spinner = <Spin className="spin_loader" />;
   }
   return (
     <>
@@ -14,6 +14,5 @@ export const GameStatus = ({ status, gameHasEnded }) => {
         gameHasEnded ? <strong>Game Ended!</strong> : <span>{spinner}{getRoundStatusText(status)}</span>
       }
     </>
-  )
-
+  );
 }

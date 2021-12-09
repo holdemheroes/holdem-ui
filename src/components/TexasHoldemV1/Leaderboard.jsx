@@ -91,7 +91,7 @@ export const Leaderboard = ({ gameId, showWinnings = false }) => {
   }
 
   const sortLeaderboard = (lb) => {
-    let newLb = []
+    let newLb = [];
     if (lb.length > 0) {
       newLb = [...lb].sort(compareValues("rank", "asc"));
     }

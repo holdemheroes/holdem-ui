@@ -16,7 +16,7 @@ const AnimateButton = (props) => {
                 if (prev >= 4) { clearInterval(id); setIconNum(0); }
                 return prev + 1;
             });
-        }, 100);
+        }, 300);
     };
     return (
         <div className="btn_animate" onMouseEnter={handleMouseEnter}>

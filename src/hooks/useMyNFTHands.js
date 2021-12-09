@@ -10,7 +10,7 @@ export const useMyNFTHands = (options) => {
   const { Moralis } = useMoralis();
   const { chainId, walletAddress } = useMoralisDapp();
   const hehContractAddress = getHoldemHeroesAddress(chainId);
-  const texasHoldemAddress = getTexasHoldemV1Address(chainId)
+  const texasHoldemAddress = getTexasHoldemV1Address(chainId);
   const thAbi = abis.texas_holdem_v1;
   const { resolveLink } = useIPFS();
   const [NFTHands, setNFTHands] = useState([]);
@@ -25,10 +25,12 @@ export const useMyNFTHands = (options) => {
     if (data?.result) {
       const NFTs = data.result;
       for (let NFT of NFTs) {
+        
         if (NFT?.metadata) {
           NFT.metadata = JSON.parse(NFT.metadata);
           NFT.image = resolveLink(NFT.metadata?.image);
         }
+
         if (NFT?.token_id) {
           fetchHandData(NFT.token_id)
             .then((d) => {
