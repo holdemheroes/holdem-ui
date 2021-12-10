@@ -9,6 +9,24 @@ export default function NFTCard({ nft, chainId }) {
     const contractAddress = getHoldemHeroesAddress(chainId);
     let metadata = decodeNftUriToJson(nft.token_uri);
 
+    // let block = null;
+    // if (nftOwner === "no") {
+    //     if (canMint) {
+    //         block = <button title={`Mint NFT #${nft.tokenId}`} onClick={action} className="nft_card-btn">Mint</button>
+    //     } else {
+    //         block = <p>Mint limit reached. Wait for open market</p>;
+    //     }
+    // } else {
+    //     block = <a
+    //         href={`${openSeaUrl}/assets/${contractAddress}/${nft.token_id}`}
+    //         target="_blank"
+    //         rel="noreferrer"
+    //         className="nft_card-btn"
+    //     >
+    //         View on OpenSea
+    //     </a>;
+    // }
+
     return (
         <div className="nft_card">
             <p className="nft_card-name">{metadata.name}</p>

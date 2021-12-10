@@ -8,6 +8,7 @@ import { ShoppingCartOutlined } from "@ant-design/icons";
 import NFTMeta from "../NFTMeta/NFTMeta";
 import { decodeNftUriToJson } from "../../helpers/nft";
 import { openNotification } from "helpers/notifications";
+import NFTCard from "../../components/NFTCard/NFTCard";
 
 export default function NFT({ tokenId, canMint, mintedTokens, pricePerToken }) {
   const { Moralis } = useMoralis();
@@ -135,5 +136,6 @@ export default function NFT({ tokenId, canMint, mintedTokens, pricePerToken }) {
     >
       <NFTMeta metadata={nft} />
     </Card>
+    // <NFTCard key={`token_${tokenId}`} nft={nftData} chainId={chainId} nftOwner={nftOwner} canMint={canMint} action={() => postRevealMint(tokenId)} />
   );
 }
