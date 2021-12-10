@@ -7,7 +7,6 @@ import { useGameMetadata } from "../../hooks/useGameMetadata";
 
 export default function GamesV1() {
   const { walletAddress } = useMoralisDapp();
-  console.log(walletAddress)
 
   const { maxConcurrentGames, gamesInProgress } = useGameMetadata();
 
@@ -17,7 +16,7 @@ export default function GamesV1() {
 
   return (
     <div className="play-wrapper">
-      <h2>Play</h2>
+      <h2>Play Holdem Heroes</h2>
       <StartNewGame gameIdsInProgress={gamesInProgress} maxConcurrentGames={maxConcurrentGames} />
 
       <Tabs>

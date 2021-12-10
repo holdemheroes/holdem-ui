@@ -11,7 +11,7 @@ export const GameStatus = ({ status, gameHasEnded }) => {
   return (
     <>
       {
-        gameHasEnded ? <strong>Game Ended!</strong> : <span>{spinner}{getRoundStatusText(status)}</span>
+        gameHasEnded ? <strong style={{ color: "white" }}>Game Ended!</strong> : <span style={{ color: "white" }}>{spinner}{getRoundStatusText(status)}</span>
       }
     </>
   );

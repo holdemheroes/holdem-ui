@@ -1,9 +1,9 @@
-import { Descriptions, Table } from "antd";
 import React from "react";
 import { useMoralis } from "react-moralis";
-import { GameStatus } from "./GameStatus";
 import Countdown from "react-countdown";
-import { getDealRequestedText } from "helpers/formatters";
+import { Descriptions, Table } from "antd";
+import { GameStatus } from "./GameStatus";
+import { getDealRequestedText } from "../../helpers/formatters";
 
 export const GameMetaData = ({ gameId, gameData, feesPaid, playersPerRound, numFinalHands, numHands, gameHasEnded }) => {
 
@@ -103,7 +103,7 @@ export const GameMetaData = ({ gameId, gameData, feesPaid, playersPerRound, numF
         }
         {
           (gameData.status === 2 || gameData.status === 4 || gameData.status === 6) && !gameHasEnded &&
-          <div>{getDealRequestedText(gameData.status)} ends in{" "}
+          <div style={{ color: "white" }}>{getDealRequestedText(gameData.status)} ends in{" "}
             <Countdown date={(gameData.roundEndTime * 1000)} />
           </div>
         }
