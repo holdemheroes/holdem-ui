@@ -1,5 +1,6 @@
 import React from "react";
 // import { Card } from "antd";
+import "./style.scss";
 
 export default function NFTMeta({ metadata }) {
 
@@ -12,9 +13,8 @@ export default function NFTMeta({ metadata }) {
   const attributes = <ul>{traits}</ul>;
 
   return (
-    // <Card title={metadata.name}>
-    //   {attributes}
-    // </Card>
-    attributes
+    <div className="nft_meta">
+      {attributes}
+    </div>
   );
 }

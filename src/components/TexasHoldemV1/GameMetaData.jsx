@@ -91,13 +91,13 @@ export const GameMetaData = ({ gameId, gameData, feesPaid, playersPerRound, numF
           <div>Card will be dealt in approx{" "}
 
             {
-              gameData.status === 1 && <Countdown date={(gameData.gameStartTime * 1000) + 200000} />
+              gameData.status === 1 && <Countdown date={(gameData.gameStartTime * 1000) + 20000} />
             }
             {
-              gameData.status === 3 && <Countdown date={(gameData.roundEndTime * 1000) + 200000} />
+              gameData.status === 3 && <Countdown date={(gameData.roundEndTime * 1000) + 20000} />
             }
             {
-              gameData.status === 5 && <Countdown date={(gameData.roundEndTime * 1000) + 200000} />
+              gameData.status === 5 && <Countdown date={(gameData.roundEndTime * 1000) + 20000} />
             }
           </div>
         }

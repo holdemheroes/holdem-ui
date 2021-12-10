@@ -73,6 +73,9 @@ const App = () => {
         </Header>
         <>
           <Switch>
+            <Route exact path="/">
+              <Home />
+            </Route>
             <Route path="/home">
               <Home />
             </Route>
@@ -100,7 +103,7 @@ const App = () => {
             {/* <Redirect from="/" to="/wallet" /> */}
           </Switch>
           {/* {isAuthenticated ? <Redirect to="/home" /> : <Redirect to="/nonauthenticated" />} */}
-          <Redirect to="/home" />
+          {/* <Redirect to="/home" /> */}
         </>
       </Layout>
     </Router>

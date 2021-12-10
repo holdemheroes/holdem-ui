@@ -5,7 +5,7 @@ import abis from "../../helpers/contracts";
 import { getHoldemHeroesAddress, getOpenSeaUrl } from "../../helpers/networks";
 import { Card, Image, Tooltip } from "antd";
 import { ShoppingCartOutlined } from "@ant-design/icons";
-import NFTMeta from "../NFTMeta";
+import NFTMeta from "../NFTMeta/NFTMeta";
 import { decodeNftUriToJson } from "../../helpers/nft";
 import { openNotification } from "helpers/notifications";
 
