@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useEffect, useState } from "react";
 import { useMoralis } from "react-moralis";
 import { Form, Input, Button, Collapse, Spin } from 'antd';
 import { useMoralisDapp } from "../../providers/MoralisDappProvider/MoralisDappProvider";
@@ -11,6 +11,11 @@ export default function StartNewGame({ gameIdsInProgress, maxConcurrentGames }) 
   const { chainId } = useMoralisDapp();
   const abi = abis.texas_holdem_v1;
   const contractAddress = getTexasHoldemV1Address(chainId);
+  const [started, setStarted] = useState(false);
+
+  useEffect(() => {
+    console.log(started);
+  }, [started]);
 
   if (!gameIdsInProgress || !maxConcurrentGames) {
     // return <div>LOADING</div>;
@@ -91,53 +96,56 @@ export default function StartNewGame({ gameIdsInProgress, maxConcurrentGames }) 
   }
 
   return (
-    <Collapse>
-      <Collapse.Panel header={"Start new Game"}>
-        <div>
-          <h3>Start New Game</h3>
-          <Form
-            name="basic"
-            labelCol={{ span: 8 }}
-            wrapperCol={{ span: 16 }}
-            initialValues={{ remember: true }}
-            onFinish={startNewCustomGame}
-            autoComplete="off"
-          >
-            <Form.Item
-              initialValue={"60"}
-              label="Round Time"
-              name="round_timer"
-              rules={[{ required: true, message: 'Please input round time!' }]}
+    <>
+      <button onClick={() => { setStarted(started => !started) }} style={{ display: started ? "none" : "block" }}>Start New Game</button>
+      <Collapse style={{ display: started ? "block" : "none" }}>
+        <Collapse.Panel header={"Start new Game"}>
+          <div>
+            <h3>Start New Game</h3>
+            <Form
+              name="basic"
+              labelCol={{ span: 8 }}
+              wrapperCol={{ span: 16 }}
+              initialValues={{ remember: true }}
+              onFinish={startNewCustomGame}
+              autoComplete="off"
             >
-              <Input addonAfter={" Minutes"} />
-            </Form.Item>
+              <Form.Item
+                initialValue={"60"}
+                label="Round Time"
+                name="round_timer"
+                rules={[{ required: true, message: 'Please input round time!' }]}
+              >
+                <Input addonAfter={" Minutes"} />
+              </Form.Item>
 
-            <Form.Item
-              initialValue={"0.1"}
-              label="Flop bet"
-              name="round_1_price"
-              rules={[{ required: true, message: 'Please input flop bet!' }]}
-            >
-              <Input addonAfter={"ETH Per NFT"} />
-            </Form.Item>
+              <Form.Item
+                initialValue={"0.1"}
+                label="Flop bet"
+                name="round_1_price"
+                rules={[{ required: true, message: 'Please input flop bet!' }]}
+              >
+                <Input addonAfter={"ETH Per NFT"} />
+              </Form.Item>
 
-            <Form.Item
-              initialValue={"0.2"}
-              label="Turn bet"
-              name="round_2_price"
-              rules={[{ required: true, message: 'Please input flop bet!' }]}
-            >
-              <Input addonAfter={"ETH Per NFT"} />
-            </Form.Item>
+              <Form.Item
+                initialValue={"0.2"}
+                label="Turn bet"
+                name="round_2_price"
+                rules={[{ required: true, message: 'Please input flop bet!' }]}
+              >
+                <Input addonAfter={"ETH Per NFT"} />
+              </Form.Item>
 
-            <Form.Item wrapperCol={{ offset: 8, span: 16 }}>
-              <Button type="primary" htmlType="submit">
-                Start!
-              </Button>
-            </Form.Item>
-          </Form>
-        </div>
-      </Collapse.Panel>
-    </Collapse>
+              <Form.Item wrapperCol={{ offset: 8, span: 16 }}>
+                <Button type="primary" htmlType="submit">
+                  Start!
+                </Button>
+              </Form.Item>
+            </Form>
+          </div>
+        </Collapse.Panel>
+      </Collapse>
+    </>
   );
 }

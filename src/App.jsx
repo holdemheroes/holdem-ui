@@ -16,11 +16,15 @@ import Home from "./pages/Home";
 import GamePlay from "./pages/GamePlay";
 import "./App.scss";
 import logo from "./assets/images/hhlogo.png";
+import { useMoralisDapp } from "./providers/MoralisDappProvider/MoralisDappProvider";
+import { getEllipsisTxt } from "./helpers/formatters";
+import Logout from "./components/Logout";
 
 const { Header } = Layout;
 
 const App = () => {
   const { isWeb3Enabled, enableWeb3, isAuthenticated, isWeb3EnableLoading } = useMoralis();
+  const { walletAddress } = useMoralisDapp();
 
   useEffect(() => {
     if (isAuthenticated && !isWeb3Enabled && !isWeb3EnableLoading) enableWeb3();
@@ -29,84 +33,152 @@ const App = () => {
 
   return (
     <Router>
-      <Layout>
-        <Header className="header">
-          <Logo />
-          <div className="header_chain-btn-wrapper">
-            <Chains />
-            {
-              isAuthenticated && <>
-                <Withdrawable />
-                <Blockie currentWallet size={10} scale={5} />
-              </>
-            }
-            <Account />
-          </div>
+      <div className="header">
+        <Logo />
+        <div className="topnav">
           {
-            isAuthenticated && <Menu
-              defaultSelectedKeys={["home"]}
-              mode="horizontal"
-            >
-              <Menu.Item key="home">
-                <NavLink to="/home">Home</NavLink>
-              </Menu.Item>
-              <Menu.Item key="sale">
-                <NavLink to="/sale">HEH Mint Sale</NavLink>
-              </Menu.Item>
-              <Menu.Item key="nft">
-                <NavLink to="/nftBalance">HEH Wallet</NavLink>
-              </Menu.Item>
-              <Menu.Item key="gameplay">
-                <NavLink to="/game-play">Game Play</NavLink>
-              </Menu.Item>
-              <Menu.Item key="play-v1">
-                <NavLink to="/play-v1" className="hover-expand">Play</NavLink>
-              </Menu.Item>
-              <Menu.Item key="refundable">
-                <NavLink to="/refundable">Refundable</NavLink>
-              </Menu.Item>
-              <Menu.Item key="history">
-                <NavLink to="/history">History</NavLink>
-              </Menu.Item>
-            </Menu>
+            !isAuthenticated && <>
+              <a href='https://discord.gg/wqZdRNruHG' target='_blank' rel="noreferrer" className="color-white discord_btn mr-40">Discord</a>
+              <Account />
+            </>
           }
-        </Header>
-        <>
-          <Switch>
-            <Route exact path="/">
-              <Home />
-            </Route>
-            <Route path="/home">
-              <Home />
-            </Route>
-            <Route path="/sale">
-              <Sale />
-            </Route>
-            <Route path="/game-play">
-              <GamePlay />
-            </Route>
-            <Route path="/nftBalance">
-              <NFTBalance />
-            </Route>
-            <Route path="/play-v1">
-              <GamesV1 />
-            </Route>
-            <Route path="/refundable">
-              <RefundableGames />
-            </Route>
-            <Route path="/history">
-              <History />
-            </Route>
-            <Route path="/nonauthenticated">
-              <>Please login using the "Authenticate" button</>
-            </Route>
-            {/* <Redirect from="/" to="/wallet" /> */}
-          </Switch>
-          {/* {isAuthenticated ? <Redirect to="/home" /> : <Redirect to="/nonauthenticated" />} */}
-          {/* <Redirect to="/home" /> */}
-        </>
-      </Layout>
+          {
+            isAuthenticated && <>
+              <div>
+                <NavLink to="/sale">Marketplace</NavLink>
+                <NavLink to="/nftBalance">NFT Wallet</NavLink>
+                <NavLink to="/game-play">Rules</NavLink>
+              </div>
+              <NavLink to="/play-v1" className="hover-expand" className="btn-play" style={{ marginRight: "35px" }}>Play</NavLink>
+              <div className="dropdown-wrapper account" style={{ marginRight: "15px" }}>
+                <button className="dropdown-btn address_btn">
+                  <Blockie className="circle" currentWallet size={5} scale={5} />
+                  {getEllipsisTxt(walletAddress, 6)}
+                </button>
+                <ul className="dropdown-body">
+                  <li className="dropdown-item"><Withdrawable /></li>
+                  <li className="dropdown-item"><NavLink to="history">Game History</NavLink></li>
+                  <li className="dropdown-item"><NavLink to="refundable">Refunds</NavLink></li>
+                  <li className="dropdown-item"><Logout /></li>
+                </ul>
+              </div>
+              <Chains />
+            </>
+          }
+        </div>
+      </div>
+      <>
+        <Switch>
+          <Route exact path="/">
+            <Redirect to="/home" />
+          </Route>
+          <Route path="/home">
+            <Home />
+          </Route>
+          <Route path="/sale">
+            <Sale />
+          </Route>
+          <Route path="/game-play">
+            <GamePlay />
+          </Route>
+          <Route path="/nftBalance">
+            <NFTBalance />
+          </Route>
+          <Route path="/play-v1">
+            <GamesV1 />
+          </Route>
+          <Route path="/refundable">
+            <RefundableGames />
+          </Route>
+          <Route path="/history">
+            <History />
+          </Route>
+        </Switch>
+      </>
     </Router>
+    // <Router>
+    //   <Layout>
+    //     <Header className="header">
+    //       <Logo />
+    //       {!isAuthenticated && <>
+    //         <a href='https://discord.gg/wqZdRNruHG' target='_blank' rel="noreferrer">Discord</a>
+    //         <Account />
+    //       </>}
+    //       <div className="header_chain-btn-wrapper">
+    //         <Chains />
+    //         {
+    //           isAuthenticated && <>
+    //             <Withdrawable />
+    //             {/* <Blockie currentWallet size={10} scale={5} /> */}
+    //           </>
+    //         }
+    //         <Account />
+    //       </div>
+    //       {
+    //         isAuthenticated && <Menu
+    //           // defaultSelectedKeys={["home"]}
+    //           mode="horizontal"
+    //         >
+    //           {/* <Menu.Item key="home">
+    //             <NavLink to="/home">Home</NavLink>
+    //           </Menu.Item> */}
+    //           <Menu.Item key="sale">
+    //             <NavLink to="/sale">Marketplace</NavLink>
+    //           </Menu.Item>
+    //           <Menu.Item key="nft">
+    //             <NavLink to="/nftBalance">NFT Wallet</NavLink>
+    //           </Menu.Item>
+    //           <Menu.Item key="gameplay">
+    //             <NavLink to="/game-play">Rules</NavLink>
+    //           </Menu.Item>
+    //           <Menu.Item key="play-v1">
+    //             <NavLink to="/play-v1" className="hover-expand">Play</NavLink>
+    //           </Menu.Item>
+    //           <Menu.Item key="refundable">
+    //             <NavLink to="/refundable">Refunds</NavLink>
+    //           </Menu.Item>
+    //           <Menu.Item key="history">
+    //             <NavLink to="/history">Game History</NavLink>
+    //           </Menu.Item>
+    //         </Menu>
+    //       }
+    //     </Header>
+    //     <>
+    //       <Switch>
+    //         <Route exact path="/">
+    //           <Home />
+    //         </Route>
+    //         <Route path="/home">
+    //           <Home />
+    //         </Route>
+    //         <Route path="/sale">
+    //           <Sale />
+    //         </Route>
+    //         <Route path="/game-play">
+    //           <GamePlay />
+    //         </Route>
+    //         <Route path="/nftBalance">
+    //           <NFTBalance />
+    //         </Route>
+    //         <Route path="/play-v1">
+    //           <GamesV1 />
+    //         </Route>
+    //         <Route path="/refundable">
+    //           <RefundableGames />
+    //         </Route>
+    //         <Route path="/history">
+    //           <History />
+    //         </Route>
+    //         {/* <Route path="/nonauthenticated">
+    //           <>Please login using the "Authenticate" button</>
+    //         </Route> */}
+    //         {/* <Redirect from="/" to="/wallet" /> */}
+    //       </Switch>
+    //       {/* {isAuthenticated ? <Redirect to="/home" /> : <Redirect to="/nonauthenticated" />} */}
+    //       {/* <Redirect to="/home" /> */}
+    //     </>
+    //   </Layout>
+    // </Router>
   );
 };
 

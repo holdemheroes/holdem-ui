@@ -24,32 +24,32 @@ export const BSCLogo = () => (
   </svg>
 );
 
-export const ETHLogo = () => (
-  <svg width="25" height="25" viewBox="0 0 30 30" fill="none" xmlns="http://www.w3.org/2000/svg">
-    <path
-      d="M0 10C0 4.47715 4.47715 0 10 0H20C25.5228 0 30 4.47715 30 10V20C30 25.5228 25.5228 30 20 30H10C4.47715 30 0 25.5228 0 20V10Z"
-      fill="#627EEA"
-    />
-    <path
-      d="M15.0294 3.75V12.0656L22.0578 15.2062L15.0294 3.75Z"
-      fill="white"
-      fillOpacity="0.602"
-    />
-    <path d="M15.0294 3.75L8 15.2062L15.0294 12.0656V3.75Z" fill="white" />
-    <path
-      d="M15.0294 20.595V26.2453L22.0625 16.515L15.0294 20.595Z"
-      fill="white"
-      fillOpacity="0.602"
-    />
-    <path d="M15.0294 26.2453V20.594L8 16.515L15.0294 26.2453Z" fill="white" />
-    <path
-      d="M15.0294 19.2872L22.0578 15.2063L15.0294 12.0675V19.2872Z"
-      fill="white"
-      fillOpacity="0.2"
-    />
-    <path d="M8 15.2063L15.0294 19.2872V12.0675L8 15.2063Z" fill="white" fillOpacity="0.602" />
-  </svg>
-);
+// export const ETHLogo = () => (
+//   <svg width="25" height="25" viewBox="0 0 30 30" fill="none" xmlns="http://www.w3.org/2000/svg">
+//     <path
+//       d="M0 10C0 4.47715 4.47715 0 10 0H20C25.5228 0 30 4.47715 30 10V20C30 25.5228 25.5228 30 20 30H10C4.47715 30 0 25.5228 0 20V10Z"
+//       fill="#627EEA"
+//     />
+//     <path
+//       d="M15.0294 3.75V12.0656L22.0578 15.2062L15.0294 3.75Z"
+//       fill="white"
+//       fillOpacity="0.602"
+//     />
+//     <path d="M15.0294 3.75L8 15.2062L15.0294 12.0656V3.75Z" fill="white" />
+//     <path
+//       d="M15.0294 20.595V26.2453L22.0625 16.515L15.0294 20.595Z"
+//       fill="white"
+//       fillOpacity="0.602"
+//     />
+//     <path d="M15.0294 26.2453V20.594L8 16.515L15.0294 26.2453Z" fill="white" />
+//     <path
+//       d="M15.0294 19.2872L22.0578 15.2063L15.0294 12.0675V19.2872Z"
+//       fill="white"
+//       fillOpacity="0.2"
+//     />
+//     <path d="M8 15.2063L15.0294 19.2872V12.0675L8 15.2063Z" fill="white" fillOpacity="0.602" />
+//   </svg>
+// );
 
 export const PolygonLogo = () => (
   <svg width="25" height="25" viewBox="0 0 30 30" fill="none" xmlns="http://www.w3.org/2000/svg">
@@ -63,3 +63,26 @@ export const PolygonLogo = () => (
     />
   </svg>
 );
+
+
+export const ETHLogo = (props) => {
+  console.log("size: ", props.size)
+  if (props.size == "S") {
+    return (
+      <svg width="20" height="20" viewBox="0 0 20 20" fill="none" xmlns="http://www.w3.org/2000/svg">
+        <circle cx="10" cy="10" r="10" fill="#6572F2" />
+        <path d="M9.97049 12.733L6 10.3781L9.96807 16L13.9406 10.3781L9.96807 12.733H9.97049ZM10.0295 3L6.06063 9.62045L10.0295 11.9795L14 9.62289L10.0295 3Z" fill="white" />
+      </svg>
+    );
+  }
+  if (props.size == "L") {
+    return (
+      <svg width="40" height="40" viewBox="0 0 40 40" fill="none" xmlns="http://www.w3.org/2000/svg">
+        <circle cx="20" cy="20" r="20" fill="#6572F2" />
+        <path d="M19.941 26.2148L12 21.3237L19.9361 33L27.8812 21.3237L19.9361 26.2148H19.941ZM20.059 6L12.1213 19.7502L20.059 24.6497L28 19.7552L20.059 6Z" fill="white" />
+      </svg>
+    );
+  }
+  return null;
+};
+

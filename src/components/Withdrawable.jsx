@@ -43,7 +43,7 @@ function Withdrawable() {
   return (
     <>
       <button onClick={() => handleWithdraw()}
-        className="btn btn-connect-wallet btn-shadow">
+        className="btn-withdrawable btn-shadow">
         Withdraw {`${n4.format(
           Moralis.Units.FromWei(balance, 18)
         )} ETH`}</button>

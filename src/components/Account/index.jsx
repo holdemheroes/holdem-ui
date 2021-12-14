@@ -1,15 +1,12 @@
-import { useMoralisDapp } from "providers/MoralisDappProvider/MoralisDappProvider";
 import { useMoralis } from "react-moralis";
-import { getEllipsisTxt } from "helpers/formatters";
 import './style.scss';
 
 function Account() {
-  const { authenticate, isAuthenticated, logout } = useMoralis();
-  const { walletAddress } = useMoralisDapp();
+  const { authenticate } = useMoralis();
 
   return (
-    <button className={`btn btn-connect-wallet btn-shadow`} onClick={!isAuthenticated ? () => authenticate({ signingMessage: "HoldemHeroes!" }) : () => { logout(); window.location.replace(window.location.origin); }}>
-      {!isAuthenticated ? "Connect Wallet" : getEllipsisTxt(walletAddress, 6)}
+    <button className={`btn-connect-wallet btn-shadow`} onClick={() => authenticate({ signingMessage: "HoldemHeroes!" })}>
+      Connect Wallet
     </button>
   );
 }
