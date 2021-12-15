@@ -47,4 +47,47 @@
             }
         }
     }
+
+    // new added
+    .title {
+        font-family   : "Redtone";
+        font-weight   : bold;
+        font-size     : 45px;
+        line-height   : 45px;
+        letter-spacing: 0.075em;
+    }
+
+    ul.tabs {
+        list-style-type: none;
+        display        : flex;
+        justify-content: center;
+        align-items    : center;
+        padding        : 0;
+
+        &>li {
+
+            &:first-child {
+                margin-right: 32px;
+            }
+
+            &>a {
+                font-family  : Karla;
+                font-size    : 17px;
+                line-height  : 27px;
+                color        : white;
+                padding      : 4px 0;
+                border-bottom: 1px solid transparent;
+
+                &:hover {
+                    color       : #426BFF;
+                    border-color: #426BFF;
+                }
+
+                &.active {
+                    color       : #426BFF;
+                    border-color: #426BFF;
+                }
+            }
+        }
+    }
 }

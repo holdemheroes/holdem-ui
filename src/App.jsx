@@ -1,7 +1,6 @@
-import { useEffect } from "react";
+import { useState, useEffect } from "react";
 import { BrowserRouter as Router, Switch, Route, NavLink, Redirect } from "react-router-dom";
 import { useMoralis } from "react-moralis";
-import { Menu, Layout } from "antd";
 import "antd/dist/antd.css";
 import Account from "./components/Account";
 import Chains from "./components/Chains";
@@ -19,8 +18,6 @@ import logo from "./assets/images/hhlogo.png";
 import { useMoralisDapp } from "./providers/MoralisDappProvider/MoralisDappProvider";
 import { getEllipsisTxt } from "./helpers/formatters";
 import Logout from "./components/Logout";
-
-const { Header } = Layout;
 
 const App = () => {
   const { isWeb3Enabled, enableWeb3, isAuthenticated, isWeb3EnableLoading } = useMoralis();
@@ -75,110 +72,34 @@ const App = () => {
           <Route path="/home">
             <Home />
           </Route>
-          <Route path="/sale">
-            <Sale />
-          </Route>
-          <Route path="/game-play">
-            <GamePlay />
-          </Route>
-          <Route path="/nftBalance">
-            <NFTBalance />
-          </Route>
-          <Route path="/play-v1">
-            <GamesV1 />
-          </Route>
-          <Route path="/refundable">
-            <RefundableGames />
-          </Route>
-          <Route path="/history">
-            <History />
-          </Route>
+          {
+            isAuthenticated && <>
+              <Route path="/sale">
+                <Sale />
+              </Route>
+              <Route path="/game-play">
+                <GamePlay />
+              </Route>
+              <Route path="/nftBalance">
+                <NFTBalance />
+              </Route>
+              <Route path="/play-v1">
+                <GamesV1 />
+              </Route>
+              <Route path="/refundable">
+                <RefundableGames />
+              </Route>
+              <Route path="/history">
+                <History />
+              </Route>
+            </>
+          }
+          {
+            !isAuthenticated && <Redirect to="/home" />
+          }
         </Switch>
       </>
     </Router>
-    // <Router>
-    //   <Layout>
-    //     <Header className="header">
-    //       <Logo />
-    //       {!isAuthenticated && <>
-    //         <a href='https://discord.gg/wqZdRNruHG' target='_blank' rel="noreferrer">Discord</a>
-    //         <Account />
-    //       </>}
-    //       <div className="header_chain-btn-wrapper">
-    //         <Chains />
-    //         {
-    //           isAuthenticated && <>
-    //             <Withdrawable />
-    //             {/* <Blockie currentWallet size={10} scale={5} /> */}
-    //           </>
-    //         }
-    //         <Account />
-    //       </div>
-    //       {
-    //         isAuthenticated && <Menu
-    //           // defaultSelectedKeys={["home"]}
-    //           mode="horizontal"
-    //         >
-    //           {/* <Menu.Item key="home">
-    //             <NavLink to="/home">Home</NavLink>
-    //           </Menu.Item> */}
-    //           <Menu.Item key="sale">
-    //             <NavLink to="/sale">Marketplace</NavLink>
-    //           </Menu.Item>
-    //           <Menu.Item key="nft">
-    //             <NavLink to="/nftBalance">NFT Wallet</NavLink>
-    //           </Menu.Item>
-    //           <Menu.Item key="gameplay">
-    //             <NavLink to="/game-play">Rules</NavLink>
-    //           </Menu.Item>
-    //           <Menu.Item key="play-v1">
-    //             <NavLink to="/play-v1" className="hover-expand">Play</NavLink>
-    //           </Menu.Item>
-    //           <Menu.Item key="refundable">
-    //             <NavLink to="/refundable">Refunds</NavLink>
-    //           </Menu.Item>
-    //           <Menu.Item key="history">
-    //             <NavLink to="/history">Game History</NavLink>
-    //           </Menu.Item>
-    //         </Menu>
-    //       }
-    //     </Header>
-    //     <>
-    //       <Switch>
-    //         <Route exact path="/">
-    //           <Home />
-    //         </Route>
-    //         <Route path="/home">
-    //           <Home />
-    //         </Route>
-    //         <Route path="/sale">
-    //           <Sale />
-    //         </Route>
-    //         <Route path="/game-play">
-    //           <GamePlay />
-    //         </Route>
-    //         <Route path="/nftBalance">
-    //           <NFTBalance />
-    //         </Route>
-    //         <Route path="/play-v1">
-    //           <GamesV1 />
-    //         </Route>
-    //         <Route path="/refundable">
-    //           <RefundableGames />
-    //         </Route>
-    //         <Route path="/history">
-    //           <History />
-    //         </Route>
-    //         {/* <Route path="/nonauthenticated">
-    //           <>Please login using the "Authenticate" button</>
-    //         </Route> */}
-    //         {/* <Redirect from="/" to="/wallet" /> */}
-    //       </Switch>
-    //       {/* {isAuthenticated ? <Redirect to="/home" /> : <Redirect to="/nonauthenticated" />} */}
-    //       {/* <Redirect to="/home" /> */}
-    //     </>
-    //   </Layout>
-    // </Router>
   );
 };
 
