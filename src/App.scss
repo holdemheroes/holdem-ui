@@ -156,16 +156,6 @@ button {
   }
 }
 
-.ant-pagination .ant-pagination-options-quick-jumper,
-span.ant-pagination-item-ellipsis {
-  color: white !important;
-}
-
-.ant-descriptions-title,
-.ant-descriptions-item-content {
-  color: white !important;
-}
-
 // new style
 .header {
   margin         : 16px 60px;
@@ -280,8 +270,8 @@ span.ant-pagination-item-ellipsis {
           }
 
           &>* {
-            display: block;
-            padding: 13px 0;
+            display   : block;
+            padding   : 13px 0;
             border-top: 1px solid rgba(0, 0, 0, 0.11);
           }
 
@@ -321,4 +311,45 @@ span.ant-pagination-item-ellipsis {
 
 .circle {
   border-radius: 50%;
+}
+
+// Pagination
+.ant-pagination {
+  margin-top   : 35px;
+  margin-bottom: 120px;
+
+  * {
+    color: white;
+  }
+
+  .ant-pagination-item a,
+  span.ant-pagination-item-ellipsis {
+    color: white !important;
+  }
+
+  .ant-pagination-prev .ant-pagination-item-link,
+  .ant-pagination-next .ant-pagination-item-link,
+  .ant-pagination-item {
+    border    : none;
+    background: transparent;
+  }
+
+  .ant-select.ant-pagination-options-size-changer.ant-select-single.ant-select-show-arrow {
+    display: none;
+  }
+
+  .ant-pagination-item.ant-pagination-item-active {
+    width        : 50px;
+    height       : 50px;
+    background   : white;
+    border-radius: 4px;
+
+    &>a {
+      color      : black !important;
+      display    : block;
+      width      : 100%;
+      height     : 100%;
+      line-height: 50px;
+    }
+  }
 }

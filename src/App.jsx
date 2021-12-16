@@ -1,4 +1,4 @@
-import { useState, useEffect } from "react";
+import { useEffect } from "react";
 import { BrowserRouter as Router, Switch, Route, NavLink, Redirect } from "react-router-dom";
 import { useMoralis } from "react-moralis";
 import "antd/dist/antd.css";
@@ -46,7 +46,7 @@ const App = () => {
                 <NavLink to="/nftBalance">NFT Wallet</NavLink>
                 <NavLink to="/game-play">Rules</NavLink>
               </div>
-              <NavLink to="/play-v1" className="hover-expand" className="btn-play" style={{ marginRight: "35px" }}>Play</NavLink>
+              <NavLink to="/play-v1" className="hover-expand btn-play" style={{ marginRight: "35px" }}>Play</NavLink>
               <div className="dropdown-wrapper account" style={{ marginRight: "15px" }}>
                 <button className="dropdown-btn address_btn">
                   <Blockie className="circle" currentWallet size={5} scale={5} />

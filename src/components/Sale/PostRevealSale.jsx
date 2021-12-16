@@ -1,6 +1,10 @@
 import React, { useState, useEffect } from "react";
-import { Pagination, Row, Col, Checkbox, Slider } from 'antd';
-import NFTList from "./NFTList"
+import { Pagination, Checkbox, Slider } from 'antd';
+import NFTList from "./NFTList";
+import { useMoralis } from "react-moralis";
+import { useMoralisDapp } from "../../providers/MoralisDappProvider/MoralisDappProvider";
+import abis from "../../helpers/contracts";
+import { getHoldemHeroesAddress } from "../../helpers/networks";
 
 export default function PostRevealSale({ pricePerToken, canMint, mintedTokens }) {
 
@@ -11,6 +15,33 @@ export default function PostRevealSale({ pricePerToken, canMint, mintedTokens })
   const [tokens, setTokens] = useState([]);
   const [shape, setShape] = useState(["Offsuit", "Suited", "Pair"]);
   const [ranksRange, setRanksRange] = useState([1, 169]);
+  const [marks, setMarks] = useState({ 1: '1', 169: '169' });
+
+  // const { Moralis } = useMoralis();
+  // const { chainId } = useMoralisDapp();
+  // const abi = abis.heh_nft;
+  // const contractAddress = getHoldemHeroesAddress(chainId);
+
+  // const contract_options = {
+  //   abi,
+  //   contractAddress,
+  // };
+
+  // const tokenURIs = [];
+
+  // for (let i = 0; i < 10; i++) {
+  //   Moralis.executeFunction({
+  //     functionName: "tokenURI",
+  //     params: {
+  //       _tokenId: String(i),
+  //     },
+  //     ...contract_options
+  //   }).then((response) => {
+  //     tokenURIs.push(response);
+  //   });
+  // }
+
+  // console.log(tokenURIs)
 
   const options = [
     { label: "Offsuit", value: "Offsuit" },
@@ -51,8 +82,8 @@ export default function PostRevealSale({ pricePerToken, canMint, mintedTokens })
 
   function switchTab(event) {
     event.preventDefault();
-    if (event.target.innerHTML == "Minted") setMinted(true);
-    else if (event.target.innerHTML == "Not minted") setMinted(false);
+    if (event.target.innerHTML === "Minted") setMinted(true);
+    else if (event.target.innerHTML === "Not minted") setMinted(false);
   }
 
   function handleShapeChange(checkedValues) {
@@ -62,52 +93,51 @@ export default function PostRevealSale({ pricePerToken, canMint, mintedTokens })
 
   function handleRankChange(value) {
     console.log("Rank: ", value);
+    setMarks({ [value[0]]: `${value[0]}`, [value[1]]: `${value[1]}` });
     setRanksRange([...value]);
   }
 
   return (
     <>
-      <Row>
-        <Col>
-          {/* <h2 style={{ color: "white" }}>Post Reveal Mint Sale</h2> */}
-          <p className="title">NFT Marketplace</p>
-          <ul className="tabs" onClick={switchTab}>
-            <li><a className={!minted ? "active" : ""}>Not minted</a></li>
-            <li><a className={minted ? "active" : ""}>Minted</a></li>
-          </ul>
-        </Col>
-      </Row>
-      <Row>
-        <Col>
-          <p>Filters</p>
-          <div>
-            <p>Shape</p>
-            <Checkbox.Group options={options} onChange={handleShapeChange} />
-            <div>
+      <div className="sales-header">
+        {/* <h2 style={{ divor: "white" }}>Post Reveal Mint Sale</h2> */}
+        <p className="title">NFT Marketplace</p>
+        <ul className="tabs" onClick={switchTab}>
+          <li><a className={!minted ? "active" : ""}>Not minted</a></li>
+          <li><a className={minted ? "active" : ""}>Minted</a></li>
+        </ul>
+      </div>
+
+      <div className="sales-main">
+        <div className="filter_sidebar">
+          <p className="title">Filters</p>
+          <div className="filter_body">
+            <div className="filter_item">
+              <p>Shape</p>
+              <Checkbox.Group options={options} onChange={handleShapeChange} defaultValue={["Offsuit", "Suited", "Pair"]} />
+            </div>
+            <div className="filter_item">
               <p>Rank</p>
-              <Slider range defaultValue={[1, 169]} min={1} max={169} onChange={handleRankChange}></Slider>
+              <Slider range marks={marks} defaultValue={[1, 169]} min={1} max={169} onChange={handleRankChange}></Slider>
             </div>
           </div>
-        </Col>
-        <Col>
-          <Row>
-            <Col>
-              <NFTList currentTokens={currentItems} canMint={canMint} mintedTokens={mintedTokens} pricePerToken={pricePerToken} />
-            </Col>
-          </Row>
-          <Row>
-            <Col>
-              <Pagination
-                showQuickJumper
-                showSizeChanger
-                onShowSizeChange={onShowSizeChange}
-                defaultCurrent={1}
-                total={tokens.length}
-                onChange={handlePageClick}
-              />
-            </Col>
-          </Row></Col>
-      </Row>
+        </div>
+
+        <div className="nft_list-wrapper">
+          <NFTList currentTokens={currentItems} canMint={canMint} mintedTokens={mintedTokens} pricePerToken={pricePerToken} />
+
+          <div>
+            <Pagination
+              showQuickJumper
+              showSizeChanger
+              onShowSizeChange={onShowSizeChange}
+              defaultCurrent={1}
+              total={tokens.length}
+              onChange={handlePageClick}
+            />
+          </div>
+        </div>
+      </div>
     </>
   );
 }

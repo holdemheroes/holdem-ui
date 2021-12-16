@@ -3,7 +3,7 @@ import ReactDOM from "react-dom";
 import App from "./App";
 import { MoralisProvider } from "react-moralis";
 import "./index.scss";
-import Home from "./pages/Home";
+// import Home from "./pages/Home";
 import { MoralisDappProvider } from "./providers/MoralisDappProvider/MoralisDappProvider";
 
 const APP_ID = process.env.REACT_APP_MORALIS_APPLICATION_ID || null;

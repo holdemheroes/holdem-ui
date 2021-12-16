@@ -14,78 +14,251 @@
         }
     }
 
-    .ant-row {
-        display        : flex;
-        justify-content: center;
-        align-items    : center;
-        margin-bottom  : 30px;
-    }
+    .sales-header {
+        margin-bottom: 48px;
 
-    .nft_list {
-        display        : flex;
-        justify-content: center;
-        align-items    : center;
-        flex-wrap      : wrap;
+        .title {
+            font-family   : "Redtone";
+            font-weight   : bold;
+            font-size     : 45px;
+            line-height   : 45px;
+            letter-spacing: 0.075em;
+            text-align    : center;
+        }
 
-        .ant-card {
+        ul.tabs {
+            list-style-type: none;
+            display        : flex;
+            justify-content: center;
+            align-items    : center;
+            padding        : 0;
 
-            .ant-card-actions {
-                background-color: #174aff;
-                transition      : all 0.3s ease-in-out;
+            &>li {
 
-                a {
-                    color: white;
+                &:first-child {
+                    margin-right: 32px;
                 }
 
-                &:hover {
-                    background-color: white;
+                &>a {
+                    font-family  : Karla;
+                    font-size    : 17px;
+                    line-height  : 27px;
+                    color        : white;
+                    padding      : 4px 0;
+                    border-bottom: 1px solid transparent;
 
-                    a {
-                        color: #174aff;
+                    &:hover {
+                        color       : #426BFF;
+                        border-color: #426BFF;
+                    }
+
+                    &.active {
+                        color       : #426BFF;
+                        border-color: #426BFF;
                     }
                 }
             }
         }
     }
 
-    // new added
-    .title {
-        font-family   : "Redtone";
-        font-weight   : bold;
-        font-size     : 45px;
-        line-height   : 45px;
-        letter-spacing: 0.075em;
-    }
+    .sales-main {
+        display: flex;
 
-    ul.tabs {
-        list-style-type: none;
-        display        : flex;
-        justify-content: center;
-        align-items    : center;
-        padding        : 0;
+        &>.filter_sidebar {
+            width    : 200px;
+            min-width: 200px;
 
-        &>li {
-
-            &:first-child {
-                margin-right: 32px;
+            &>.title {
+                font-family   : Redtone;
+                font-weight   : bold;
+                font-size     : 22px;
+                line-height   : 27px;
+                letter-spacing: 0.12em;
+                color         : #FFFFFF;
+                padding-bottom: 9px;
+                border-bottom : 1px solid rgba(255, 255, 255, 0.4);
             }
 
-            &>a {
-                font-family  : Karla;
-                font-size    : 17px;
-                line-height  : 27px;
-                color        : white;
-                padding      : 4px 0;
-                border-bottom: 1px solid transparent;
+            &>.filter_body {
+                margin-top: 30px;
 
-                &:hover {
-                    color       : #426BFF;
-                    border-color: #426BFF;
+                &>.filter_item {
+                    margin-bottom: 35px;
+
+                    &>p {
+                        font-family  : Karla;
+                        font-weight  : bold;
+                        font-size    : 19px;
+                        line-height  : 27px;
+                        color        : #FFFFFF;
+                        margin-bottom: 22px;
+                    }
+
+                    // Checkbox group
+                    &>.ant-checkbox-group {
+                        &>label {
+                            width: 100%;
+
+                            &:not(:last-child) {
+                                margin-bottom: 22px;
+                            }
+
+                            &>span:nth-child(2) {
+                                font-family: Karla;
+                                font-size  : 16px;
+                                line-height: 19px;
+                                display    : flex;
+                                align-items: center;
+                                color      : #FFFFFF;
+                            }
+
+                            .ant-checkbox-wrapper:hover .ant-checkbox-inner,
+                            .ant-checkbox:hover .ant-checkbox-inner,
+                            .ant-checkbox-input:focus+.ant-checkbox-inner {
+                                border-color: #0C35C6;
+                            }
+
+                            .ant-checkbox-checked .ant-checkbox-inner {
+                                background-color: #0C35C6;
+                                border-color    : #0C35C6;
+                            }
+                        }
+                    }
+
+                    // Slider
+                    &>.ant-slider {
+
+                        &>.ant-slider-track.ant-slider-track-1 {
+                            background-color: #0C35C6;
+                        }
+
+                        &:hover .ant-silder-track {
+                            background-color: #0C35C6;
+                        }
+
+                        &>.ant-slider-handle {
+                            width           : 16px;
+                            height          : 16px;
+                            background-color: #0C35C6;
+                            border-color    : white;
+                        }
+
+                        &>.ant-slider-mark {
+                            &>.ant-slider-mark-text {
+                                font-family: Karla;
+                                font-size  : 14px;
+                                line-height: 24px;
+                                color      : #FFFFFF;
+                            }
+                        }
+                    }
                 }
+            }
+        }
 
-                &.active {
-                    color       : #426BFF;
-                    border-color: #426BFF;
+        &>.nft_list-wrapper {
+            margin-left: 85px;
+
+            .nft_list {
+                display  : flex;
+                flex-wrap: wrap;
+
+                .ant-card {
+                    width        : 240px;
+                    margin       : 0 30px 40px 0;
+                    padding      : 17px 22px;
+                    border-radius: 12px;
+                    overflow     : hidden;
+
+                    .ant-card-head {
+                        padding      : 0;
+                        min-height   : unset;
+                        border-bottom: unset;
+                        margin-bottom: 15px;
+
+                        .ant-card-head-wrapper {
+
+                            .ant-card-head-title {
+                                padding    : 0;
+                                font-family: Karla;
+                                font-weight: bold;
+                                font-size  : 20px;
+                                line-height: 30px;
+                                color      : #242121;
+                                text-align : center;
+                            }
+                        }
+                    }
+
+                    .ant-card-cover {
+
+                        .ant-image {
+
+                            .ant-image-img {
+                                padding   : 0;
+                                box-shadow: 0px 0px 13px rgba(30, 30, 47, 0.16);
+                            }
+                        }
+                    }
+
+                    .ant-card-body {
+                        margin-top: 10px;
+                        padding   : 12px 0 0 0;
+                        border-top: 1px solid rgba(0, 0, 0, 0.1);
+                    }
+
+                    .ant-card-actions {
+                        // background-color: #174aff;
+                        transition: all 0.3s ease-in-out;
+                        border-top: unset;
+
+                        &>li {
+                            margin: 0;
+
+                            &>span>a {
+                                width        : 100%;
+                                padding      : 16px 22px;
+                                border-radius: 5px;
+                                font-family  : "DM Sans";
+                                font-weight  : 500;
+                                font-size    : 17px;
+                                line-height  : 27px;
+                                background   : #174AFF;
+                                color        : #FFFFFF;
+                                border       : 2px solid transparent;
+
+                                &:hover {
+                                    cursor    : pointer;
+                                    color     : #174AFF;
+                                    background: #FFFFFF;
+                                    border    : 2px solid #174AFF;
+                                }
+
+                                &.minted {
+                                    color     : #174AFF;
+                                    background: #FFFFFF;
+                                    border    : 2px solid #174AFF;
+
+                                    &:hover {
+                                        background: #174AFF;
+                                        color     : #FFFFFF;
+                                    }
+                                }
+                            }
+                        }
+
+                        // a {
+                        //     color: white;
+                        // }
+
+                        // &:hover {
+                        //     background-color: white;
+
+                        //     a {
+                        //         color: #174aff;
+                        //     }
+                        // }
+                    }
                 }
             }
         }

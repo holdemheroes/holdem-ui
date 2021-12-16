@@ -3,11 +3,11 @@ import { Row, Col, Spin } from "antd";
 // import { Card, Image, Tooltip, Row, Col, Spin } from "antd";
 // import { ShoppingCartOutlined } from "@ant-design/icons";
 import { useMoralisDapp } from "../providers/MoralisDappProvider/MoralisDappProvider";
-import NFTMeta from "./NFTMeta/NFTMeta";
+// import NFTMeta from "./NFTMeta/NFTMeta";
 import { useMyNFTHands } from "../hooks/useMyNFTHands";
 // import { getHoldemHeroesAddress, getOpenSeaUrl } from "../helpers/networks";
 // import { decodeNftUriToJson } from "../helpers/nft";
-import NFTCard from "./NFTCard/NFTCard";
+import NFTCard from "./NFTCard";
 
 const styles = {
   NFTs: {
