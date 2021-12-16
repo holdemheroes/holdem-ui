@@ -19,7 +19,7 @@
     width        : 100%;
     background   : #1646EF;
     border-radius: 5px;
-    font-family  : DM Sans;
+    font-family  : Karla;
     font-weight  : 500;
     font-size    : 14.5px;
     line-height  : 14px;
@@ -31,4 +31,8 @@
     &:hover {
         box-shadow: 1px 1px 20px 0 #174aff;
     }
+}
+
+.btn-hover-pointer:hover {
+    cursor: pointer;
 }

@@ -5,7 +5,7 @@ function Logout() {
   const { logout } = useMoralis();
 
   return (
-    <button onClick={() => { logout(); }}>
+    <button className="btn-hover-pointer" onClick={() => { logout(); }} style={{ display: "block", width: "100%", textAlign: "left" }}>
       Disconnect
     </button>
   );

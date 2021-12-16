@@ -43,7 +43,7 @@ function Withdrawable() {
   return (
     <>
       <button onClick={() => handleWithdraw()}
-        className="btn-withdrawable btn-shadow">
+        className="btn-withdrawable btn-shadow btn-hover-pointer">
         Withdraw {`${n4.format(
           Moralis.Units.FromWei(balance, 18)
         )} ETH`}</button>

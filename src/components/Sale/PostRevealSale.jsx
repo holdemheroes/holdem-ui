@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from "react";
-import { Pagination, Row, Col } from 'antd';
+import { Pagination, Row, Col, Checkbox, Slider } from 'antd';
 import NFTList from "./NFTList"
 
 export default function PostRevealSale({ pricePerToken, canMint, mintedTokens }) {
@@ -9,6 +9,14 @@ export default function PostRevealSale({ pricePerToken, canMint, mintedTokens })
   const [pageNumber, setPageNumber] = useState(1);
   const [minted, setMinted] = useState(false);
   const [tokens, setTokens] = useState([]);
+  const [shape, setShape] = useState(["Offsuit", "Suited", "Pair"]);
+  const [ranksRange, setRanksRange] = useState([1, 169]);
+
+  const options = [
+    { label: "Offsuit", value: "Offsuit" },
+    { label: "Suited", value: "Suited" },
+    { label: "Pair", value: "Pair" }
+  ];
 
   useEffect(() => {
     let tmp = [];
@@ -22,7 +30,6 @@ export default function PostRevealSale({ pricePerToken, canMint, mintedTokens })
         }
       }
     }
-    console.log(tmp)
     setTokens([...tmp]);
   }, [minted, mintedTokens]);
 
@@ -48,6 +55,16 @@ export default function PostRevealSale({ pricePerToken, canMint, mintedTokens })
     else if (event.target.innerHTML == "Not minted") setMinted(false);
   }
 
+  function handleShapeChange(checkedValues) {
+    console.log(checkedValues);
+    setShape([...checkedValues]);
+  }
+
+  function handleRankChange(value) {
+    console.log("Rank: ", value);
+    setRanksRange([...value]);
+  }
+
   return (
     <>
       <Row>
@@ -61,7 +78,17 @@ export default function PostRevealSale({ pricePerToken, canMint, mintedTokens })
         </Col>
       </Row>
       <Row>
-        <Col></Col>
+        <Col>
+          <p>Filters</p>
+          <div>
+            <p>Shape</p>
+            <Checkbox.Group options={options} onChange={handleShapeChange} />
+            <div>
+              <p>Rank</p>
+              <Slider range defaultValue={[1, 169]} min={1} max={169} onChange={handleRankChange}></Slider>
+            </div>
+          </div>
+        </Col>
         <Col>
           <Row>
             <Col>

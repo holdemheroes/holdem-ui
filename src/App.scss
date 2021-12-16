@@ -202,7 +202,8 @@ span.ant-pagination-item-ellipsis {
         line-height  : 27px;
         border-bottom: 1px solid transparent;
 
-        &:hover, &.active {
+        &:hover,
+        &.active {
           border-bottom: 1px solid white;
         }
       }
@@ -219,6 +220,11 @@ span.ant-pagination-item-ellipsis {
       letter-spacing: 0.19em;
       color         : white;
       text-transform: uppercase;
+      transition    : all 0.3s ease-in-out;
+
+      &:hover {
+        box-shadow: 1px 1px 20px 0 #3D56EF;
+      }
     }
 
     .dropdown-wrapper.account {
@@ -257,18 +263,33 @@ span.ant-pagination-item-ellipsis {
         width          : 100%;
         position       : absolute;
         margin-top     : 10px;
-        padding        : 0 14px;
+        padding        : 0;
         background     : #FFFFFF;
         border-radius  : 7px;
         list-style-type: none;
         z-index        : 999;
+        overflow       : hidden;
 
         &>.dropdown-item {
           width  : 100%;
-          padding: 13px 0;
+          padding: 0 14px;
+
+          &:first-child {
+            padding-top   : 13px;
+            padding-bottom: 13px;
+          }
+
+          &>* {
+            display: block;
+            padding: 13px 0;
+            border-top: 1px solid rgba(0, 0, 0, 0.11);
+          }
 
           &:not(:first-child) {
-            border-top: 1px solid rgba(0, 0, 0, 0.11);
+
+            &:hover {
+              background-color: #F7F7F7;
+            }
 
             &>* {
               font-family     : Karla;
@@ -276,7 +297,6 @@ span.ant-pagination-item-ellipsis {
               line-height     : 16px;
               color           : #332424;
               background-color: transparent;
-              padding         : 0;
             }
           }
         }

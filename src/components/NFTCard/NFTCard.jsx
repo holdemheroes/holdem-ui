@@ -8,6 +8,8 @@ export default function NFTCard({ nft, chainId }) {
     const openSeaUrl = getOpenSeaUrl(chainId);
     const contractAddress = getHoldemHeroesAddress(chainId);
     let metadata = decodeNftUriToJson(nft.token_uri);
+    console.log("nft: ", nft)
+    console.log("metadata: ", metadata)
 
     // let block = null;
     // if (nftOwner === "no") {
