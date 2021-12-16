@@ -18,7 +18,7 @@
         margin-bottom: 48px;
 
         .title {
-            font-family   : "Redtone";
+            font-family   : Redtone, sans-serif;
             font-weight   : bold;
             font-size     : 45px;
             line-height   : 45px;
@@ -69,7 +69,7 @@
             min-width: 200px;
 
             &>.title {
-                font-family   : Redtone;
+                font-family   : Redtone, sans-serif;
                 font-weight   : bold;
                 font-size     : 22px;
                 line-height   : 27px;
@@ -219,7 +219,7 @@
                                 width        : 100%;
                                 padding      : 16px 22px;
                                 border-radius: 5px;
-                                font-family  : "DM Sans";
+                                font-family  : "DM Sans", sans-serif;
                                 font-weight  : 500;
                                 font-size    : 17px;
                                 line-height  : 27px;

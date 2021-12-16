@@ -4,7 +4,7 @@ import { useMoralis } from "react-moralis";
 import "antd/dist/antd.css";
 import Account from "./components/Account";
 import Chains from "./components/Chains";
-import NFTBalance from "./components/NFTBalance";
+import NFTBalance from "./components/NFTBalance/";
 import Blockie from "./components/Blockie";
 import Sale from "./components/Sale";
 import GamesV1 from "./components/TexasHoldemV1";
