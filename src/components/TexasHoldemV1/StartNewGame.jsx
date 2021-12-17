@@ -1,6 +1,6 @@
 import React, { useEffect, useState } from "react";
 import { useMoralis } from "react-moralis";
-import { Form, Input, Button, Collapse, Spin } from 'antd';
+import { Form, Input, Button, Spin } from 'antd';
 import { useMoralisDapp } from "../../providers/MoralisDappProvider/MoralisDappProvider";
 import { openNotification } from "../../helpers/notifications";
 import abis from "../../helpers/contracts";
@@ -97,55 +97,51 @@ export default function StartNewGame({ gameIdsInProgress, maxConcurrentGames }) 
 
   return (
     <>
-      <button onClick={() => { setStarted(started => !started) }} style={{ display: started ? "none" : "block" }}>Start New Game</button>
-      <Collapse style={{ display: started ? "block" : "none" }}>
-        <Collapse.Panel header={"Start new Game"}>
-          <div>
-            <h3>Start New Game</h3>
-            <Form
-              name="basic"
-              labelCol={{ span: 8 }}
-              wrapperCol={{ span: 16 }}
-              initialValues={{ remember: true }}
-              onFinish={startNewCustomGame}
-              autoComplete="off"
-            >
-              <Form.Item
-                initialValue={"60"}
-                label="Round Time"
-                name="round_timer"
-                rules={[{ required: true, message: 'Please input round time!' }]}
-              >
-                <Input addonAfter={" Minutes"} />
-              </Form.Item>
+      <button onClick={() => { setStarted(started => !started) }} style={{ display: started ? "none" : "block" }} className="start_btn btn-shadow">Start New Game</button>
+      <div style={{ display: started ? "block" : "none", width: "340px", margin: "0 auto" }} className="game_start_card">
+        <p className="title">Start New Game</p>
+        <Form
+          name="basic"
+          labelCol={{ span: 8 }}
+          wrapperCol={{ span: 16 }}
+          initialValues={{ remember: true }}
+          onFinish={startNewCustomGame}
+          autoComplete="off"
+        >
+          <Form.Item
+            initialValue={"60"}
+            label="Round Time"
+            name="round_timer"
+            rules={[{ required: true, message: 'Please input round time' }]}
+          >
+            <Input addonAfter={"Minutes"} />
+          </Form.Item>
 
-              <Form.Item
-                initialValue={"0.1"}
-                label="Flop bet"
-                name="round_1_price"
-                rules={[{ required: true, message: 'Please input flop bet!' }]}
-              >
-                <Input addonAfter={"ETH Per NFT"} />
-              </Form.Item>
+          <Form.Item
+            initialValue={"0.1"}
+            label="Flop bet"
+            name="round_1_price"
+            rules={[{ required: true, message: 'Please input flop bet' }]}
+          >
+            <Input addonAfter={"ETH Per NFT"} />
+          </Form.Item>
 
-              <Form.Item
-                initialValue={"0.2"}
-                label="Turn bet"
-                name="round_2_price"
-                rules={[{ required: true, message: 'Please input flop bet!' }]}
-              >
-                <Input addonAfter={"ETH Per NFT"} />
-              </Form.Item>
+          <Form.Item
+            initialValue={"0.2"}
+            label="Turn bet"
+            name="round_2_price"
+            rules={[{ required: true, message: 'Please input turn bet' }]}
+          >
+            <Input addonAfter={"ETH Per NFT"} />
+          </Form.Item>
 
-              <Form.Item wrapperCol={{ offset: 8, span: 16 }}>
-                <Button type="primary" htmlType="submit">
-                  Start!
-                </Button>
-              </Form.Item>
-            </Form>
-          </div>
-        </Collapse.Panel>
-      </Collapse>
+          <Form.Item className="start_btn-wrapper">
+            <Button type="primary" htmlType="submit">
+              Start!
+            </Button>
+          </Form.Item>
+        </Form>
+      </div>
     </>
   );
 }

@@ -16,7 +16,7 @@ export default function GamesV1() {
 
   return (
     <div className="play-wrapper">
-      <h2>Play Holdem Heroes</h2>
+      <p className="title">Play Holdem Heroes</p>
       <StartNewGame gameIdsInProgress={gamesInProgress} maxConcurrentGames={maxConcurrentGames} />
 
       <Tabs>

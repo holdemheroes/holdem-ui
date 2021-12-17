@@ -46,7 +46,7 @@ const App = () => {
                 <NavLink to="/NFTwallet">NFT Wallet</NavLink>
                 <NavLink to="/Rules">Rules</NavLink>
               </div>
-              <NavLink to="/Play" className="hover-expand btn-play" style={{ marginRight: "35px" }}>Play</NavLink>
+              <NavLink to="/Play" className="btn-play" style={{ marginRight: "35px" }}>Play</NavLink>
               <div className="dropdown-wrapper account" style={{ marginRight: "15px" }}>
                 <button className="dropdown-btn address_btn">
                   <Blockie className="circle" currentWallet size={5} scale={5} />

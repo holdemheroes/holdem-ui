@@ -21,7 +21,7 @@ export default function NFTBalance() {
       <div className="no_nfts-body">
         <p className="title">You don't have any Holdem Heroes NFTs yet :(</p>
         <div className="btn-wrapper">
-          <NavLink to="/Marketplace" className="mint_now_btn">Mint now</NavLink>
+          <NavLink to="/Marketplace" className="mint_now_btn btn-shadow">Mint now</NavLink>
         </div>
       </div>
     );
