@@ -14,7 +14,7 @@ import { History } from "./components/TexasHoldemV1/History/History";
 import Home from "./pages/Home";
 import GamePlay from "./pages/GamePlay";
 import "./App.scss";
-import logo from "./assets/images/hhlogo.png";
+import logo from "./assets/images/hhlogo_new.png";
 import { useMoralisDapp } from "./providers/MoralisDappProvider/MoralisDappProvider";
 import { getEllipsisTxt } from "./helpers/formatters";
 import Logout from "./components/Logout";
@@ -42,11 +42,11 @@ const App = () => {
           {
             isAuthenticated && <>
               <div>
-                <NavLink to="/sale">Marketplace</NavLink>
-                <NavLink to="/nftBalance">NFT Wallet</NavLink>
-                <NavLink to="/game-play">Rules</NavLink>
+                <NavLink to="/Marketplace">Marketplace</NavLink>
+                <NavLink to="/NFTwallet">NFT Wallet</NavLink>
+                <NavLink to="/Rules">Rules</NavLink>
               </div>
-              <NavLink to="/play-v1" className="hover-expand btn-play" style={{ marginRight: "35px" }}>Play</NavLink>
+              <NavLink to="/Play" className="hover-expand btn-play" style={{ marginRight: "35px" }}>Play</NavLink>
               <div className="dropdown-wrapper account" style={{ marginRight: "15px" }}>
                 <button className="dropdown-btn address_btn">
                   <Blockie className="circle" currentWallet size={5} scale={5} />
@@ -54,8 +54,8 @@ const App = () => {
                 </button>
                 <ul className="dropdown-body">
                   <li className="dropdown-item"><Withdrawable /></li>
-                  <li className="dropdown-item"><NavLink to="history">Game History</NavLink></li>
-                  <li className="dropdown-item"><NavLink to="refundable">Refunds</NavLink></li>
+                  <li className="dropdown-item"><NavLink to="/History">Game History</NavLink></li>
+                  <li className="dropdown-item"><NavLink to="/Refunds">Refunds</NavLink></li>
                   <li className="dropdown-item"><Logout /></li>
                 </ul>
               </div>
@@ -67,35 +67,35 @@ const App = () => {
       <>
         <Switch>
           <Route exact path="/">
-            <Redirect to="/home" />
+            <Redirect to="/Home" />
           </Route>
-          <Route path="/home">
+          <Route path="/Home">
             <Home />
           </Route>
           {
             isAuthenticated && <>
-              <Route path="/sale">
+              <Route path="/Marketplace">
                 <Sale />
               </Route>
-              <Route path="/game-play">
+              <Route path="/Rules">
                 <GamePlay />
               </Route>
-              <Route path="/nftBalance">
+              <Route path="/NFTwallet">
                 <NFTBalance />
               </Route>
-              <Route path="/play-v1">
+              <Route path="/Play">
                 <GamesV1 />
               </Route>
-              <Route path="/refundable">
+              <Route path="/Refunds">
                 <RefundableGames />
               </Route>
-              <Route path="/history">
+              <Route path="/History">
                 <History />
               </Route>
             </>
           }
           {
-            !isAuthenticated && <Redirect to="/home" />
+            !isAuthenticated && <Redirect to="/Home" />
           }
         </Switch>
       </>
@@ -104,7 +104,7 @@ const App = () => {
 };
 
 export const Logo = () => (
-  <NavLink to="/home"><img src={logo} alt="Site logo comes here" /></NavLink>
+  <NavLink to="/Home"><img src={logo} alt="Site logo comes here" /></NavLink>
 );
 
 export default App;

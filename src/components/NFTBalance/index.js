@@ -1,13 +1,18 @@
-import React from "react";
+import React, { useState, useEffect } from "react";
 import { Spin } from "antd";
 import { useMoralisDapp } from "../../providers/MoralisDappProvider/MoralisDappProvider";
 import { useMyNFTHands } from "../../hooks/useMyNFTHands";
 import NFTCard from "../NFTCard";
 import "./style.scss";
+import { Pagination } from "antd";
 
 export default function NFTBalance() {
   const { NFTHands } = useMyNFTHands();
   const { chainId } = useMoralisDapp();
+
+  // const [currentItems, setCurrentItems] = useState(null);
+  // const [tokensPerPage, setTokensPerPage] = useState(10);
+  // const [pageNumber, setPageNumber] = useState(1);
 
   if (!NFTHands.length) {
     return <Spin className="spin_loader" />;
@@ -29,6 +34,17 @@ export default function NFTBalance() {
           })
         }
       </div>
+
+      {/* <div>
+        <Pagination
+          showQuickJumper
+          showSizeChanger
+          onShowSizeChange={onShowSizeChange}
+          defaultCurrent={1}
+          total={NFTHands.length}
+          onChange={handlePageClick}
+        />
+      </div> */}
     </div>
   );
 }

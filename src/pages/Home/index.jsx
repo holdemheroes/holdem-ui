@@ -68,8 +68,8 @@ export default function Home(props) {
               You can choose your game duration, bet size, and play multiple games in parallel.</p>
           </div>
           <div>
-            <NavLink to="/play-v1" className="btn-play">Play Now</NavLink>
-            <NavLink to="/game-play" className="btn-learn">Learn More</NavLink>
+            <NavLink to="/Play" className="btn-play">Play Now</NavLink>
+            <NavLink to="/Rules" className="btn-learn">Learn More</NavLink>
           </div>
         </div>
       </div>
@@ -95,7 +95,7 @@ export default function Home(props) {
           <div>
             <AnimateButton><a href='#section--nft_poker' rel="noreferrer">Mint Poker Nfts</a></AnimateButton>
             <AnimateButton><a href='https://discord.gg/wqZdRNruHG' target='_blank' rel="noreferrer">Join Our Community</a></AnimateButton>
-            <AnimateButton><NavLink to='/play-v1'>Play Hold&#x27;em Heroes</NavLink></AnimateButton>
+            <AnimateButton><NavLink to='/Play'>Play Hold&#x27;em Heroes</NavLink></AnimateButton>
           </div>
         </div>
 

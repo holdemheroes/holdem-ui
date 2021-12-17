@@ -1,13 +1,13 @@
 import { useEffect, useState } from "react";
 import useChain from "../../hooks/useChain";
 import { useMoralisDapp } from "../../providers/MoralisDappProvider/MoralisDappProvider";
-import { ETHLogo } from "./Logos";
+import { ETHLogo, PolygonLogo } from "./Logos";
 import "./style.scss";
 
 const menuItems = [
   {
     key: "0x1",
-    value: "Ethereum Mainnet",
+    value: "Ethereum",
     icon: <ETHLogo size="S" />,
     iconL: <ETHLogo size="L" />,
   },
@@ -25,9 +25,15 @@ const menuItems = [
   },
   {
     key: "0x4",
-    value: "Rinkeby Testnet",
+    value: "Rinkeby",
     icon: <ETHLogo size="S" />,
     iconL: <ETHLogo size="L" />,
+  },
+  {
+    key: "0x###",
+    value: "Polygon",
+    icon: <PolygonLogo />,
+    iconL: <PolygonLogo />,
   },
 ];
 
