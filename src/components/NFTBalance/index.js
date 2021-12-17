@@ -5,6 +5,7 @@ import { useMyNFTHands } from "../../hooks/useMyNFTHands";
 import NFTCard from "../NFTCard";
 import "./style.scss";
 import { Pagination } from "antd";
+import { NavLink } from "react-router-dom";
 
 export default function NFTBalance() {
   const { NFTHands } = useMyNFTHands();
@@ -15,7 +16,15 @@ export default function NFTBalance() {
   // const [pageNumber, setPageNumber] = useState(1);
 
   if (!NFTHands.length) {
-    return <Spin className="spin_loader" />;
+    // return <Spin className="spin_loader" />;
+    return (
+      <div className="no_nfts-body">
+        <p className="title">You don't have any Holdem Heroes NFTs yet :(</p>
+        <div className="btn-wrapper">
+          <NavLink to="/Marketplace" className="mint_now_btn">Mint now</NavLink>
+        </div>
+      </div>
+    );
   }
 
   return (
