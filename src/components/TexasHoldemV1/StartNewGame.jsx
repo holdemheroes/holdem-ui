@@ -87,6 +87,8 @@ export default function StartNewGame({ gameIdsInProgress, maxConcurrentGames }) 
         });
         console.log(error);
       });
+
+    setStarted(false);
   }
 
   if (gameIdsInProgress.length === maxConcurrentGames) {
