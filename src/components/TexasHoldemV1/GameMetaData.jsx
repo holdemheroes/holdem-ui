@@ -37,6 +37,34 @@ export const GameMetaData = ({ gameId, gameData, feesPaid, playersPerRound, numF
     },
   ];
 
+  const columns_r = [
+    {
+      title: "",
+      dataIndex: "item",
+      key: "item",
+    },
+    {
+      title: "Flop",
+      dataIndex: "flop",
+      key: "flop",
+    },
+    {
+      title: "Turn",
+      dataIndex: "turn",
+      key: "turn",
+    },
+    {
+      title: "River",
+      dataIndex: "river",
+      key: "river",
+    },
+    {
+      title: "Total Pot",
+      dataIndex: "total_pot",
+      key: "total_pot",
+    },
+  ]
+
   const dataSource = [
     {
       key: '2',
@@ -72,6 +100,41 @@ export const GameMetaData = ({ gameId, gameData, feesPaid, playersPerRound, numF
     },
   ];
 
+  const dataSource_r = [
+    {
+      key: "My Bet",
+      item: "My Bet",
+      flop: Moralis.Units.FromWei(feesPaid[2].me, 18),
+      turn: Moralis.Units.FromWei(feesPaid[4].me, 18),
+      river: "",
+      total_pot: "",
+    },
+    {
+      key: "Players",
+      item: "Players",
+      flop: playersPerRound[2].length,
+      turn: playersPerRound[4].length,
+      river: numFinalHands,
+      total_pot: "",
+    },
+    {
+      key: "Hands",
+      item: "Hands",
+      flop: numHands[2],
+      turn: numHands[4],
+      river: numFinalHands,
+      total_pot: "",
+    },
+    {
+      key: "Total Bet",
+      item: "Total Bet",
+      flop: Moralis.Units.FromWei(feesPaid[2].total, 18),
+      turn: Moralis.Units.FromWei(feesPaid[4].total, 18),
+      river: "",
+      total_pot: Moralis.Units.FromWei(gameData.totalPaidIn, 18),
+    },
+  ]
+
   return (
     <>
       <Descriptions
@@ -82,6 +145,14 @@ export const GameMetaData = ({ gameId, gameData, feesPaid, playersPerRound, numF
         <Descriptions.Item label="Flop Ante Per NFT:">{Moralis.Units.FromWei(gameData.round1Price, 18)}</Descriptions.Item>
         <Descriptions.Item label="Turn Ante Per NFT:">{Moralis.Units.FromWei(gameData.round2Price, 18)}</Descriptions.Item>
       </Descriptions>
+
+      <Table
+        dataSource={dataSource_r}
+        columns={columns_r}
+        pagination={false}
+        bordered
+        size={"small"}
+      />
 
       <h4>
         <GameStatus status={gameData.status} gameHasEnded={gameHasEnded} key={`game_status_${gameId}`} />
@@ -108,14 +179,6 @@ export const GameMetaData = ({ gameId, gameData, feesPaid, playersPerRound, numF
           </div>
         }
       </h4>
-
-      <Table
-        dataSource={dataSource}
-        columns={columns}
-        pagination={false}
-        bordered
-        size={"small"}
-      />
     </>
   );
 }
