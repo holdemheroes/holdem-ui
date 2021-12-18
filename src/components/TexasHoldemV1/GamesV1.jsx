@@ -23,9 +23,7 @@ export default function GamesV1() {
         {
           gamesInProgress && gamesInProgress.map((item) => (
             <Tabs.TabPane tab={`Game #${item}`} key={`game_tab_${item}_${walletAddress}`}>
-              <div>
-                <Game gameId={item} key={`game_outer_container_${item}_${walletAddress}`} />
-              </div>
+              <Game gameId={item} key={`game_outer_container_${item}_${walletAddress}`} />
             </Tabs.TabPane>
           ))
         }

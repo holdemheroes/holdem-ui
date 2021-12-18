@@ -70,6 +70,7 @@ export default function StartNewGame({ gameIdsInProgress, maxConcurrentGames }) 
         description: `📃 Tx Hash: ${hash}`,
         type: "success"
       });
+      setStarted(false);
     })
       .on("receipt", (receipt) => {
         openNotification({
@@ -77,6 +78,7 @@ export default function StartNewGame({ gameIdsInProgress, maxConcurrentGames }) 
           description: `📃 Receipt: ${receipt.transactionHash}`,
           type: "success"
         });
+        setStarted(false);
       })
       .on("error", (error) => {
         openNotification({
@@ -87,8 +89,6 @@ export default function StartNewGame({ gameIdsInProgress, maxConcurrentGames }) 
         });
         console.log(error);
       });
-
-    setStarted(false);
   }
 
   if (gameIdsInProgress.length === maxConcurrentGames) {

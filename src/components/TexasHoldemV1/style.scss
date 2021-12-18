@@ -124,4 +124,47 @@
             }
         }
     }
+
+    .ant-tabs.ant-tabs-top {
+        margin-top: 75px;
+
+        .ant-tabs-tab>.ant-tabs-tab-btn {
+            font-family   : Redtone, sans-serif;
+            font-style    : normal;
+            font-weight   : 600;
+            font-size     : 22px;
+            line-height   : 32px;
+            letter-spacing: 0.035em;
+            color         : #FFFFFF;
+        }
+
+        .ant-tabs-tab+.ant-tabs-tab {
+            margin: 0 0 0 52px;
+        }
+
+        .ant-tabs-tab.ant-tabs-tab-active {
+
+            &>.ant-tabs-tab-btn {
+                color: #174AFF;
+            }
+        }
+    }
+
+    .ant-tabs-top>.ant-tabs-nav::before,
+    .ant-tabs-bottom>.ant-tabs-nav::before,
+    .ant-tabs-top>div>.ant-tabs-nav::before,
+    .ant-tabs-bottom>div>.ant-tabs-nav::before {
+        border-bottom: 1px solid #FFFFFF;
+    }
+
+    .ant-tabs-top>.ant-tabs-nav .ant-tabs-ink-bar,
+    .ant-tabs-bottom>.ant-tabs-nav .ant-tabs-ink-bar,
+    .ant-tabs-top>div>.ant-tabs-nav .ant-tabs-ink-bar,
+    .ant-tabs-bottom>div>.ant-tabs-nav .ant-tabs-ink-bar {
+        height: 3px;
+    }
+
+    .ant-tabs-ink-bar {
+        background: #174AFF;
+    }
 }

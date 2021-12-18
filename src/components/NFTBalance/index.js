@@ -19,7 +19,7 @@ export default function NFTBalance() {
     // return <Spin className="spin_loader" />;
     return (
       <div className="no_nfts-body">
-        <p className="title">You don't have any Holdem Heroes NFTs yet :(</p>
+        <p className="title">You don't have any Holdem Heroes NFTs yet.</p>
         <div className="btn-wrapper">
           <NavLink to="/Marketplace" className="mint_now_btn btn-shadow">Mint now</NavLink>
         </div>
@@ -31,7 +31,7 @@ export default function NFTBalance() {
     <div className="wallet_page-wrapper">
       <div className="wallet-header">
         <p className="title">My NFTs</p>
-        <p className="desc">Urna et urna neque lorem. Diam lacus aliquet mauris suscipit turpis cursus ut.</p>
+        <p className="desc">These are the Holdem Heroes NFTs in your wallet.<br />You can <NavLink to="/Play">play</NavLink> Holdem Heroes with these, or trade them on OpenSea.</p>
       </div>
 
       <div className="wallet-main">

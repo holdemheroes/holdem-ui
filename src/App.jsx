@@ -14,10 +14,10 @@ import { History } from "./components/TexasHoldemV1/History/History";
 import Home from "./pages/Home";
 import GamePlay from "./pages/GamePlay";
 import "./App.scss";
-import logo from "./assets/images/hhlogo_new.png";
 import { useMoralisDapp } from "./providers/MoralisDappProvider/MoralisDappProvider";
 import { getEllipsisTxt } from "./helpers/formatters";
 import Logout from "./components/Logout";
+import { logo } from "./logo";
 
 const App = () => {
   const { isWeb3Enabled, enableWeb3, isAuthenticated, isWeb3EnableLoading } = useMoralis();
@@ -104,7 +104,7 @@ const App = () => {
 };
 
 export const Logo = () => (
-  <NavLink to="/Home"><img src={logo} alt="Site logo comes here" /></NavLink>
+  <NavLink to="/Home">{logo()}</NavLink>
 );
 
 export default App;
