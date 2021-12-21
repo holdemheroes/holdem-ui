@@ -2,9 +2,6 @@ import React, { useState, useEffect } from "react";
 import { Pagination, Checkbox, Slider } from 'antd';
 import NFTList from "./NFTList";
 import { useMoralis } from "react-moralis";
-import { useMoralisDapp } from "../../providers/MoralisDappProvider/MoralisDappProvider";
-import abis from "../../helpers/contracts";
-import { getHoldemHeroesAddress } from "../../helpers/networks";
 
 export default function PostRevealSale({ pricePerToken, canMint, mintedTokens }) {
 
@@ -17,31 +14,7 @@ export default function PostRevealSale({ pricePerToken, canMint, mintedTokens })
   const [ranksRange, setRanksRange] = useState([1, 169]);
   const [marks, setMarks] = useState({ 1: '1', 169: '169' });
 
-  // const { Moralis } = useMoralis();
-  // const { chainId } = useMoralisDapp();
-  // const abi = abis.heh_nft;
-  // const contractAddress = getHoldemHeroesAddress(chainId);
-
-  // const contract_options = {
-  //   abi,
-  //   contractAddress,
-  // };
-
-  // const tokenURIs = [];
-
-  // for (let i = 0; i < 10; i++) {
-  //   Moralis.executeFunction({
-  //     functionName: "tokenURI",
-  //     params: {
-  //       _tokenId: String(i),
-  //     },
-  //     ...contract_options
-  //   }).then((response) => {
-  //     tokenURIs.push(response);
-  //   });
-  // }
-
-  // console.log(tokenURIs)
+  const { Moralis } = useMoralis();
 
   const options = [
     { label: "Offsuit", value: "Offsuit" },
@@ -50,19 +23,28 @@ export default function PostRevealSale({ pricePerToken, canMint, mintedTokens })
   ];
 
   useEffect(() => {
-    let tmp = [];
-    if (mintedTokens.length) {
-      if (minted) {
-        tmp = [...mintedTokens];
-      } else {
-        for (let i = 0; i < 1326; i += 1) {
-          if (mintedTokens.includes(i)) continue;
-          tmp.push(i);
+    let filtered = [];
+    const Hands = Moralis.Object.extend("Hands");
+    const query = new Moralis.Query(Hands);
+    console.log(mintedTokens)
+    query.containedIn("shape", shape)
+      .greaterThanOrEqualTo("rank", parseInt(ranksRange[0]))
+      .lessThanOrEqualTo("rank", parseInt(ranksRange[1]))
+      .find()
+      .then((result) => {
+        for (let i = 0; i < result.length; i++) {
+          filtered.push(result[i].get("tokenId"));
         }
-      }
-    }
-    setTokens([...tmp]);
-  }, [minted, mintedTokens]);
+        let tmp = [];
+        if (mintedTokens.length) {
+          for (let i = 0; i < filtered.length; i++) {
+            if (minted && mintedTokens.includes(filtered[i])) tmp.push(filtered[i]);
+            if (!minted && !mintedTokens.includes(filtered[i])) tmp.push(filtered[i]);
+          }
+        }
+        setTokens([...tmp]);
+      });
+  }, [minted, mintedTokens, shape, ranksRange]);
 
   useEffect(() => {
     const start = (pageNumber - 1) * tokensPerPage;

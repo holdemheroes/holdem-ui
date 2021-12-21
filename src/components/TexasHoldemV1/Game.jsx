@@ -11,6 +11,7 @@ import { useGameData } from "../../hooks/useGameData";
 import abis from "../../helpers/contracts";
 import { openNotification } from "../../helpers/notifications";
 import { getTexasHoldemV1Address } from "../../helpers/networks";
+import { GameStatus } from "./GameStatus";
 
 const styles = {
   NFTs: {
@@ -213,7 +214,53 @@ export default function Game({ gameId }) {
   }
 
   return (
-    <div key={`game_inner_container_${gameId}`}>
+    <div key={`game_inner_container_${gameId}`} className="game-board">
+      <div>
+        <div>
+          <GameStatus status={gameData.status} gameHasEnded={gameHasEnded} key={`game_status_${gameId}`} />
+          {(gameData.status === 2 || gameData.status === 4 || gameData.status === 6) && !gameHasEnded &&
+            <Form.Item
+              name={`river_cards`}
+            >
+              <Checkbox.Group onChange={handleRiverCheckboxChange}>
+                <Row>
+                  <Space>
+                    {cardsDealt.map((item, idx) => (
+                      <Col key={`river_col_${item}_${gameId}`}>
+                        <PlayingCard cardId={item} key={`card_in_river${item}_${gameId}`} />
+                        <>
+                          {
+                            gameData.status === 6 && !gameHasEnded && lastRoundPlayed !== 6 && <>
+                              <br />
+                              <Checkbox value={String(item)} key={`checkbox_river${item}_${gameId}`} />
+                            </>
+                          }
+                        </>
+                      </Col>
+                    ))}
+                  </Space>
+                </Row>
+              </Checkbox.Group>
+            </Form.Item>}
+          <GameMetaData
+            key={`game_metadata_${gameId}`}
+            gameData={gameData}
+            gameId={gameId}
+            feesPaid={feesPaid}
+            playersPerRound={playersPerRound}
+            numHands={numHands}
+            numFinalHands={numFinalHands}
+            gameHasEnded={gameHasEnded}
+            countdown={true} />
+        </div>
+        <div>
+
+        </div>
+      </div>
+      <div>
+        <div></div>
+        <div></div>
+      </div>
       <Row>
         <Col>
           <GameMetaData
@@ -224,7 +271,8 @@ export default function Game({ gameId }) {
             playersPerRound={playersPerRound}
             numHands={numHands}
             numFinalHands={numFinalHands}
-            gameHasEnded={gameHasEnded} />
+            gameHasEnded={gameHasEnded}
+            countdown={true} />
         </Col>
         <Col>
           {
