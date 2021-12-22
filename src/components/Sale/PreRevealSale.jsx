@@ -5,7 +5,7 @@ import abis from "../../helpers/contracts";
 import { getHoldemHeroesAddress } from "../../helpers/networks";
 import { openNotification } from "../../helpers/notifications";
 
-const BN = require('bn.js')
+const BN = require('bn.js');
 
 export default function PreRevealSale({ pricePerToken, mintedTokens, maxCanOwn, balance, totalSupply }) {
   const { chainId } = useMoralisDapp();

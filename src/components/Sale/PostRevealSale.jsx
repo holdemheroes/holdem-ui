@@ -25,8 +25,7 @@ export default function PostRevealSale({ pricePerToken, canMint, mintedTokens })
   useEffect(() => {
     let filtered = [];
     const Hands = Moralis.Object.extend("Hands");
-    const query = new Moralis.Query(Hands);
-    console.log(mintedTokens)
+    let query = new Moralis.Query(Hands);
     query.containedIn("shape", shape)
       .greaterThanOrEqualTo("rank", parseInt(ranksRange[0]))
       .lessThanOrEqualTo("rank", parseInt(ranksRange[1]))
@@ -44,6 +43,12 @@ export default function PostRevealSale({ pricePerToken, canMint, mintedTokens })
         }
         setTokens([...tmp]);
       });
+
+    // cleanup function
+    return () => {
+      setTokens([]);
+      query = null;
+    }
   }, [minted, mintedTokens, shape, ranksRange]);
 
   useEffect(() => {

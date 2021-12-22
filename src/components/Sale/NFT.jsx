@@ -23,25 +23,6 @@ export default function NFT({ tokenId, canMint, mintedTokens, pricePerToken }) {
     contractAddress,
   };
 
-  // Moralis.executeFunction({
-  //   functionName: "tokenIdToHandId",
-  //   params: {
-  //     _tokenId: String(tokenId),
-  //   },
-  //   ...options
-  // }).then((response) => {
-  //   Moralis.executeFunction({
-  //     functionName: "getHandShape",
-  //     params: {
-  //       handId: String(response),
-  //       abbreviate: true,
-  //     },
-  //     ...options
-  //   }).then((response) => {
-  //     console.log("shape: ", response)
-  //   });
-  // });
-
   Moralis.executeFunction({
     functionName: "tokenURI",
     params: {
