@@ -167,17 +167,17 @@ button {
     display    : flex;
     align-items: center;
 
-    .discord_btn {
-      font-family  : Karla;
-      font-size    : 17px;
-      line-height  : 30px;
-      border-bottom: 1px solid transparent;
+    // .discord_btn {
+    //   font-family  : Karla;
+    //   font-size    : 17px;
+    //   line-height  : 30px;
+    //   border-bottom: 1px solid transparent;
 
-      &:hover {
-        color        : white;
-        border-bottom: 1px solid white;
-      }
-    }
+    //   &:hover {
+    //     color        : white;
+    //     border-bottom: 1px solid white;
+    //   }
+    // }
 
     &>div:first-child {
       display    : flex;

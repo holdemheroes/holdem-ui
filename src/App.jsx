@@ -4,6 +4,7 @@ import { useMoralis } from "react-moralis";
 import "antd/dist/antd.css";
 import Account from "./components/Account";
 import Chains from "./components/Chains";
+import Community from "./components/Community";
 import NFTBalance from "./components/NFTBalance/";
 import Blockie from "./components/Blockie";
 import Sale from "./components/Sale";
@@ -45,6 +46,7 @@ const App = () => {
                 <NavLink to="/Marketplace">Marketplace</NavLink>
                 <NavLink to="/NFTwallet">NFT Wallet</NavLink>
                 <NavLink to="/Rules">Rules</NavLink>
+                <Community />
               </div>
               <NavLink to="/Play" className="btn-play" style={{ marginRight: "35px" }}>Play</NavLink>
               <div className="dropdown-wrapper account" style={{ marginRight: "15px" }}>

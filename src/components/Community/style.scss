@@ -1,7 +1,16 @@
-.dropdown-wrapper.select_chain {
-    position: relative;
+.dropdown-wrapper.community {
+    position    : relative;
+    margin-left : 22px;
+    margin-right: 35px;
 
     .dropdown-btn {
+        border     : 1px solid transparent;
+        font-family: Karla, sans-serif;
+        font-style : normal;
+        font-weight: normal;
+        font-size  : 17px;
+        line-height: 27px;
+        color      : #FFFFFF;
         display    : flex;
         align-items: center;
         background : transparent;
@@ -18,8 +27,7 @@
     }
 
     .dropdown-body {
-        margin-top     : 5px;
-        min-width      : 150px;
+        margin-top     : 10px;
         visibility     : hidden;
         transition     : all 0.3s ease-in-out;
         position       : absolute;
@@ -36,9 +44,11 @@
             padding    : 13px 14px;
             display    : flex;
             align-items: center;
-            font-family: Karla;
-            font-size  : 15px;
-            line-height: 15px;
+            font-family: Karla, sans-serif;
+            font-style : normal;
+            font-weight: normal;
+            font-size  : 16px;
+            line-height: 16px;
             color      : #332424;
 
             &:hover {
