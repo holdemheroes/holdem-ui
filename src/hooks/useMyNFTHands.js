@@ -25,7 +25,6 @@ export const useMyNFTHands = (options) => {
     if (data?.result) {
       const NFTs = data.result;
       for (let NFT of NFTs) {
-        
         if (NFT?.metadata) {
           NFT.metadata = JSON.parse(NFT.metadata);
           NFT.image = resolveLink(NFT.metadata?.image);

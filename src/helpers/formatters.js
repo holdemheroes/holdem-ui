@@ -34,17 +34,17 @@ export const getRoundStatusText = (status) => {
     case 0:
       return "Does not exist!";
     case 1:
-      return "Waiting for Flop";
+      return "Flop dealt in:";
     case 2:
-      return "Flop Dealt";
+      return "Flop dealt.";
     case 3:
-      return "Waiting for Turn";
+      return "Turn dealt in:";
     case 4:
-      return "Turn Dealt";
+      return "Turn dealt.";
     case 5:
-      return "Waiting for River";
+      return "River dealt in:";
     case 6:
-      return "River Dealt";
+      return "River Dealt.";
     default:
       return "Unknown";
   }

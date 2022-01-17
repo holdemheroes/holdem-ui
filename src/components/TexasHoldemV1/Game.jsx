@@ -12,6 +12,7 @@ import abis from "../../helpers/contracts";
 import { openNotification } from "../../helpers/notifications";
 import { getTexasHoldemV1Address } from "../../helpers/networks";
 import { GameStatus } from "./GameStatus";
+import { getRoundStatusText } from "../../helpers/formatters";
 
 const styles = {
   NFTs: {
@@ -215,33 +216,29 @@ export default function Game({ gameId }) {
 
   return (
     <div key={`game_inner_container_${gameId}`} className="game-board">
-      <div>
+      <div className="game-board--left_panel">
         <div>
-          <GameStatus status={gameData.status} gameHasEnded={gameHasEnded} key={`game_status_${gameId}`} />
-          {(gameData.status === 2 || gameData.status === 4 || gameData.status === 6) && !gameHasEnded &&
-            <Form.Item
-              name={`river_cards`}
-            >
+          {/* <GameStatus status={gameData.status} gameHasEnded={gameHasEnded} key={`game_status_${gameId}`} /> */}
+          {(gameData.status === 2 || gameData.status === 4 || gameData.status === 6) && !gameHasEnded && <>
+            <div>{getRoundStatusText(gameData.status)}</div>
+            <Form.Item name={`river_cards`}>
               <Checkbox.Group onChange={handleRiverCheckboxChange}>
-                <Row>
-                  <Space>
-                    {cardsDealt.map((item, idx) => (
-                      <Col key={`river_col_${item}_${gameId}`}>
-                        <PlayingCard cardId={item} key={`card_in_river${item}_${gameId}`} />
-                        <>
-                          {
-                            gameData.status === 6 && !gameHasEnded && lastRoundPlayed !== 6 && <>
-                              <br />
-                              <Checkbox value={String(item)} key={`checkbox_river${item}_${gameId}`} />
-                            </>
-                          }
+                {cardsDealt.map((item, idx) => (
+                  <div key={`river_col_${item}_${gameId}`}>
+                    <PlayingCard cardId={item} key={`card_in_river${item}_${gameId}`} />
+                    <>
+                      {
+                        gameData.status === 6 && !gameHasEnded && lastRoundPlayed !== 6 && <>
+                          <br />
+                          <Checkbox value={String(item)} key={`checkbox_river${item}_${gameId}`} />
                         </>
-                      </Col>
-                    ))}
-                  </Space>
-                </Row>
+                      }
+                    </>
+                  </div>
+                ))}
               </Checkbox.Group>
-            </Form.Item>}
+            </Form.Item>
+          </>}
           <GameMetaData
             key={`game_metadata_${gameId}`}
             gameData={gameData}
@@ -254,26 +251,65 @@ export default function Game({ gameId }) {
             countdown={true} />
         </div>
         <div>
+          {!gameHasEnded && lastRoundPlayed !== 6 &&
+            <>
+              <p style={{ color: "white" }} className="title">Available Hands</p>
 
+              {/* <p style={{ color: "white" }}>Your available hands include those that do not contain cards already dealt, or that you have already played this round</p>
+
+              <p style={{ color: "white" }}>For the Turn and Final Hand rounds, only hands played during the previous round are available</p> */}
+
+              {(gameData.status === 1 || gameData.status === 3 || gameData.status === 5) && <p style={{ color: "white" }} className="desc">These are your available hands. You’ll be able to play them once the flop is dealt.</p>}
+
+              {(gameData.status === 2 || gameData.status === 4 || gameData.status === 6) && <p style={{ color: "white" }} className="desc">Choose which hand(s) to play.</p>}
+              <Form.Item
+                name={"final_token"}
+              >
+                <Radio.Group>
+                  <div style={styles.NFTs}>
+                    {
+                      playableHands.map((nft, index) => (
+                        <Hand nft={nft} key={`hand_${nft.token_id}_${gameId}`}>
+                          <>
+                            {
+                              gameData.status === 6 && !gameHasEnded && lastRoundPlayed !== 6 && <>
+                                <Radio.Button
+                                  key={`final_hand_token_${nft.token_id}`}
+                                  value={nft.token_id}
+                                  onClick={() => handleFinalTokenChange([nft.card1, nft.card2])}
+                                >
+                                  #{nft.token_id}
+                                </Radio.Button>
+                              </>
+                            }
+                          </>
+                          <>
+                            {(gameData.status === 2 || gameData.status === 4) && <>
+                              <Button onClick={() => handleHandPlayed(nft.token_id)} key={`play_button_${nft.token_id}`}>Play #{nft.token_id}</Button>
+                            </>}
+                          </>
+                        </Hand>
+                      ))}
+                  </div>
+                </Radio.Group>
+              </Form.Item>
+            </>
+          }
         </div>
       </div>
-      <div>
-        <div></div>
-        <div></div>
+      <div className="game-board--right_panel">
+        <GameMetaData
+          key={`game_metadata_${gameId}`}
+          gameData={gameData}
+          gameId={gameId}
+          feesPaid={feesPaid}
+          playersPerRound={playersPerRound}
+          numHands={numHands}
+          numFinalHands={numFinalHands}
+          gameHasEnded={gameHasEnded}
+          countdown={false} />
       </div>
-      <Row>
-        <Col>
-          <GameMetaData
-            key={`game_metadata_${gameId}`}
-            gameData={gameData}
-            gameId={gameId}
-            feesPaid={feesPaid}
-            playersPerRound={playersPerRound}
-            numHands={numHands}
-            numFinalHands={numFinalHands}
-            gameHasEnded={gameHasEnded}
-            countdown={true} />
-        </Col>
+      {/* <Row>
         <Col>
           {
             (finalHand.card1 >= 0 || gameHasEnded) &&
@@ -392,46 +428,6 @@ export default function Game({ gameId }) {
                 </Space>
               </Row>
             </div>
-            {!gameHasEnded && lastRoundPlayed !== 6 &&
-              <>
-                <h4 style={{ color: "white" }}>Available Hands</h4>
-
-                <p style={{ color: "white" }}>Your available hands include those that do not contain cards already dealt, or that you have already played this round</p>
-
-                <p style={{ color: "white" }}>For the Turn and Final Hand rounds, only hands played during the previous round are available</p>
-                <Form.Item
-                  name={"final_token"}
-                >
-                  <Radio.Group>
-                    <div style={styles.NFTs}>
-                      {
-                        playableHands.map((nft, index) => (
-                          <Hand nft={nft} key={`hand_${nft.token_id}_${gameId}`}>
-                            <>
-                              {
-                                gameData.status === 6 && !gameHasEnded && lastRoundPlayed !== 6 && <>
-                                  <Radio.Button
-                                    key={`final_hand_token_${nft.token_id}`}
-                                    value={nft.token_id}
-                                    onClick={() => handleFinalTokenChange([nft.card1, nft.card2])}
-                                  >
-                                    #{nft.token_id}
-                                  </Radio.Button>
-                                </>
-                              }
-                            </>
-                            <>
-                              {(gameData.status === 2 || gameData.status === 4) && <>
-                                <Button onClick={() => handleHandPlayed(nft.token_id)} key={`play_button_${nft.token_id}`}>Play #{nft.token_id}</Button>
-                              </>}
-                            </>
-                          </Hand>
-                        ))}
-                    </div>
-                  </Radio.Group>
-                </Form.Item>
-              </>
-            }
             <>
               {
                 gameData.status === 6 && !gameHasEnded && lastRoundPlayed !== 6 &&
@@ -467,7 +463,7 @@ export default function Game({ gameId }) {
             </>
           </Form>
         </Col>
-      </Row>
-    </div>
+      </Row> */}
+    </div >
   );
 }

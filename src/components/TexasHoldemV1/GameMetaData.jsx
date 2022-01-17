@@ -2,7 +2,7 @@ import React from "react";
 import { useMoralis } from "react-moralis";
 import Countdown from "react-countdown";
 import { Table } from "antd";
-import { getDealRequestedText } from "../../helpers/formatters";
+import { getDealRequestedText, getRoundStatusText } from "../../helpers/formatters";
 
 export const GameMetaData = ({ gameId, gameData, feesPaid, playersPerRound, numFinalHands, numHands, gameHasEnded, countdown = false }) => {
 
@@ -134,28 +134,55 @@ export const GameMetaData = ({ gameId, gameData, feesPaid, playersPerRound, numF
     },
   ];
 
+  const renderer = ({ hours, minutes, seconds, completed }) => {
+    if (completed) {
+      // Render a completed state
+      return null;
+    } else {
+      // Render a countdown
+      return (
+        <div className="countdown">
+          <div>
+            <div>{hours < 10 ? "0" + hours : hours}</div>
+            <div>hrs</div>
+          </div>
+          <div>
+            <div>{minutes < 10 ? "0" + minutes : minutes}</div>
+            <div>min</div>
+          </div>
+          <div>
+            <div>{seconds < 10 ? "0" + seconds : seconds}</div>
+            <div>sec</div>
+          </div>
+        </div>
+      );
+    }
+  };
+
   if (countdown) {
     return (
       <div>
         {
-          (gameData.status === 1 || gameData.status === 3 || gameData.status === 5) && gameData.gameStartTime > 0 &&
-          <div>Card will be dealt in approx{" "}
-
-            {
-              gameData.status === 1 && <Countdown date={(gameData.gameStartTime * 1000) + 200000} />
-            }
-            {
-              gameData.status === 3 && <Countdown date={(gameData.roundEndTime * 1000) + 200000} />
-            }
-            {
-              gameData.status === 5 && <Countdown date={(gameData.roundEndTime * 1000) + 200000} />
-            }
+          (gameData.status === 1 || gameData.status === 3 || gameData.status === 5) && gameData.gameStartTime > 0 && <div className="dealt_in_time">
+            <div>{getRoundStatusText(gameData.status)}</div>
+            <>
+              {
+                gameData.status === 1 && <Countdown date={(gameData.gameStartTime * 1000) + 200000} renderer={renderer} />
+              }
+              {
+                gameData.status === 3 && <Countdown date={(gameData.roundEndTime * 1000) + 200000} renderer={renderer} />
+              }
+              {
+                gameData.status === 5 && <Countdown date={(gameData.roundEndTime * 1000) + 200000} renderer={renderer} />
+              }
+            </>
           </div>
         }
         {
           (gameData.status === 2 || gameData.status === 4 || gameData.status === 6) && !gameHasEnded &&
-          <div style={{ color: "white" }}>{getDealRequestedText(gameData.status)} ends in{" "}
-            <Countdown date={(gameData.roundEndTime * 1000)} />
+          <div className="end_in_time">
+            <div>{getDealRequestedText(gameData.status)} ends in:</div>
+            <Countdown date={(gameData.roundEndTime * 1000)} renderer={renderer} />
           </div>
         }
       </div>
@@ -164,18 +191,42 @@ export const GameMetaData = ({ gameId, gameData, feesPaid, playersPerRound, numF
 
   return (
     <>
-      <div>
-        <p>{`Flop Ante Per NFT: ${Moralis.Units.FromWei(gameData.round1Price, 18)}`}</p>
-        <p>{`Turn Ante Per NFT: ${Moralis.Units.FromWei(gameData.round2Price, 18)}`}</p>
+      <div className="bet_price-info">
+        <p style={{ color: "white" }}>{`Flop Bet Per NFT: ${Moralis.Units.FromWei(gameData.round1Price, 18)}`}</p>
+        <p style={{ color: "white" }}>{`Turn Bet Per NFT: ${Moralis.Units.FromWei(gameData.round2Price, 18)}`}</p>
       </div>
 
-      <Table
+      {/* <Table
         dataSource={dataSource_r}
         columns={columns_r}
         pagination={false}
-        bordered
+        // bordered
         size={"small"}
-      />
+      /> */}
+      <div className="game_info-table--wrapper">
+        <table className="game_info-table">
+          <thead>
+            <tr>
+              {columns_r.map((item) => (
+                <td key={item.key}>{item.title}</td>
+              ))}
+            </tr>
+          </thead>
+          <tbody>
+            {dataSource_r.map((item) => {
+              return (
+                <tr key={item.key}>
+                  <td>{item.item}</td>
+                  <td>{item.flop}</td>
+                  <td>{item.turn}</td>
+                  <td>{item.river}</td>
+                  <td>{item.total_pot}</td>
+                </tr>
+              )
+            })}
+          </tbody>
+        </table>
+      </div>
     </>
   );
 }

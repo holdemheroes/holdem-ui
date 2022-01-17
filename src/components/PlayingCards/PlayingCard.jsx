@@ -6,7 +6,7 @@ import abis from "../../helpers/contracts";
 import { getHoldemHeroesAddress } from "../../helpers/networks";
 import { svgToImgSrc } from "../../helpers/nft";
 
-export const PlayingCard = ({ cardId, width = 50 }) => {
+export const PlayingCard = ({ cardId, width = 100 }) => {
 
   const { chainId } = useMoralisDapp();
   const abi = abis.heh_nft;
