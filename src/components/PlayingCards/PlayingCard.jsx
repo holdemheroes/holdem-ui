@@ -37,6 +37,6 @@ export const PlayingCard = ({ cardId, width = 100 }) => {
   }
 
   return (
-    <Image src={svgToImgSrc(cardSvg)} alt={`Card #${cardId}`} width={width} />
+    <Image src={svgToImgSrc(cardSvg)} alt={`Card #${cardId}`} width={width} preview={false} />
   );
 }

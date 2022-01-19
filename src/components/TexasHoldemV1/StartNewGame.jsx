@@ -13,9 +13,9 @@ export default function StartNewGame({ gameIdsInProgress, maxConcurrentGames }) 
   const contractAddress = getTexasHoldemV1Address(chainId);
   const [started, setStarted] = useState(false);
 
-  useEffect(() => {
-    console.log(started);
-  }, [started]);
+  // useEffect(() => {
+  //   console.log(started);
+  // }, [started]);
 
   if (!gameIdsInProgress || !maxConcurrentGames) {
     // return <div>LOADING</div>;

@@ -14,18 +14,6 @@ import { getTexasHoldemV1Address } from "../../helpers/networks";
 import { GameStatus } from "./GameStatus";
 import { getRoundStatusText } from "../../helpers/formatters";
 
-const styles = {
-  NFTs: {
-    display: "flex",
-    flexWrap: "wrap",
-    WebkitBoxPack: "start",
-    justifyContent: "flex-start",
-    margin: "0 auto",
-    maxWidth: "1000px",
-    gap: "10px",
-  },
-};
-
 export default function Game({ gameId }) {
 
   const { chainId } = useMoralisDapp();
@@ -266,7 +254,7 @@ export default function Game({ gameId }) {
                 name={"final_token"}
               >
                 <Radio.Group>
-                  <div style={styles.NFTs}>
+                  <div className="available_hands-wrapper">
                     {
                       playableHands.map((nft, index) => (
                         <Hand nft={nft} key={`hand_${nft.token_id}_${gameId}`}>
@@ -285,11 +273,12 @@ export default function Game({ gameId }) {
                           </>
                           <>
                             {(gameData.status === 2 || gameData.status === 4) && <>
-                              <Button onClick={() => handleHandPlayed(nft.token_id)} key={`play_button_${nft.token_id}`}>Play #{nft.token_id}</Button>
+                              <Button onClick={() => handleHandPlayed(nft.token_id)} key={`play_button_${nft.token_id}`}>Play</Button>
                             </>}
                           </>
                         </Hand>
-                      ))}
+                      ))
+                    }
                   </div>
                 </Radio.Group>
               </Form.Item>
@@ -297,6 +286,7 @@ export default function Game({ gameId }) {
           }
         </div>
       </div>
+
       <div className="game-board--right_panel">
         <GameMetaData
           key={`game_metadata_${gameId}`}
@@ -308,7 +298,41 @@ export default function Game({ gameId }) {
           numFinalHands={numFinalHands}
           gameHasEnded={gameHasEnded}
           countdown={false} />
+
+        {handsPlayed[2].hands.length > 0 &&
+          <div key={`game_flop_container_${gameId}`} className="played_cards-wrapper">
+            <p>Played in Flop</p>
+            {
+              handsPlayed[2].hands.map((hand, index) => (
+                // <div key={`flop_row_${index}_${gameId}_${hand.card1}_${hand.card2}`}>
+                <div key={`flop_col_${index}_${gameId}_${hand.card1}_${hand.card2}`} className="played_cards">
+                  <PlayingCard cardId={hand.card1} key={`flop_card_${index}_card1_${gameId}`} />
+                  <PlayingCard cardId={hand.card2} key={`flop_card_${index}_card2_${gameId}`} />
+                </div>
+                // </div>
+              ))
+            }
+          </div>
+        }
+
+        {handsPlayed[4].hands.length > 0 &&
+          <div key={`game_turn_container_${gameId}`} className="played_cards-wrapper">
+            <p>Played in Turn</p>
+            {
+              handsPlayed[4].hands.map((hand, index) => (
+                // <div key={`turn_row_${index}_${gameId}`}>
+                <div key={`turn_col_${index}_${gameId}`} className="played_cards">
+                  <PlayingCard cardId={hand.card1} key={`turn_card_${index}_card1_${gameId}`} />
+                  <PlayingCard cardId={hand.card2} key={`turn_card_${index}_card2_${gameId}`} />
+                </div>
+                // </div>
+              ))
+            }
+          </div>
+        }
       </div>
+
+      {/* uncompleted code block */}
       {/* <Row>
         <Col>
           {
@@ -330,7 +354,7 @@ export default function Game({ gameId }) {
 
       <Divider />
 
-      <Row>
+      <Row style={{ width: "100%" }}>
         <Col>
           <Form
             name="final_hand"

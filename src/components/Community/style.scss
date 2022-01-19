@@ -44,21 +44,28 @@
             padding    : 13px 14px;
             display    : flex;
             align-items: center;
-            font-family: Karla, sans-serif;
-            font-style : normal;
-            font-weight: normal;
-            font-size  : 16px;
-            line-height: 16px;
-            color      : #332424;
 
             &:hover {
                 cursor          : pointer;
                 background-color: #F7F7F7;
             }
 
-            &>span {
-                margin-left: 5px;
+            &>a {
+                display    : flex;
+                align-items: center;
+                width      : 100%;
+
+                &>span {
+                    margin-left: 5px;
+                    font-family: Karla, sans-serif;
+                    font-style : normal;
+                    font-weight: normal;
+                    font-size  : 16px;
+                    line-height: 16px;
+                    color      : #332424;
+                }
             }
+
 
             &:not(:first-child) {
                 border-top: 1px solid rgba(0, 0, 0, 0.11);

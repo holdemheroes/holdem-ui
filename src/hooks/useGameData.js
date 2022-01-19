@@ -73,7 +73,7 @@ export const useGameData = (gameId) => {
   const [gameHasEnded, setGameHasEnded] = useState(false);
 
   function handMatchesPlayed(h, round) {
-    for (let j = 0; j < handsPlayed[round].tokenRefs.length; j += 1) {
+    for (let j = 0; j < handsPlayed[round].tokenRefs.length; j++) {
       if (parseInt(h.token_id, 10) === handsPlayed[round].tokenRefs[j]) {
         return true;
       }
@@ -138,7 +138,7 @@ export const useGameData = (gameId) => {
   }
 
   function handleOnChainGameData(data) {
-    const gameCleansed = {
+    const gameCleaned = {
       gameRoundTimeSeconds: parseInt(data.gameRoundTimeSeconds),
       numCardsDealt: parseInt(data.numCardsDealt),
       numPlayersInRound: parseInt(data.numPlayersInRound),
@@ -151,7 +151,7 @@ export const useGameData = (gameId) => {
       totalPaidIn: data.totalPaidIn,
     };
 
-    setGameData(gameCleansed);
+    setGameData(gameCleaned);
   }
 
   function handleOnChainCardsDealt(cards) {
