@@ -44,7 +44,7 @@ export const getRoundStatusText = (status) => {
     case 5:
       return "River dealt in:";
     case 6:
-      return "River Dealt.";
+      return "River";
     default:
       return "Unknown";
   }

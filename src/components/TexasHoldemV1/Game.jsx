@@ -205,85 +205,196 @@ export default function Game({ gameId }) {
   return (
     <div key={`game_inner_container_${gameId}`} className="game-board">
       <div className="game-board--left_panel">
-        <div>
-          {/* <GameStatus status={gameData.status} gameHasEnded={gameHasEnded} key={`game_status_${gameId}`} /> */}
-          {(gameData.status === 2 || gameData.status === 4 || gameData.status === 6) && !gameHasEnded && <>
-            <div>{getRoundStatusText(gameData.status)}</div>
-            <Form.Item name={`river_cards`}>
-              <Checkbox.Group onChange={handleRiverCheckboxChange}>
-                {cardsDealt.map((item, idx) => (
-                  <div key={`river_col_${item}_${gameId}`}>
-                    <PlayingCard cardId={item} key={`card_in_river${item}_${gameId}`} />
-                    <>
-                      {
-                        gameData.status === 6 && !gameHasEnded && lastRoundPlayed !== 6 && <>
-                          <br />
-                          <Checkbox value={String(item)} key={`checkbox_river${item}_${gameId}`} />
-                        </>
-                      }
-                    </>
+        <Form
+          name="final_hand"
+          onFinish={handlePlayFinalHand}
+          autoComplete="off"
+        >
+          <div>
+            {/* <GameStatus status={gameData.status} gameHasEnded={gameHasEnded} key={`game_status_${gameId}`} /> */}
+            {
+              (gameData.status === 2 || gameData.status === 4) && !gameHasEnded && <>
+                <div>{getRoundStatusText(gameData.status)}</div>
+
+                <Form.Item name={`river_cards`}>
+                  <div>
+                    {cardsDealt.map((item, idx) => (
+                      <div key={`river_col_${item}_${gameId}`}>
+                        <PlayingCard cardId={item} key={`card_in_river${item}_${gameId}`} />
+                      </div>
+                    ))}
                   </div>
-                ))}
-              </Checkbox.Group>
-            </Form.Item>
-          </>}
-          <GameMetaData
-            key={`game_metadata_${gameId}`}
-            gameData={gameData}
-            gameId={gameId}
-            feesPaid={feesPaid}
-            playersPerRound={playersPerRound}
-            numHands={numHands}
-            numFinalHands={numFinalHands}
-            gameHasEnded={gameHasEnded}
-            countdown={true} />
-        </div>
-        <div>
-          {!gameHasEnded && lastRoundPlayed !== 6 &&
-            <>
-              <p style={{ color: "white" }} className="title">Available Hands</p>
+                </Form.Item>
+              </>
+            }
 
-              {/* <p style={{ color: "white" }}>Your available hands include those that do not contain cards already dealt, or that you have already played this round</p>
+            {
+              gameData.status === 6 && !gameHasEnded && <>
+                <div className="river_stage-header">
+                  <p className="title">Select your final hand</p>
+                  <p className="desc">Select one of your available hands plus three cards from the river.</p>
+                </div>
 
-              <p style={{ color: "white" }}>For the Turn and Final Hand rounds, only hands played during the previous round are available</p> */}
+                {
+                  lastRoundPlayed !== 6 &&
+                  <>
+                    <p className="river_stage-sub_title">Available Hands</p>
 
-              {(gameData.status === 1 || gameData.status === 3 || gameData.status === 5) && <p style={{ color: "white" }} className="desc">These are your available hands. You’ll be able to play them once the flop is dealt.</p>}
+                    <Form.Item
+                      name={"final_token"}
+                    >
+                      <Radio.Group>
+                        <div className="available_hands-wrapper">
+                          {
+                            playableHands.map((nft, index) => (
+                              <Hand nft={nft} key={`hand_${nft.token_id}_${gameId}`}>
+                                <Radio.Button
+                                  key={`final_hand_token_${nft.token_id}`}
+                                  value={nft.token_id}
+                                  onClick={() => handleFinalTokenChange([nft.card1, nft.card2])}
+                                >
+                                  {/* #{nft.token_id} */}
+                                </Radio.Button>
+                              </Hand>
+                            ))
+                          }
+                        </div>
+                      </Radio.Group>
+                    </Form.Item>
+                  </>
+                }
 
-              {(gameData.status === 2 || gameData.status === 4 || gameData.status === 6) && <p style={{ color: "white" }} className="desc">Choose which hand(s) to play.</p>}
-              <Form.Item
-                name={"final_token"}
-              >
-                <Radio.Group>
+                <p className="river_stage-sub_title">{getRoundStatusText(gameData.status)}</p>
+
+                <Form.Item name={`river_cards`}>
+                  <Checkbox.Group onChange={handleRiverCheckboxChange}>
+                    {
+                      cardsDealt.map((item, idx) => (
+                        <div key={`river_col_${item}_${gameId}`}>
+                          <PlayingCard cardId={item} key={`card_in_river${item}_${gameId}`} />
+                          <>
+                            {
+                              lastRoundPlayed !== 6 && <>
+                                <br />
+                                <Checkbox value={String(item)} key={`checkbox_river${item}_${gameId}`} />
+                              </>
+                            }
+                          </>
+                        </div>
+                      ))
+                    }
+                  </Checkbox.Group>
+                </Form.Item>
+
+                {
+                  lastRoundPlayed !== 6 && <div className="final_hand-btn--wrapper">
+                    <Button className={`final_hand-btn submit`} htmlType="submit">
+                      Submit Final Hand
+                    </Button>
+
+                    <Button className={`final_hand-btn check`} onClick={() => handlePotentialFinalHandScore()}>
+                      Check Final Hand
+                    </Button>
+                  </div>
+                }
+              </>
+            }
+
+            <GameMetaData
+              key={`game_metadata_${gameId}`}
+              gameData={gameData}
+              gameId={gameId}
+              feesPaid={feesPaid}
+              playersPerRound={playersPerRound}
+              numHands={numHands}
+              numFinalHands={numFinalHands}
+              gameHasEnded={gameHasEnded}
+              countdown={true} />
+          </div>
+
+          <div>
+            {
+              !gameHasEnded && lastRoundPlayed !== 6 && gameData.status !== 6 &&
+              <>
+                <p style={{ color: "white" }} className="title">Available Hands</p>
+
+                {/* <p style={{ color: "white" }}>Your available hands include those that do not contain cards already dealt, or that you have already played this round</p>
+                <p style={{ color: "white" }}>For the Turn and Final Hand rounds, only hands played during the previous round are available</p> */}
+
+                {(gameData.status === 1 || gameData.status === 3 || gameData.status === 5) && <p style={{ color: "white" }} className="desc">These are your available hands. You’ll be able to play them once the flop is dealt.</p>}
+
+                {(gameData.status === 2 || gameData.status === 4) && <p style={{ color: "white" }} className="desc">Choose which hand(s) to play.</p>}
+
+                <Form.Item
+                  name={"final_token"}
+                >
                   <div className="available_hands-wrapper">
                     {
                       playableHands.map((nft, index) => (
                         <Hand nft={nft} key={`hand_${nft.token_id}_${gameId}`}>
                           <>
                             {
-                              gameData.status === 6 && !gameHasEnded && lastRoundPlayed !== 6 && <>
-                                <Radio.Button
-                                  key={`final_hand_token_${nft.token_id}`}
-                                  value={nft.token_id}
-                                  onClick={() => handleFinalTokenChange([nft.card1, nft.card2])}
-                                >
-                                  #{nft.token_id}
-                                </Radio.Button>
+                              (gameData.status === 2 || gameData.status === 4) && <>
+                                <Button onClick={() => handleHandPlayed(nft.token_id)} key={`play_button_${nft.token_id}`}>Play</Button>
                               </>
                             }
-                          </>
-                          <>
-                            {(gameData.status === 2 || gameData.status === 4) && <>
-                              <Button onClick={() => handleHandPlayed(nft.token_id)} key={`play_button_${nft.token_id}`}>Play</Button>
-                            </>}
                           </>
                         </Hand>
                       ))
                     }
                   </div>
-                </Radio.Group>
-              </Form.Item>
+                </Form.Item>
+              </>
+            }
+          </div>
+
+          {
+            gameData.status === 6 && !gameHasEnded && lastRoundPlayed !== 6 &&
+            <>
+              {/* <div>
+                {
+                  potentialFinalHandScore > -1 &&
+                  <>
+                    Potential final hand score:{" "}
+                    {potentialFinalHandScore}{" "}
+
+                    <RankName rank={potentialFinalHandScore} key={`potential_rank_${gameId}_${potentialFinalHandScore}`} />
+
+                    <Row>
+                      <Space>
+                        {
+                          potentialFinalHand.map((item, idx) => (
+                            <Col key={`potential_final_hand_col_${item}_${gameId}`}>
+                              <PlayingCard cardId={item} key={`potential_final_hand_card${item}_${gameId}`} width={35} />
+                            </Col>
+                          ))
+                        }
+                      </Space>
+                    </Row>
+                  </>
+                }
+              </div> */}
             </>
           }
+        </Form>
+
+        <div>
+          {
+            (finalHand.card1 >= 0 || gameHasEnded) &&
+            <div>
+              <p>Leaderboard</p>
+              <Leaderboard gameId={gameId} key={`leaderboard_game_${gameId}`} />
+            </div>
+          }
+          <>
+            {
+              gameData.status === 6 && gameHasEnded && <>
+                <Button type="primary" onClick={() => handleEndGame()}>
+                  End Game
+                </Button>
+              </>
+            }
+          </>
         </div>
       </div>
 
@@ -299,7 +410,8 @@ export default function Game({ gameId }) {
           gameHasEnded={gameHasEnded}
           countdown={false} />
 
-        {handsPlayed[2].hands.length > 0 &&
+        {
+          handsPlayed[2].hands.length > 0 &&
           <div key={`game_flop_container_${gameId}`} className="played_cards-wrapper">
             <p>Played in Flop</p>
             {
@@ -315,7 +427,8 @@ export default function Game({ gameId }) {
           </div>
         }
 
-        {handsPlayed[4].hands.length > 0 &&
+        {
+          handsPlayed[4].hands.length > 0 &&
           <div key={`game_turn_container_${gameId}`} className="played_cards-wrapper">
             <p>Played in Turn</p>
             {
@@ -330,6 +443,54 @@ export default function Game({ gameId }) {
             }
           </div>
         }
+
+        {
+          gameData.status === 6 &&
+          <div key={`game_river_container_${gameId}`} className="played_cards-wrapper">
+            <p>Played in River</p>
+            {
+              finalHand.card1 >= 0 && <div>
+                <PlayingCard cardId={finalHand.card1} key={`final_hand_card1_${gameId}`} />
+                <PlayingCard cardId={finalHand.card2} key={`final_hand_card2_${gameId}`} />
+                <PlayingCard cardId={finalHand.card3} key={`final_hand_card3_${gameId}`} />
+                <PlayingCard cardId={finalHand.card4} key={`final_hand_card4_${gameId}`} />
+                <PlayingCard cardId={finalHand.card5} key={`final_hand_card5_${gameId}`} />
+              </div>
+            }
+          </div>
+        }
+
+        {/* <div key={`game_final_hand_container_${gameId}`}>
+          <h4>Final Hand</h4>
+          {
+            finalHand.card1 >= 0 && <div>
+              <Row>
+                <Col>
+                  Rank: <RankName rank={finalHand.rank} /> ({finalHand.rank})
+                </Col>
+              </Row>
+              <Space>
+                <Row>
+                  <Col>
+                    <PlayingCard cardId={finalHand.card1} key={`final_hand_card1_${gameId}`} />
+                  </Col>
+                  <Col>
+                    <PlayingCard cardId={finalHand.card2} key={`final_hand_card2_${gameId}`} />
+                  </Col>
+                  <Col>
+                    <PlayingCard cardId={finalHand.card3} key={`final_hand_card3_${gameId}`} />
+                  </Col>
+                  <Col>
+                    <PlayingCard cardId={finalHand.card4} key={`final_hand_card4_${gameId}`} />
+                  </Col>
+                  <Col>
+                    <PlayingCard cardId={finalHand.card5} key={`final_hand_card5_${gameId}`} />
+                  </Col>
+                </Row>
+              </Space>
+            </div>
+          }
+        </div> */}
       </div>
 
       {/* uncompleted code block */}
@@ -352,9 +513,9 @@ export default function Game({ gameId }) {
         </Col>
       </Row>
 
-      <Divider />
+      <Divider /> */}
 
-      <Row style={{ width: "100%" }}>
+      {/* <Row style={{ width: "100%" }}>
         <Col>
           <Form
             name="final_hand"

@@ -189,31 +189,111 @@
                 rgba(255, 255, 255, 1),
                 rgba(255, 255, 255, 0)) 1 100%;
 
-        * {
-            color: white;
-        }
+        form#final_hand {
 
-        &>div:first-child {
-            border-bottom: 1px solid rgba(255, 255, 255, 0.14);
-            padding      : 45px 0;
-
-            &>div:first-child {
-                text-align    : center;
-                font-family   : Redtone, sans-serif;
-                font-style    : normal;
-                font-weight   : bold;
-                font-size     : 35px;
-                line-height   : 35px;
-                letter-spacing: 0.075em;
+            * {
+                color: white;
             }
 
-            .dealt_in_time {
-                width       : 40%;
-                margin-left : auto;
-                margin-right: auto;
+            &>div:first-child {
+                border-bottom: 1px solid rgba(255, 255, 255, 0.14);
+                padding      : 45px 0;
 
                 &>div:first-child {
-                    margin-bottom : 55px;
+                    text-align    : center;
+                    font-family   : Redtone, sans-serif;
+                    font-style    : normal;
+                    font-weight   : bold;
+                    font-size     : 35px;
+                    line-height   : 35px;
+                    letter-spacing: 0.075em;
+                }
+
+                .dealt_in_time {
+                    width       : 40%;
+                    margin-left : auto;
+                    margin-right: auto;
+
+                    &>div:first-child {
+                        margin-bottom : 55px;
+                        font-family   : Redtone, sans-serif;
+                        font-style    : normal;
+                        font-weight   : bold;
+                        font-size     : 35px;
+                        line-height   : 35px;
+                        text-align    : center;
+                        letter-spacing: 0.075em;
+                    }
+
+                    &>.countdown {
+                        &>div {
+                            &>div:first-child {
+                                margin-bottom : 30px;
+                                font-family   : Redtone, sans-serif;
+                                font-style    : normal;
+                                font-weight   : 600;
+                                font-size     : 40px;
+                                line-height   : 50px;
+                                letter-spacing: 0.025em;
+                            }
+
+                            &>div:last-child {
+                                font-family   : Redtone, sans-serif;
+                                font-style    : normal;
+                                font-weight   : normal;
+                                font-size     : 26px;
+                                line-height   : 26px;
+                                letter-spacing: 0.035em;
+                                color         : rgba(255, 255, 255, 0.9);
+                            }
+                        }
+                    }
+                }
+
+                .end_in_time {
+                    width : 30%;
+                    margin: auto;
+
+                    * {
+                        font-family   : "DM Sans", sans-serif;
+                        font-weight   : 500;
+                        font-size     : 20px;
+                        line-height   : 28px;
+                        text-align    : center;
+                        letter-spacing: 0.075em;
+                    }
+
+                    &>div:first-child {
+                        margin-bottom: 20px;
+                    }
+
+                    &>.countdown>div>div:first-child {
+                        font-family   : Redtone, sans-serif;
+                        font-weight   : 600;
+                        font-size     : 40px;
+                        line-height   : 50px;
+                        letter-spacing: 0.025em;
+                    }
+                }
+
+                #final_hand_river_cards {
+                    display        : flex;
+                    align-items    : center;
+                    justify-content: center;
+                    margin-top     : 35px;
+                    margin-bottom  : 55px;
+
+                    &>div {
+                        text-align: center;
+                        margin    : 0 30px;
+                    }
+                }
+            }
+
+            &>div:last-child {
+                margin-top: 45px;
+
+                .title {
                     font-family   : Redtone, sans-serif;
                     font-style    : normal;
                     font-weight   : bold;
@@ -223,74 +303,71 @@
                     letter-spacing: 0.075em;
                 }
 
-                &>.countdown {
-                    &>div {
-                        &>div:first-child {
-                            margin-bottom : 30px;
-                            font-family   : Redtone, sans-serif;
-                            font-style    : normal;
-                            font-weight   : 600;
-                            font-size     : 40px;
-                            line-height   : 50px;
-                            letter-spacing: 0.025em;
-                        }
+                .desc {
+                    font-family: Karla, sans-serif;
+                    font-style : normal;
+                    font-weight: normal;
+                    font-size  : 17px;
+                    line-height: 27px;
+                    text-align : center;
+                }
+            }
 
-                        &>div:last-child {
-                            font-family   : Redtone, sans-serif;
-                            font-style    : normal;
-                            font-weight   : normal;
-                            font-size     : 26px;
-                            line-height   : 26px;
-                            letter-spacing: 0.035em;
-                            color         : rgba(255, 255, 255, 0.9);
+            .ant-radio-group.ant-radio-group-outline {
+                width: 100%;
+            }
+
+            .available_hands-wrapper {
+                display        : flex;
+                justify-content: space-between;
+                align-items    : center;
+                flex-wrap      : wrap;
+                margin-top     : 40px;
+
+                .nft_card-available {
+                    position     : relative;
+                    width        : 30%;
+                    border-radius: 12px;
+                    padding      : 10px 10px 45px 10px;
+                    margin-bottom: 80px;
+                    background   : #FFFFFF;
+
+                    .nft_card-image {
+                        box-shadow: 0px 0px 13px rgba(30, 30, 47, 0.16);
+                        background: transparent;
+                    }
+
+                    &>button {
+                        display        : flex;
+                        justify-content: center;
+                        align-items    : center;
+                        padding        : 16px 22px;
+                        background     : linear-gradient(170.35deg, #0033E7 7.75%, #0066FF 102.31%);
+                        border         : none;
+                        border-radius  : 5px;
+                        position       : absolute;
+                        left           : 50%;
+                        top            : 100%;
+                        transform      : translate(-50%, -50%);
+
+                        &>span {
+                            font-family: Karla, sans-serif;
+                            font-style : normal;
+                            font-weight: bold;
+                            font-size  : 19px;
+                            line-height: 22px;
+                            color      : #FFFFFF;
+                            margin     : 0px 10px;
                         }
                     }
                 }
             }
-
-            .end_in_time {
-                width : 30%;
-                margin: auto;
-
-                * {
-                    font-family   : "DM Sans", sans-serif;
-                    font-weight   : 500;
-                    font-size     : 20px;
-                    line-height   : 28px;
-                    text-align    : center;
-                    letter-spacing: 0.075em;
-                }
-
-                &>div:first-child {
-                    margin-bottom: 20px;
-                }
-
-                &>.countdown>div>div:first-child {
-                    font-family   : Redtone, sans-serif;
-                    font-weight   : 600;
-                    font-size     : 40px;
-                    line-height   : 50px;
-                    letter-spacing: 0.025em;
-                }
-            }
-
-            #river_cards {
-                display        : flex;
-                align-items    : center;
-                justify-content: center;
-                margin-top     : 35px;
-                margin-bottom  : 55px;
-
-                &>div {
-                    margin: 0 30px;
-                }
-            }
         }
 
-        &>div:last-child {
-            margin-top: 45px;
+        .river_stage-header {
+            margin-bottom: 60px;
 
-            .title {
+            &>.title {
                 font-family   : Redtone, sans-serif;
                 font-style    : normal;
                 font-weight   : bold;
@@ -298,9 +375,10 @@
                 line-height   : 35px;
                 text-align    : center;
                 letter-spacing: 0.075em;
+                margin-bottom : 12px;
             }
 
-            .desc {
+            &>.desc {
                 font-family: Karla, sans-serif;
                 font-style : normal;
                 font-weight: normal;
@@ -310,51 +388,52 @@
             }
         }
 
-        .ant-radio-group.ant-radio-group-outline {
-            width: 100%;
+        .river_stage-sub_title {
+            font-family   : Redtone;
+            font-style    : normal;
+            font-weight   : bold;
+            font-size     : 25px;
+            line-height   : 35px;
+            text-align    : center;
+            letter-spacing: 0.075em;
+            margin-bottom : 20px;
         }
 
-        .available_hands-wrapper {
+        .final_hand-btn--wrapper {
             display        : flex;
-            justify-content: space-between;
+            justify-content: center;
             align-items    : center;
-            flex-wrap      : wrap;
-            margin-top     : 40px;
+            margin-bottom  : 60px;
 
-            .nft_card-available {
-                position     : relative;
-                width        : 30%;
-                border-radius: 12px;
-                padding      : 10px 10px 45px 10px;
-                margin-bottom: 80px;
-                background   : #FFFFFF;
+            .final_hand-btn {
+                border-radius: 5px;
+                margin       : 0 20px;
+                padding      : 10px 20px;
+                border       : none;
+                height       : unset;
 
-                .nft_card-image {
-                    box-shadow: 0px 0px 13px rgba(30, 30, 47, 0.16);
-                    background: transparent;
+                &>span {
+                    font-family: Karla;
+                    font-style : normal;
+                    font-weight: bold;
+                    font-size  : 19px;
+                    line-height: 22px;
+                    display    : block;
                 }
 
-                &>button {
-                    display        : flex;
-                    justify-content: center;
-                    align-items    : center;
-                    padding        : 16px 22px;
-                    background     : linear-gradient(170.35deg, #0033E7 7.75%, #0066FF 102.31%);
-                    border         : none;
-                    border-radius  : 5px;
-                    position       : absolute;
-                    left           : 50%;
-                    top            : 100%;
-                    transform      : translate(-50%, -50%);
+                &.submit {
+                    background: linear-gradient(170.35deg, #0033E7 7.75%, #0066FF 102.31%);
 
                     &>span {
-                        font-family: Karla, sans-serif;
-                        font-style : normal;
-                        font-weight: bold;
-                        font-size  : 19px;
-                        line-height: 22px;
-                        color      : #FFFFFF;
-                        margin     : 0px 10px;
+                        color: #FFFFFF;
+                    }
+                }
+
+                &.check {
+                    background-color: white;
+
+                    &>span {
+                        color: #0033E7;
                     }
                 }
             }

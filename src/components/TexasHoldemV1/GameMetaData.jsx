@@ -181,7 +181,7 @@ export const GameMetaData = ({ gameId, gameData, feesPaid, playersPerRound, numF
         {
           (gameData.status === 2 || gameData.status === 4 || gameData.status === 6) && !gameHasEnded &&
           <div className="end_in_time">
-            <div>{getDealRequestedText(gameData.status)} ends in:</div>
+            <div>{(gameData.status === 2 || gameData.status === 4) && `${getDealRequestedText(gameData.status)} ends in:`}</div>
             <Countdown date={(gameData.roundEndTime * 1000)} renderer={renderer} />
           </div>
         }
