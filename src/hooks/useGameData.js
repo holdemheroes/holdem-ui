@@ -94,6 +94,7 @@ export const useGameData = (gameId) => {
     const playable = [];
     // handle initial playable hands
     switch (gameData?.status) {
+      case 1:
       case 2:
         // can use any of my NFTs that have not yet been dealt or played
         for (let i = 0; i < NFTHands.length; i += 1) {
@@ -105,6 +106,7 @@ export const useGameData = (gameId) => {
           }
         }
         break;
+      case 3:
       case 4:
         // can only play hands already added to Flop
         for (let i = 0; i < NFTHands.length; i += 1) {
@@ -118,6 +120,7 @@ export const useGameData = (gameId) => {
           }
         }
         break;
+      case 5:
       case 6:
         // can only play hands already added to Turn
         for (let i = 0; i < NFTHands.length; i += 1) {
@@ -167,7 +170,8 @@ export const useGameData = (gameId) => {
     const round = parseInt(data.attributes.turnRequested, 10);
     setGameData({ ...gameData, status: round });
 
-    setPlayableHands([]);
+    // setPlayableHands([]);
+    processPlayableHands();
 
     setRefetchGameData(true);
 
@@ -601,7 +605,8 @@ export const useGameData = (gameId) => {
 
     if (gameData?.status === 1 || gameData?.status === 3 || gameData?.status === 5) {
       timeout = setTimeout(() => {
-        setPlayableHands([]);
+        // setPlayableHands([]);
+        processPlayableHands();
       }, 1000);
     }
 

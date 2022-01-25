@@ -213,8 +213,8 @@ export default function Game({ gameId }) {
           <div>
             {/* <GameStatus status={gameData.status} gameHasEnded={gameHasEnded} key={`game_status_${gameId}`} /> */}
             {
-              (gameData.status === 2 || gameData.status === 4) && !gameHasEnded && <>
-                <div>{getRoundStatusText(gameData.status)}</div>
+              (gameData.status > 1 && gameData.status < 6) && !gameHasEnded && <>
+                <div>{getRoundStatusText(gameData.status % 2 === 0 ? gameData.status : gameData.status - 1)}</div>
 
                 <Form.Item name={`river_cards`}>
                   <div>
