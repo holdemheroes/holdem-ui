@@ -210,7 +210,7 @@ export default function Game({ gameId }) {
           onFinish={handlePlayFinalHand}
           autoComplete="off"
         >
-          <div>
+          <div className={gameData.status === 6 ? "border-none" : ""}>
             {/* <GameStatus status={gameData.status} gameHasEnded={gameHasEnded} key={`game_status_${gameId}`} /> */}
             {
               (gameData.status > 1 && gameData.status < 6) && !gameHasEnded && <>
@@ -229,7 +229,7 @@ export default function Game({ gameId }) {
             }
 
             {
-              gameData.status === 6 && !gameHasEnded && <>
+              gameData.status === 6 && !gameHasEnded && finalHand.card1 < 0 && <>
                 <div className="river_stage-header">
                   <p className="title">Select your final hand</p>
                   <p className="desc">Select one of your available hands plus three cards from the river.</p>
@@ -292,12 +292,19 @@ export default function Game({ gameId }) {
                       Submit Final Hand
                     </Button>
 
-                    <Button className={`final_hand-btn check`} onClick={() => handlePotentialFinalHandScore()}>
+                    {/* <Button className={`final_hand-btn check`} onClick={() => handlePotentialFinalHandScore()}>
                       Check Final Hand
-                    </Button>
+                    </Button> */}
                   </div>
                 }
               </>
+            }
+
+            {
+              gameData?.status === 6 && !gameHasEnded && finalHand.card1 >= 0 && <div>
+                <p>Waiting for all players to submit their final hand.</p>
+                <p>Winners revealed in:</p>
+              </div>
             }
 
             <GameMetaData
@@ -310,6 +317,21 @@ export default function Game({ gameId }) {
               numFinalHands={numFinalHands}
               gameHasEnded={gameHasEnded}
               countdown={true} />
+
+            {
+              gameHasEnded &&
+              <div className="leaderboard-wrapper">
+                <p>Leaderboard</p>
+                <Leaderboard gameId={gameId} key={`leaderboard_game_${gameId}`} />
+              </div>
+            }
+            {
+              gameData.status === 6 && gameHasEnded && <>
+                <Button type="primary" onClick={() => handleEndGame()}>
+                  Distribute Pot
+                </Button>
+              </>
+            }
           </div>
 
           <div>
@@ -377,25 +399,6 @@ export default function Game({ gameId }) {
             </>
           }
         </Form>
-
-        <div>
-          {
-            (finalHand.card1 >= 0 || gameHasEnded) &&
-            <div>
-              <p>Leaderboard</p>
-              <Leaderboard gameId={gameId} key={`leaderboard_game_${gameId}`} />
-            </div>
-          }
-          <>
-            {
-              gameData.status === 6 && gameHasEnded && <>
-                <Button type="primary" onClick={() => handleEndGame()}>
-                  End Game
-                </Button>
-              </>
-            }
-          </>
-        </div>
       </div>
 
       <div className="game-board--right_panel">

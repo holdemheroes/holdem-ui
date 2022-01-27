@@ -190,7 +190,6 @@ export const Leaderboard = ({ gameId, showWinnings = false }) => {
   }
 
   useEffect(() => {
-
     const data = [];
     if (winningsInitialised && leaderboardInitialised) {
       for (let i = 0; i < leaderboard.length; i += 1) {

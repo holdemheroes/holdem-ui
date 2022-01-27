@@ -199,6 +199,10 @@
                 border-bottom: 1px solid rgba(255, 255, 255, 0.14);
                 padding      : 45px 0;
 
+                &.border-none {
+                    border: none;
+                }
+
                 &>div:first-child {
                     text-align    : center;
                     font-family   : Redtone, sans-serif;
@@ -360,6 +364,30 @@
                             margin     : 0px 10px;
                         }
                     }
+
+                    label.ant-radio-button-wrapper {
+                        background: transparent;
+
+                        span.ant-radio-button {
+                            display        : flex;
+                            justify-content: center;
+                            align-items    : center;
+
+                            input[type="radio"].ant-radio-button-input {
+                                opacity: unset;
+                            }
+                        }
+                    }
+                }
+            }
+
+            .leaderboard-wrapper {
+
+                .ant-table-wrapper {
+
+                    * {
+                        color: black;
+                    }
                 }
             }
         }
@@ -437,6 +465,13 @@
                     }
                 }
             }
+        }
+
+        label.ant-radio-button-wrapper {
+            position : absolute;
+            top      : calc(100% + 10px);
+            left     : 50%;
+            transform: translateX(-50%);
         }
     }
 
@@ -553,7 +588,7 @@
                 padding      : 10px;
                 background   : #FFFFFF;
                 border-radius: 12px;
-                margin-right : 10px;
+                margin       : 10px 20px;
 
                 &>* {
                     box-shadow: 0px 0px 13px rgba(30, 30, 47, 0.16);

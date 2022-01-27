@@ -13,12 +13,7 @@ export default function StartNewGame({ gameIdsInProgress, maxConcurrentGames }) 
   const contractAddress = getTexasHoldemV1Address(chainId);
   const [started, setStarted] = useState(false);
 
-  // useEffect(() => {
-  //   console.log(started);
-  // }, [started]);
-
   if (!gameIdsInProgress || !maxConcurrentGames) {
-    // return <div>LOADING</div>;
     return <Spin className="spin_loader" />;
   }
 
@@ -83,7 +78,6 @@ export default function StartNewGame({ gameIdsInProgress, maxConcurrentGames }) 
       .on("error", (error) => {
         openNotification({
           message: "🔊 Error",
-          // description: `📃 Receipt: ${error.toString()}`,
           description: `📃 Receipt: ${error.message}`,
           type: "error"
         });
