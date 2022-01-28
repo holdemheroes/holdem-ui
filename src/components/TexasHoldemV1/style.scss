@@ -473,11 +473,127 @@
             left     : 50%;
             transform: translateX(-50%);
         }
+
+        .waiting_section {
+
+            .title {
+                font-family   : Redtone, sans-serif;
+                font-style    : normal;
+                font-weight   : bold;
+                font-size     : 45px;
+                line-height   : 60px;
+                text-align    : center;
+                letter-spacing: 0.075em;
+            }
+
+            .sub_title {
+                font-family   : "DM Sans", sans-serif;
+                font-style    : normal;
+                font-weight   : bold;
+                font-size     : 25px;
+                line-height   : 35px;
+                text-align    : center;
+                letter-spacing: 0.075em;
+            }
+        }
+
+        .leaderboard-wrapper {
+            text-align: center;
+
+            .title {
+                font-family   : Redtone, sans-serif;
+                font-style    : normal;
+                font-weight   : bold;
+                font-size     : 45px;
+                line-height   : 65px;
+                text-align    : center;
+                letter-spacing: 0.075em;
+                margin-bottom : 70px;
+            }
+
+            .desc {
+                font-family   : "DM Sans", sans-serif;
+                font-style    : normal;
+                font-weight   : 500;
+                font-size     : 16px;
+                line-height   : 26px;
+                letter-spacing: 0.12em;
+                margin-top    : 50px;
+                margin-bottom : 30px;
+            }
+
+            button.distribute_btn {
+                background   : #174AFF;
+                border-radius: 5px;
+                padding      : 10px 40px;
+                border       : none;
+                height       : unset;
+
+                span {
+                    font-family: Karla, sans-serif;
+                    font-style : normal;
+                    font-weight: bold;
+                    font-size  : 19px;
+                    line-height: 22px;
+                    color      : #FFFFFF;
+                }
+            }
+
+            table {
+
+                th,
+                td {
+                    text-align: center;
+                }
+
+                th {
+                    font-family: "DM Sans", sans-serif;
+                    font-style : normal;
+                    font-weight: 500;
+                    font-size  : 17px;
+                    line-height: 17px;
+                    color      : rgba(0, 0, 0, 0.62);
+                    padding    : 17px 10px;
+                }
+
+                td {
+                    font-family: "DM Sans", sans-serif;
+                    font-style : normal;
+                    font-weight: normal;
+                    font-size  : 15px;
+                    line-height: 15px;
+                    color      : rgba(0, 0, 0, 0.88);
+
+                    &:first-child {
+                        // display    : flex;
+                        // align-items: center;
+
+                        &>svg {
+                            margin-right: 10px;
+                        }
+                    }
+
+                    a {
+                        color: #1687EF !important;
+                    }
+                }
+            }
+        }
     }
 
     &>.game-board--right_panel {
         width  : 40%;
         padding: 40px;
+
+        .game_info-title {
+            font-family   : Redtone, sans-serif;
+            font-style    : normal;
+            font-weight   : bold;
+            font-size     : 40px;
+            line-height   : 40px;
+            letter-spacing: 0.075em;
+            color         : #FFFFFF;
+        }
 
         .bet_price-info {
             &>p {

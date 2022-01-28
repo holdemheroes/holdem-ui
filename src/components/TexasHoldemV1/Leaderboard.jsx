@@ -22,7 +22,7 @@ export const Leaderboard = ({ gameId, showWinnings = false }) => {
 
   const columns = [
     {
-      title: '#',
+      title: '',
       dataIndex: 'position',
       key: 'position',
     },
@@ -41,11 +41,11 @@ export const Leaderboard = ({ gameId, showWinnings = false }) => {
       dataIndex: 'tx_hash',
       key: 'tx_hash',
     },
-    {
-      title: 'Time',
-      dataIndex: 'timestamp',
-      key: 'timestamp',
-    },
+    // {
+    //   title: 'Time',
+    //   dataIndex: 'timestamp',
+    //   key: 'timestamp',
+    // },
     {
       title: 'Rank',
       dataIndex: 'rank',
@@ -121,7 +121,7 @@ export const Leaderboard = ({ gameId, showWinnings = false }) => {
         fh.card5 = cTmp[4];
         fh.rank = parseInt(res.get("rank"), 10);
         fh.txHash = res.get("transaction_hash");
-        fh.timestamp = res.get("block_timestamp");
+        // fh.timestamp = res.get("block_timestamp");
         lb.push(fh);
       }
 
@@ -206,7 +206,7 @@ export const Leaderboard = ({ gameId, showWinnings = false }) => {
 
         const d = {
           key: i,
-          position: leaderboard[i].player === walletAddress ? <strong>{i + 1}</strong> : i + 1,
+          position: leaderboard[i].player === walletAddress ? <>{i < 2 ? <GoldCup /> : <Cup />}<strong>{i + 1}</strong></> : <>{i < 2 ? <GoldCup /> : <Cup />}{i + 1}</>,
           hand: h,
           player: leaderboard[i].player === walletAddress ?
             <strong>
@@ -240,7 +240,7 @@ export const Leaderboard = ({ gameId, showWinnings = false }) => {
               rel={"noreferrer"}>
               {getEllipsisTxt(leaderboard[i].txHash, 4)}
             </a>,
-          timestamp: <Moment format="YYYY/MM/DD HH:mm:ss">{leaderboard[i].timestamp.toString()}</Moment>,
+          // timestamp: <Moment format="YYYY/MM/DD HH:mm:ss">{leaderboard[i].timestamp.toString()}</Moment>,
         };
 
         if (showWinnings) {
@@ -277,5 +277,21 @@ export const Leaderboard = ({ gameId, showWinnings = false }) => {
         size={"small"}
       />
     </>
+  );
+}
+
+export const Cup = () => {
+  return (
+    <svg width="15" height="15" viewBox="0 0 15 15" fill="none" xmlns="http://www.w3.org/2000/svg">
+      <path d="M14.175 0.9H12.45V0.15C12.45 0.0675 12.3825 0 12.3 0H2.7C2.6175 0 2.55 0.0675 2.55 0.15V0.9H0.825C0.606196 0.9 0.396354 0.986919 0.241637 1.14164C0.0869193 1.29635 0 1.5062 0 1.725V4.5C0 6.03188 1.125 7.305 2.59125 7.5375C2.88188 9.71625 4.63125 11.4319 6.825 11.6719V13.6444H3.15C2.81813 13.6444 2.55 13.9125 2.55 14.2444V14.85C2.55 14.9325 2.6175 15 2.7 15H12.3C12.3825 15 12.45 14.9325 12.45 14.85V14.2444C12.45 13.9125 12.1819 13.6444 11.85 13.6444H8.175V11.6719C10.3688 11.4319 12.1181 9.71625 12.4088 7.5375C13.875 7.305 15 6.03188 15 4.5V1.725C15 1.5062 14.9131 1.29635 14.7584 1.14164C14.6036 0.986919 14.3938 0.9 14.175 0.9ZM1.35 4.5V2.25H2.55V6.1425C2.20171 6.03125 1.89779 5.8122 1.6821 5.51698C1.46641 5.22175 1.35011 4.86562 1.35 4.5ZM11.1 6.9C11.1 7.82063 10.7419 8.68875 10.0894 9.33937C9.43688 9.99187 8.57063 10.35 7.65 10.35H7.35C6.42938 10.35 5.56125 9.99187 4.91062 9.33937C4.25813 8.68688 3.9 7.82063 3.9 6.9V1.35H11.1V6.9ZM13.65 4.5C13.65 5.26875 13.1456 5.92125 12.45 6.1425V2.25H13.65V4.5Z" fill="#D4D4D4" />
+    </svg>
+  );
+}
+
+export const GoldCup = () => {
+  return (
+    <svg width="15" height="15" viewBox="0 0 15 15" fill="none" xmlns="http://www.w3.org/2000/svg">
+      <path d="M14.175 0.9H12.45V0.15C12.45 0.0675 12.3825 0 12.3 0H2.7C2.6175 0 2.55 0.0675 2.55 0.15V0.9H0.825C0.606196 0.9 0.396354 0.986919 0.241637 1.14164C0.0869193 1.29635 0 1.5062 0 1.725V4.5C0 6.03188 1.125 7.305 2.59125 7.5375C2.88188 9.71625 4.63125 11.4319 6.825 11.6719V13.6444H3.15C2.81813 13.6444 2.55 13.9125 2.55 14.2444V14.85C2.55 14.9325 2.6175 15 2.7 15H12.3C12.3825 15 12.45 14.9325 12.45 14.85V14.2444C12.45 13.9125 12.1819 13.6444 11.85 13.6444H8.175V11.6719C10.3688 11.4319 12.1181 9.71625 12.4088 7.5375C13.875 7.305 15 6.03188 15 4.5V1.725C15 1.5062 14.9131 1.29635 14.7584 1.14164C14.6036 0.986919 14.3938 0.9 14.175 0.9ZM1.35 4.5V2.25H2.55V6.1425C2.20171 6.03125 1.89779 5.8122 1.6821 5.51698C1.46641 5.22175 1.35011 4.86562 1.35 4.5ZM11.1 6.9C11.1 7.82063 10.7419 8.68875 10.0894 9.33937C9.43688 9.99187 8.57063 10.35 7.65 10.35H7.35C6.42938 10.35 5.56125 9.99187 4.91062 9.33937C4.25813 8.68688 3.9 7.82063 3.9 6.9V1.35H11.1V6.9ZM13.65 4.5C13.65 5.26875 13.1456 5.92125 12.45 6.1425V2.25H13.65V4.5Z" fill="#FFC700" />
+    </svg>
   );
 }

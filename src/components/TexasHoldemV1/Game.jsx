@@ -16,6 +16,8 @@ import { getRoundStatusText } from "../../helpers/formatters";
 
 export default function Game({ gameId }) {
 
+  const stageName = ['', 'flop', '', 'turn', '', 'river'];
+
   const { chainId } = useMoralisDapp();
   const { Moralis } = useMoralis();
 
@@ -301,9 +303,9 @@ export default function Game({ gameId }) {
             }
 
             {
-              gameData?.status === 6 && !gameHasEnded && finalHand.card1 >= 0 && <div>
-                <p>Waiting for all players to submit their final hand.</p>
-                <p>Winners revealed in:</p>
+              gameData?.status === 6 && !gameHasEnded && finalHand.card1 >= 0 && <div className="waiting_section">
+                <p className="title">Waiting for all players to submit their final hand.</p>
+                <p className="sub_title">Winners revealed in:</p>
               </div>
             }
 
@@ -321,16 +323,13 @@ export default function Game({ gameId }) {
             {
               gameHasEnded &&
               <div className="leaderboard-wrapper">
-                <p>Leaderboard</p>
-                <Leaderboard gameId={gameId} key={`leaderboard_game_${gameId}`} />
-              </div>
-            }
-            {
-              gameData.status === 6 && gameHasEnded && <>
-                <Button type="primary" onClick={() => handleEndGame()}>
+                <p className="title">Leaderboard</p>
+                <Leaderboard gameId={gameId} showWinnings={true} key={`leaderboard_game_${gameId}`} />
+                <p className="desc">Click on this button to distribute winnings to all players on the leaderboard.</p>
+                <Button className="distribute_btn" onClick={() => handleEndGame()}>
                   Distribute Pot
                 </Button>
-              </>
+              </div>
             }
           </div>
 
@@ -343,7 +342,7 @@ export default function Game({ gameId }) {
                 {/* <p style={{ color: "white" }}>Your available hands include those that do not contain cards already dealt, or that you have already played this round</p>
                 <p style={{ color: "white" }}>For the Turn and Final Hand rounds, only hands played during the previous round are available</p> */}
 
-                {(gameData.status === 1 || gameData.status === 3 || gameData.status === 5) && <p style={{ color: "white" }} className="desc">These are your available hands. You’ll be able to play them once the flop is dealt.</p>}
+                {(gameData.status === 1 || gameData.status === 3 || gameData.status === 5) && <p style={{ color: "white" }} className="desc">These are your available hands. You’ll be able to play them once the {stageName[gameData.status]} is dealt.</p>}
 
                 {(gameData.status === 2 || gameData.status === 4) && <p style={{ color: "white" }} className="desc">Choose which hand(s) to play.</p>}
 
@@ -402,6 +401,7 @@ export default function Game({ gameId }) {
       </div>
 
       <div className="game-board--right_panel">
+        {gameData.status === 6 && gameHasEnded && <p className="game_info-title">Game Info</p>}
         <GameMetaData
           key={`game_metadata_${gameId}`}
           gameData={gameData}
