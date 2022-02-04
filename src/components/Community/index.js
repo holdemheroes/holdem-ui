@@ -6,7 +6,7 @@ const menuItems = [
     key: "discord",
     value: "Discord",
     icon: <DiscordLogo />,
-    link: "https://discord.gg/wqZdRNruHG",
+    link: "https://discord.gg/dmgga7b72Y",
   },
   {
     key: "twitter",

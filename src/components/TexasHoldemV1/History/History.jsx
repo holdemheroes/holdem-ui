@@ -1,6 +1,6 @@
 import React, { useEffect, useState } from "react";
 import { useGameMetadata } from "../../../hooks/useGameMetadata";
-import { Col, Pagination, Row, Tabs } from "antd";
+import { Pagination, Tabs } from "antd";
 import { GameHistoryContainer } from "./GameHistoryContainer";
 import "./style.scss";
 
@@ -18,16 +18,20 @@ export const History = () => {
     }
     const games = [];
 
-    for (let i = numGames; i > 0; i -= 1) {
+    for (let i = numGames; i > 0; i--) {
       games.push(i);
     }
 
     const start = (pageNumber - 1) * gamesPerPage;
     const end = start + gamesPerPage;
     setCurrentItems(games.slice(start, end));
+
+    return () => {
+      setCurrentItems([]);
+    };
   }, [pageNumber, gamesPerPage, numGames]);
 
-  const handlePageClick = (pageNumber) => {
+  function handlePageClick(pageNumber) {
     setPageNumber(pageNumber);
   };
 
@@ -49,16 +53,15 @@ export const History = () => {
         </Tabs>
       </div>
 
-      <div>
+      {numGames ?
         <Pagination
           showQuickJumper
           showSizeChanger
           onShowSizeChange={onShowSizeChange}
           defaultCurrent={1}
-          total={numGames}
+          total={+numGames}
           onChange={handlePageClick}
-        />
-      </div>
+        /> : null}
     </div>
   );
 }

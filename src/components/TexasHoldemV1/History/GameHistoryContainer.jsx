@@ -123,7 +123,9 @@ export const GameHistoryContainer = ({ gameId, gamesInProgress }) => {
   // first check if it's in progress
   if (gamesInProgress.includes(String(gameId))) {
     return (
-      <div>Game #{gameId} has not yet ended. Historical data will be displayed once it has ended.</div>
+      <div className="game_history_main_body">
+        <p className="desc">Game #{gameId} has not yet ended. Historical data will be displayed once it has ended.</p>
+      </div>
     );
   }
 
@@ -132,8 +134,8 @@ export const GameHistoryContainer = ({ gameId, gamesInProgress }) => {
   }
 
   return (
-    <div>
-      <p>Game #{gameId} History</p>
+    <div className="game_history_main_body">
+      {/* <p>Game #{gameId} History</p> */}
       {
         gameIsFinished && gameStartedData !== null && gameEndedData !== null &&
         <GameHistoryCompleted
@@ -151,7 +153,7 @@ export const GameHistoryContainer = ({ gameId, gamesInProgress }) => {
         />
       }
       {
-        !gameIsFinished && !gameIsRefunded && <p style={{ color: "white" }}>No players entered this game</p>
+        !gameIsFinished && !gameIsRefunded && <p className="desc">No players entered this game</p>
       }
     </div>
   );

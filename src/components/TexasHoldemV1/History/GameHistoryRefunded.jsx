@@ -11,7 +11,7 @@ export const GameHistoryRefunded = ({ gameId, gameStartedData, gameEndedData }) 
 
   return (
     <div>
-      <p style={{ color: "white" }}>
+      <p className="desc">
         This game started on{" "}
         <Moment format="YYYY/MM/DD HH:mm:ss">{gameStartedData.timestamp.toString()}</Moment> in
         Tx <a
@@ -21,7 +21,8 @@ export const GameHistoryRefunded = ({ gameId, gameStartedData, gameEndedData }) 
           {getEllipsisTxt(gameStartedData.txHash, 8)}
         </a>.
       </p>
-      <p style={{ color: "white" }}>
+
+      <p className="desc">
         This game did not finish and entered a refundable state on{" "}
         <Moment format="YYYY/MM/DD HH:mm:ss">{gameEndedData.timestamp.toString()}</Moment> in
         Tx <a
@@ -31,13 +32,10 @@ export const GameHistoryRefunded = ({ gameId, gameStartedData, gameEndedData }) 
           {getEllipsisTxt(gameEndedData.txHash, 8)}
         </a>.
       </p>
-      <div>
-        <GameHistoryHandsPlayed gameId={gameId} round1Price={gameStartedData.round1Price} round2Price={gameStartedData.round2Price} />
-      </div>
 
-      <div>
-        <GameHistoryProcessedRefunds gameId={gameId} />
-      </div>
+      <GameHistoryHandsPlayed gameId={gameId} round1Price={gameStartedData.round1Price} round2Price={gameStartedData.round2Price} />
+
+      <GameHistoryProcessedRefunds gameId={gameId} />
     </div>
   );
 }

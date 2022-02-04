@@ -74,12 +74,12 @@ export default function PostRevealSale({ pricePerToken, canMint, mintedTokens })
   }
 
   function handleShapeChange(checkedValues) {
-    console.log(checkedValues);
+    // console.log(checkedValues);
     setShape([...checkedValues]);
   }
 
   function handleRankChange(value) {
-    console.log("Rank: ", value);
+    // console.log("Rank: ", value);
     setMarks({ [value[0]]: `${value[0]}`, [value[1]]: `${value[1]}` });
     setRanksRange([...value]);
   }
@@ -113,16 +113,17 @@ export default function PostRevealSale({ pricePerToken, canMint, mintedTokens })
         <div className="nft_list-wrapper">
           <NFTList currentTokens={currentItems} canMint={canMint} mintedTokens={mintedTokens} pricePerToken={pricePerToken} />
 
-          <div>
-            <Pagination
-              showQuickJumper
-              showSizeChanger
-              onShowSizeChange={onShowSizeChange}
-              defaultCurrent={1}
-              total={tokens.length}
-              onChange={handlePageClick}
-            />
-          </div>
+          {tokens.length ?
+            <div>
+              <Pagination
+                showQuickJumper
+                showSizeChanger
+                onShowSizeChange={onShowSizeChange}
+                defaultCurrent={1}
+                total={tokens.length}
+                onChange={handlePageClick}
+              />
+            </div> : null}
         </div>
       </div>
     </>

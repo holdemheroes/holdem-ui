@@ -180,24 +180,24 @@ export const GameHistoryHandsPlayed = ({ gameId, round1Price, round2Price, finis
 
   return (
     <div>
-      <p>Bets, Winnings and House summary</p>
+      <p className="subtitle">Bets, Winnings and House summary</p>
 
-      <p>Total Flop Bets: {Moralis.Units.FromWei(totalFeesPaidFlop, 18)} ETH</p>
-      <p>Total Turn Bets: {Moralis.Units.FromWei(totalFeesPaidTurn, 18)} ETH</p>
-      <p>Total Bets: {Moralis.Units.FromWei(totalFeesPaid, 18)} ETH</p>
+      <p className="desc">Total Flop Bets: {Moralis.Units.FromWei(totalFeesPaidFlop, 18)} ETH</p>
+      <p className="desc">Total Turn Bets: {Moralis.Units.FromWei(totalFeesPaidTurn, 18)} ETH</p>
+      <p className="desc">Total Bets: {Moralis.Units.FromWei(totalFeesPaid, 18)} ETH</p>
 
       {
         finished && <>
-          <p>Total Winnings: {Moralis.Units.FromWei(totalWinnings, 18)} ETH</p>
-          <p>House Cut: {Moralis.Units.FromWei(houseCut, 18)} ETH</p>
+          <p className="desc">Total Winnings: {Moralis.Units.FromWei(totalWinnings, 18)} ETH</p>
+          <p className="desc">House Cut: {Moralis.Units.FromWei(houseCut, 18)} ETH</p>
         </>
       }
 
       {
-        !finished && <p>Highest Round Played: {getDealRequestedText(highestRoundPlayed)}</p>
+        !finished && <p className="desc">Highest Round Played: {getDealRequestedText(highestRoundPlayed)}</p>
       }
 
-      <p>Hands played in Flop</p>
+      <p className="subtitle">Hands played in Flop</p>
 
       <Table
         dataSource={handsPlayedFlop}
@@ -207,7 +207,7 @@ export const GameHistoryHandsPlayed = ({ gameId, round1Price, round2Price, finis
         size={"small"}
       />
 
-      <p>Hands played in Turn</p>
+      <p className="subtitle">Hands played in Turn</p>
 
       {handsPlayedTurn.length > 0 ?
         <Table
@@ -217,7 +217,7 @@ export const GameHistoryHandsPlayed = ({ gameId, round1Price, round2Price, finis
           bordered
           size={"small"}
         />
-        : <p style={{ color: "white" }}>No hands played in Turn</p>
+        : <p className="desc">No hands played in Turn</p>
       }
     </div>
   );
