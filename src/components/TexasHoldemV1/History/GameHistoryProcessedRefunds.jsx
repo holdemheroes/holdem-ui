@@ -110,7 +110,7 @@ export const GameHistoryProcessedRefunds = ({ gameId }) => {
 
   return (
     <div>
-      <h3>Processed Refunds</h3>
+      <p>Processed Refunds</p>
 
       <Table
         dataSource={gameRefundsData}

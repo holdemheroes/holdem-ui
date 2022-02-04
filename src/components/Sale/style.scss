@@ -7,11 +7,77 @@
         color: white;
     }
 
+    &>.title {
+        font-family   : Redtone, sans-serif;
+        font-style    : normal;
+        font-weight   : bold;
+        font-size     : 45px;
+        line-height   : 45px;
+        letter-spacing: 0.075em;
+        text-align    : center;
+        margin-bottom : 30px;
+    }
+
+    &>.desc {
+        font-family  : Karla, sans-serif;
+        font-style   : normal;
+        font-weight  : normal;
+        font-size    : 16px;
+        line-height  : 19px;
+        text-align   : center;
+        margin-bottom: 80px;
+    }
+
     .sale_info {
+        text-align: center;
 
         * {
-            color: white;
+            color         : white;
+            font-family   : Redtone, sans-serif;
+            font-style    : normal;
+            font-weight   : bold;
+            font-size     : 35px;
+            line-height   : 35px;
+            text-align    : center;
+            letter-spacing: 0.075em;
         }
+
+        .countdown {
+            display        : flex;
+            justify-content: space-between;
+            align-items    : center;
+            width          : 30%;
+            margin         : 50px auto;
+
+            &>div {
+                &>div:first-child {
+                    font-family   : Redtone, sans-serif;
+                    font-style    : normal;
+                    font-weight   : 600;
+                    font-size     : 40px;
+                    line-height   : 50px;
+                    letter-spacing: 0.025em;
+                }
+
+                &>div:last-child {
+                    font-family   : Redtone, sans-serif;
+                    font-style    : normal;
+                    font-weight   : normal;
+                    font-size     : 26px;
+                    line-height   : 26px;
+                    letter-spacing: 0.035em;
+                    color         : rgba(255, 255, 255, 0.9);
+                }
+            }
+        }
+    }
+
+    form[name="mint-form"] {
+        margin-top     : 50px;
+        margin-bottom  : 100px;
+        display        : flex;
+        justify-content: center;
+        align-items    : center;
     }
 
     .sales-header {

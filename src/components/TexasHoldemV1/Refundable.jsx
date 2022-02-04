@@ -40,11 +40,11 @@ export default function Refundable({ gameId, amount }) {
   }
 
   return (
-    <div>
-      <h4>Game #{gameId}</h4>
-      <Button onClick={() => handleClaimRefund()}>
+    <div className="refundable_game_card">
+      <p className="title">Game #{gameId}</p>
+      <button className="claim_btn btn-shadow btn-hover-pointer" onClick={() => handleClaimRefund()}>
         Claim {Moralis.Units.FromWei(amount, 18)} ETH
-      </Button>
+      </button>
     </div>
   );
 }

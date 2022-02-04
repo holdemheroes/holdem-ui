@@ -1,7 +1,7 @@
 import { useMoralis } from "react-moralis";
 import React, { useEffect, useState } from "react";
 import { getDealRequestedText, getEllipsisTxt } from "../../../helpers/formatters";
-import { Col, Row, Spin, Table } from "antd";
+import { Spin, Table } from "antd";
 import { PlayingCard } from "../../PlayingCards/PlayingCard";
 import BN from "bn.js";
 import Moment from "react-moment";
@@ -180,46 +180,24 @@ export const GameHistoryHandsPlayed = ({ gameId, round1Price, round2Price, finis
 
   return (
     <div>
-      <h3>Bets, Winnings and House summary</h3>
+      <p>Bets, Winnings and House summary</p>
 
-      <Row>
-        <Col>
-          Total Flop Bets: {Moralis.Units.FromWei(totalFeesPaidFlop, 18)} ETH
-        </Col>
-      </Row>
-      <Row>
-        <Col>
-          Total Turn Bets: {Moralis.Units.FromWei(totalFeesPaidTurn, 18)} ETH
-        </Col>
-      </Row>
-      <Row>
-        <Col>
-          Total Bets: {Moralis.Units.FromWei(totalFeesPaid, 18)} ETH
-        </Col>
-      </Row>
-      {finished && <>
-        <Row>
-          <Col>
-            Total Winnings: {Moralis.Units.FromWei(totalWinnings, 18)} ETH
-          </Col>
-        </Row>
-        <Row>
-          <Col>
-            House Cut: {Moralis.Units.FromWei(houseCut, 18)} ETH
-          </Col>
-        </Row>
-      </>
+      <p>Total Flop Bets: {Moralis.Units.FromWei(totalFeesPaidFlop, 18)} ETH</p>
+      <p>Total Turn Bets: {Moralis.Units.FromWei(totalFeesPaidTurn, 18)} ETH</p>
+      <p>Total Bets: {Moralis.Units.FromWei(totalFeesPaid, 18)} ETH</p>
+
+      {
+        finished && <>
+          <p>Total Winnings: {Moralis.Units.FromWei(totalWinnings, 18)} ETH</p>
+          <p>House Cut: {Moralis.Units.FromWei(houseCut, 18)} ETH</p>
+        </>
       }
 
       {
-        !finished && <Row>
-          <Col>
-            Highest Round Played: {getDealRequestedText(highestRoundPlayed)}
-          </Col>
-        </Row>
+        !finished && <p>Highest Round Played: {getDealRequestedText(highestRoundPlayed)}</p>
       }
 
-      <h3>Hands played in Flop</h3>
+      <p>Hands played in Flop</p>
 
       <Table
         dataSource={handsPlayedFlop}
@@ -229,7 +207,7 @@ export const GameHistoryHandsPlayed = ({ gameId, round1Price, round2Price, finis
         size={"small"}
       />
 
-      <h3>Hands played in Turn</h3>
+      <p>Hands played in Turn</p>
 
       {handsPlayedTurn.length > 0 ?
         <Table

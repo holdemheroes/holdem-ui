@@ -161,6 +161,7 @@ export default function Game({ gameId }) {
   };
 
   const handlePotentialFinalHandScore = async () => {
+
     setPotentialFinalHandScore(-1);
     if (potentialFinalToken.length === 2 && potentialFinalRiver.length === 3) {
       const hand = [
@@ -325,7 +326,7 @@ export default function Game({ gameId }) {
               <div className="leaderboard-wrapper">
                 <p className="title">Leaderboard</p>
                 <Leaderboard gameId={gameId} showWinnings={true} key={`leaderboard_game_${gameId}`} />
-                <p className="desc">Click on this button to distribute winnings to all players on the leaderboard.</p>
+                <p className="desc">Distribute Winnings to all players on the Leaderboard.</p>
                 <Button className="distribute_btn" onClick={() => handleEndGame()}>
                   Distribute Pot
                 </Button>

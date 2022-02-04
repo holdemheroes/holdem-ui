@@ -38,34 +38,27 @@ export const History = () => {
 
   return (
     <div className="history-wrapper">
-      <h1>Game History</h1>
-      <Row className="tabs-wrapper">
-        <Col>
-          <Tabs tabPosition={"left"}>
-            {currentItems &&
-              currentItems.map((item) => (
-                <Tabs.TabPane tab={`Game #${item}`} key={`game_history_tab_${item}`}>
-                  <div>
-                    <GameHistoryContainer gameId={item} key={`game_history_container_${item}`} gamesInProgress={gamesInProgress} />
-                  </div>
-                </Tabs.TabPane>
-              ))}
-          </Tabs>
-        </Col>
-      </Row>
+      <p className="title">Game History</p>
+      <div className="tabs-wrapper">
+        <Tabs tabPosition={"left"}>
+          {currentItems && currentItems.map((item) => (
+            <Tabs.TabPane tab={`Game #${item}`} key={`game_history_tab_${item}`}>
+              <GameHistoryContainer gameId={item} key={`game_history_container_${item}`} gamesInProgress={gamesInProgress} />
+            </Tabs.TabPane>
+          ))}
+        </Tabs>
+      </div>
 
-      <Row>
-        <Col>
-          <Pagination
-            showQuickJumper
-            showSizeChanger
-            onShowSizeChange={onShowSizeChange}
-            defaultCurrent={1}
-            total={numGames}
-            onChange={handlePageClick}
-          />
-        </Col>
-      </Row>
+      <div>
+        <Pagination
+          showQuickJumper
+          showSizeChanger
+          onShowSizeChange={onShowSizeChange}
+          defaultCurrent={1}
+          total={numGames}
+          onChange={handlePageClick}
+        />
+      </div>
     </div>
   );
 }

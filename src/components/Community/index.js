@@ -1,5 +1,5 @@
 import "./style.scss";
-import { DiscordLogo, TwitterLogo, OpenSeaLogo, DocumentationLogo } from "./Logos.jsx";
+import { DiscordLogo, TwitterLogo, OpenSeaLogo, DocumentationLogo, MediumLogo } from "./Logos.jsx";
 
 const menuItems = [
   {
@@ -19,6 +19,12 @@ const menuItems = [
     value: "OpenSea",
     icon: <OpenSeaLogo />,
     link: "https://opensea.io/collection/holdemheroes",
+  },
+  {
+    key: "blog",
+    value: "Blog",
+    icon: <MediumLogo />,
+    link: "https://medium.com/holdem-heroes",
   },
   {
     key: "documentation",

@@ -33,22 +33,18 @@ export const GameHistoryCompleted = ({ gameId, gameStartedData, gameEndedData })
           {getEllipsisTxt(gameEndedData.txHash, 8)}
         </a>.
       </p>
-      <Row>
-        <Col>
-          <h3>Final Hands and Leaderboard</h3>
-          <Leaderboard gameId={gameId} showWinnings={true} />
-        </Col>
-      </Row>
-      <Row>
-        <Col>
-          <GameHistoryHandsPlayed
-            gameId={gameId}
-            round1Price={gameStartedData.round1Price}
-            round2Price={gameStartedData.round2Price}
-            finished={true}
-          />
-        </Col>
-      </Row>
+      <div>
+        <p>Final Hands and Leaderboard</p>
+        <Leaderboard gameId={gameId} showWinnings={true} />
+      </div>
+      <div>
+        <GameHistoryHandsPlayed
+          gameId={gameId}
+          round1Price={gameStartedData.round1Price}
+          round2Price={gameStartedData.round2Price}
+          finished={true}
+        />
+      </div>
     </div>
   );
 }

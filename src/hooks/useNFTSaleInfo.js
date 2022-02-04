@@ -54,7 +54,7 @@ export const useNFTSaleInfo = () => {
     fetch: pricePerTokenFetch,
   } = useWeb3ExecuteFunction({
     ...options,
-    functionName: "NFT_MINT_PRICE",
+    functionName: "getNftPrice",
   });
 
   const {

@@ -7,13 +7,15 @@ import { openNotification } from "../../helpers/notifications";
 
 const BN = require('bn.js');
 
-export default function PreRevealSale({ pricePerToken, mintedTokens, maxCanOwn, balance, totalSupply }) {
+export default function PreRevealSale({ pricePerToken, mintedTokens, maxCanOwn, balance, totalSupply, saleHeader }) {
   const { chainId } = useMoralisDapp();
   const { Moralis } = useMoralis();
   const abi = abis.heh_nft;
   const contractAddress = getHoldemHeroesAddress(chainId);
 
   const MAX_TOTAL_SUPPLY = 1326;
+
+  console.log(pricePerToken)
 
   async function preRevealMint(event) {
     event.preventDefault();
@@ -57,15 +59,15 @@ export default function PreRevealSale({ pricePerToken, mintedTokens, maxCanOwn, 
       });
   }
 
-  const canMint = Math.min((maxCanOwn - balance, MAX_TOTAL_SUPPLY - totalSupply), 5);
+  const canMint = Math.min((maxCanOwn - balance, MAX_TOTAL_SUPPLY - totalSupply), 7);
   const options = [];
   for (let i = 1; i <= canMint; i += 1) {
     options.push(<option value={i} key={`mint_option_${i}`}>{i}</option>);
   }
 
-  let block = <>Minted max of {maxCanOwn.toString()} already</>;
+  let block = <p className="title">Minted max of {maxCanOwn.toString()} already</p>;
   if (options.length > 0) {
-    block = <form onSubmit={(e) => preRevealMint(e)}>
+    block = <form onSubmit={(e) => preRevealMint(e)} name="mint-form">
       Mint{" "}
       <select name={"mint_amount"}>
         {options}
@@ -77,8 +79,9 @@ export default function PreRevealSale({ pricePerToken, mintedTokens, maxCanOwn, 
 
   return (
     <>
-      <h4>Pre-reveal minting sale - {1326 - mintedTokens.length} left!</h4>
+      <p className="title">Pre-reveal minting sale - {1326 - mintedTokens.length} left!</p>
       {block}
+      {saleHeader}
     </>
   );
 }

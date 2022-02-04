@@ -1,10 +1,11 @@
 import React, { useState, useEffect } from "react";
+import { useMoralis } from "react-moralis";
+import { Spin } from "antd";
 import { useMoralisDapp } from "../../providers/MoralisDappProvider/MoralisDappProvider";
 import abis from "../../helpers/contracts";
 import { getTexasHoldemV1Address } from "../../helpers/networks";
-import { useMoralis } from "react-moralis";
 import Refundable from "./Refundable";
-import { Spin } from "antd";
+import "./style.scss";
 
 export default function RefundableGames() {
   const { chainId, walletAddress } = useMoralisDapp();
@@ -71,13 +72,16 @@ export default function RefundableGames() {
   }
 
   return (
-    <div>
-      <h2>Refundable Games</h2>
-      {refundableGames &&
-        refundableGames.map((item) => (
-          <Refundable gameId={item.gameId} amount={item.amount} key={`refundable_game_${item.gameId}`} />
-        ))
-      }
+    <div className="refundable_wrapper">
+      <p className="title">Refundable Games</p>
+      <p className="desc">Collect refunds from games in which you were the only player here</p>
+      <div className="refundable_games">
+        {refundableGames &&
+          refundableGames.map((item) => (
+            <Refundable gameId={item.gameId} amount={item.amount} key={`refundable_game_${item.gameId}`} />
+          ))
+        }
+      </div>
     </div>
   );
 }

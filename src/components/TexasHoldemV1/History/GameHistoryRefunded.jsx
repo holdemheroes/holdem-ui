@@ -1,5 +1,4 @@
 import React from "react";
-import { Col, Row } from "antd";
 import { GameHistoryHandsPlayed } from "./GameHistoryHandsPlayed";
 import { GameHistoryProcessedRefunds } from "./GameHistoryProcessedRefunds";
 import Moment from "react-moment";
@@ -32,18 +31,13 @@ export const GameHistoryRefunded = ({ gameId, gameStartedData, gameEndedData }) 
           {getEllipsisTxt(gameEndedData.txHash, 8)}
         </a>.
       </p>
-      <Row>
-        <Col>
-          <GameHistoryHandsPlayed gameId={gameId} round1Price={gameStartedData.round1Price} round2Price={gameStartedData.round2Price} />
-        </Col>
-      </Row>
+      <div>
+        <GameHistoryHandsPlayed gameId={gameId} round1Price={gameStartedData.round1Price} round2Price={gameStartedData.round2Price} />
+      </div>
 
-      <Row>
-        <Col>
-          <GameHistoryProcessedRefunds gameId={gameId} />
-        </Col>
-      </Row>
-
+      <div>
+        <GameHistoryProcessedRefunds gameId={gameId} />
+      </div>
     </div>
   );
 }
