@@ -68,12 +68,12 @@ export default function PreRevealSale({ pricePerToken, mintedTokens, maxCanOwn, 
   let block = <p className="title">Minted max of {maxCanOwn.toString()} already</p>;
   if (options.length > 0) {
     block = <form onSubmit={(e) => preRevealMint(e)} name="mint-form">
-      Mint{" "}
+      <span>Mint</span>
       <select name={"mint_amount"}>
         {options}
       </select>
-      {" "}Hands for Ξ{Moralis.Units.FromWei(pricePerToken)} each
-      {" "}<input type="submit" value="Mint!" />
+      <span>Hands for Ξ{Moralis.Units.FromWei(pricePerToken)} each</span>
+      <input className="btn-shadow btn-hover-pointer" type="submit" value="Mint!" />
     </form>;
   }
 

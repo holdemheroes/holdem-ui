@@ -82,6 +82,10 @@
                                 line-height: 27px;
                                 color      : #FFFFFF;
                             }
+
+                            &>div:first-child>div:first-child>p.subtitle:first-child {
+                                margin-top: 0;
+                            }
                         }
                     }
                 }

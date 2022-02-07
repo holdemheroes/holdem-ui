@@ -20,10 +20,6 @@ export default function Sale() {
   } = useNFTSaleInfo();
 
   const [minted, setMinted] = useState([]);
-  const [now, setNow] = useState(Math.floor(Date.now() / 1000));
-  const [saleStartDiff, setSaleStartDiff] = useState(startTime - now);
-  const [revealTimeDiff, setRevealTimeDiff] = useState(revealTime - now);
-  const [startIdx, setStartIdx] = useState(parseInt(startingIndex, 10));
 
   const { NFTHands, isLoading: nftBalanceIsLoading } = useMyNFTHands();
 
@@ -50,24 +46,15 @@ export default function Sale() {
     }
   }, [mintedRes]);
 
-  useEffect(() => {
-    setSaleStartDiff(startTime - now);
-    setRevealTimeDiff(revealTime - now);
-    setStartIdx(parseInt(startingIndex, 10));
-
-    console.log("saleStartDiff", saleStartDiff)
-    console.log("revealTimeDiff", revealTimeDiff)
-    console.log("startIdx", startIdx)
-
-    setNow(Math.floor(Date.now() / 1000));
-  }, [now]);
-
   if (!dataInitialised && nftBalanceIsLoading) {
     return <Spin className="spin_loader" />;
   }
 
-  // const now = Math.floor(Date.now() / 1000);
+  const now = Math.floor(Date.now() / 1000);
 
+  const saleStartDiff = startTime - now;
+  const revealTimeDiff = revealTime - now;
+  const startIdx = parseInt(startingIndex, 10);
 
   // const saleHeader = <SaleInfo
   //   startTime={startTime}

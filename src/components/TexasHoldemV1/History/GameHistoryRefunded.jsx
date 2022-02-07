@@ -11,7 +11,11 @@ export const GameHistoryRefunded = ({ gameId, gameStartedData, gameEndedData }) 
 
   return (
     <div>
-      <p className="desc">
+      <GameHistoryHandsPlayed gameId={gameId} round1Price={gameStartedData.round1Price} round2Price={gameStartedData.round2Price} />
+
+      <GameHistoryProcessedRefunds gameId={gameId} />
+
+      <p className="desc" style={{marginTop: "44px"}}>
         This game started on{" "}
         <Moment format="YYYY/MM/DD HH:mm:ss">{gameStartedData.timestamp.toString()}</Moment> in
         Tx <a
@@ -32,10 +36,6 @@ export const GameHistoryRefunded = ({ gameId, gameStartedData, gameEndedData }) 
           {getEllipsisTxt(gameEndedData.txHash, 8)}
         </a>.
       </p>
-
-      <GameHistoryHandsPlayed gameId={gameId} round1Price={gameStartedData.round1Price} round2Price={gameStartedData.round2Price} />
-
-      <GameHistoryProcessedRefunds gameId={gameId} />
     </div>
   );
 }

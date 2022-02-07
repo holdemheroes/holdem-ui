@@ -17,7 +17,6 @@ export default function RefundableGames() {
   const [initialDataFetched, setInitialDataFetched] = useState(false);
 
   useEffect(() => {
-
     const fetchPaidIn = async (gameId) => {
       return await Moralis.executeFunction({
         contractAddress,
@@ -45,7 +44,7 @@ export default function RefundableGames() {
 
       const rs = [];
 
-      for (let i = 0; i < results.length; i += 1) {
+      for (let i = 0; i < results.length; i++) {
         const gameId = results[i].get("gameId");
         const amount = await fetchPaidIn(gameId);
         if (amount && amount !== "0" && !rs.includes({
@@ -56,9 +55,9 @@ export default function RefundableGames() {
           });
         }
       }
+
       setRefundableGames(rs);
       setInitialDataFetched(true);
-
     }
 
     if (!initialDataFetched) {

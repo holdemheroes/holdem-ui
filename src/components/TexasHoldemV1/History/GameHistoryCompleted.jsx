@@ -12,7 +12,19 @@ export const GameHistoryCompleted = ({ gameId, gameStartedData, gameEndedData })
 
   return (
     <div>
-      <p className="desc">
+      <div>
+        <p className="subtitle">Final Hands and Leaderboard</p>
+        <Leaderboard gameId={gameId} showWinnings={true} />
+      </div>
+
+      <GameHistoryHandsPlayed
+        gameId={gameId}
+        round1Price={gameStartedData.round1Price}
+        round2Price={gameStartedData.round2Price}
+        finished={true}
+      />
+
+      <p className="desc" style={{marginTop: "44px"}}>
         This game started on{" "}
         <Moment format="YYYY/MM/DD HH:mm:ss">{gameStartedData.timestamp.toString()}</Moment> in
         Tx <a
@@ -33,18 +45,6 @@ export const GameHistoryCompleted = ({ gameId, gameStartedData, gameEndedData })
           {getEllipsisTxt(gameEndedData.txHash, 8)}
         </a>.
       </p>
-
-      <div>
-        <p className="subtitle">Final Hands and Leaderboard</p>
-        <Leaderboard gameId={gameId} showWinnings={true} />
-      </div>
-
-      <GameHistoryHandsPlayed
-        gameId={gameId}
-        round1Price={gameStartedData.round1Price}
-        round2Price={gameStartedData.round2Price}
-        finished={true}
-      />
     </div>
   );
 }
