@@ -15,7 +15,9 @@ export default function NFTBalance() {
   // const [tokensPerPage, setTokensPerPage] = useState(10);
   // const [pageNumber, setPageNumber] = useState(1);
 
-  if (!NFTHands.length) {
+  console.log("*********", { NFTHands })
+
+  if (!NFTHands.length || !NFTHands) {
     // return <Spin className="spin_loader" />;
     return (
       <div className="no_nfts-body">

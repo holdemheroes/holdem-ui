@@ -7,11 +7,11 @@ import "./style.scss";
 export default function NFTCard({ nft, chainId }) {
     const openSeaUrl = getOpenSeaUrl(chainId);
     const contractAddress = getHoldemHeroesAddress(chainId);
-    let metadata = decodeNftUriToJson(nft.token_uri);
+    let metadata = nft.token_uri != null ? decodeNftUriToJson(nft.token_uri) : null;
 
     return (
         <div className="nft_card">
-            <p className="nft_card-name">{metadata.name}</p>
+            <p className="nft_card-name">{metadata?.name}</p>
             <Image
                 preview={false}
                 src={metadata?.image || "error"}
@@ -21,7 +21,7 @@ export default function NFTCard({ nft, chainId }) {
                 className="nft_card-image"
             />
             <Divider className="nft_card-divider" />
-            <NFTMeta metadata={metadata} />
+            {metadata ? <NFTMeta metadata={metadata} /> : <></>}
             <a
                 href={`${openSeaUrl}/assets/${contractAddress}/${nft.token_id}`}
                 target="_blank"

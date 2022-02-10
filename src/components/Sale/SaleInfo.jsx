@@ -50,7 +50,7 @@ export default function SaleInfo(
 
   if (saleStartDiff <= 0 && revealTimeDiff > 0) {
     saleInfo = <div>
-      Revealed & distributed in: <Countdown date={revealTime * 1000} renderer={renderer} />
+      Reveal and Airdrop in: <Countdown date={revealTime * 1000} renderer={renderer} />
     </div>;
   }
 

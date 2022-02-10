@@ -79,7 +79,7 @@ export default function PreRevealSale({ pricePerToken, mintedTokens, maxCanOwn, 
 
   return (
     <>
-      <p className="title">Pre-reveal minting sale - {1326 - totalSupply} left!</p>
+      <p className="title">Blind Minting Phase: {1326 - totalSupply} Available</p>
       {block}
       {saleHeader}
     </>
