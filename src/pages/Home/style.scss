@@ -48,78 +48,82 @@
                         background-color: white;
                         box-shadow      : 0 0 20px 0 hsl(0deg 0% 100% / 35%);
 
-                        &>p:first-child {
-                            text-align    : center;
-                            font-family   : Redtone, sans-serif;
-                            font-size     : 22px;
-                            color         : rgba(18, 21, 31, 0.77);
-                            padding-bottom: 20px;
-                            border-bottom : 0.4px solid rgba(0, 0, 0, 0.15);
-                        }
+                        form {
+                            &>p:first-child {
+                                text-align    : center;
+                                font-family   : Redtone, sans-serif;
+                                font-size     : 22px;
+                                color         : rgba(18, 21, 31, 0.77);
+                                padding-bottom: 20px;
+                                border-bottom : 0.4px solid rgba(0, 0, 0, 0.15);
+                            }
 
-                        &>div {
-                            display        : flex;
-                            justify-content: space-between;
-                            align-items    : center;
-                            margin-bottom  : 20px;
+                            &>div {
+                                display        : flex;
+                                justify-content: space-between;
+                                align-items    : center;
+                                margin-bottom  : 20px;
 
-                            &>select#mint_num {
-                                display      : block;
-                                width        : 40%;
-                                height       : 45px;
-                                padding      : 5px 16px 8px;
-                                border       : 1px solid #d8d8d8;
-                                border-radius: 8px;
-                                font-size    : 20px;
-                                font-family  : Karla, sans-serif;
-                                color        : #333333;
+                                &>select#mint_num {
+                                    display      : block;
+                                    width        : 40%;
+                                    height       : 45px;
+                                    padding      : 5px 16px 8px;
+                                    border       : 1px solid #d8d8d8;
+                                    border-radius: 8px;
+                                    font-size    : 20px;
+                                    font-family  : Karla, sans-serif;
+                                    color        : #333333;
 
-                                &:focus {
-                                    border-color: rgb(10, 172, 212);
+                                    &:focus {
+                                        border-color: rgb(10, 172, 212);
+                                    }
+                                }
+
+                                &>p:last-child {
+                                    display        : flex;
+                                    justify-content: center;
+                                    align-items    : center;
+                                    width          : 40%;
+                                    height         : 45px;
+                                    margin-bottom  : 0;
+                                    border         : 1px solid rgba(255, 41, 195, 0.34);
+                                    border-radius  : 8px;
+                                    font-size      : 20px;
+                                    font-family    : Karla, sans-serif;
+                                    color          : #333333;
+                                }
+
+                                &+p {
+                                    margin-top : 10px;
+                                    font-family: Karla, sans-serif;
+                                    font-size  : 15px;
+                                    color      : rgba(0, 0, 0, 0.45);
                                 }
                             }
 
-                            &>p:last-child {
-                                display        : flex;
-                                justify-content: center;
-                                align-items    : center;
-                                width          : 40%;
-                                height         : 45px;
-                                margin-bottom  : 0;
-                                border         : 1px solid rgba(255, 41, 195, 0.34);
-                                border-radius  : 8px;
-                                font-size      : 20px;
-                                font-family    : Karla, sans-serif;
-                                color          : #333333;
+                            &>input[type="submit"] {
+                                width           : 100%;
+                                margin-top      : 20px;
+                                padding-top     : 16px;
+                                padding-bottom  : 16px;
+                                border-radius   : 8px;
+                                background-image: linear-gradient(117deg, #1847ed, #391cef);
+                                transition      : all 500ms ease;
+                                font-family     : Karla, sans-serif;
+                                font-size       : 19px;
+                                color           : white;
+                                text-align      : center;
+                                letter-spacing  : 1px;
+
+                                &:hover {
+                                    background-color: transparent;
+                                    background-image: linear-gradient(117deg, #2a59ff, #462bf5);
+                                }
                             }
 
-                            &+p {
-                                margin-top : 10px;
-                                font-family: Karla, sans-serif;
-                                font-size  : 15px;
-                                color      : rgba(0, 0, 0, 0.45);
-                            }
                         }
 
-                        &>button {
-                            width           : 100%;
-                            margin-top      : 20px;
-                            padding-top     : 16px;
-                            padding-bottom  : 16px;
-                            border-radius   : 8px;
-                            background-image: linear-gradient(117deg, #1847ed, #391cef);
-                            transition      : all 500ms ease;
-                            font-family     : Karla, sans-serif;
-                            font-size       : 19px;
-                            color           : white;
-                            text-align      : center;
-                            letter-spacing  : 1px;
-
-                            &:hover {
-                                background-color: transparent;
-                                background-image: linear-gradient(117deg, #2a59ff, #462bf5);
-                            }
-                        }
                     }
 
                     &>p:last-child {

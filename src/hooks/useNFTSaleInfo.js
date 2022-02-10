@@ -66,7 +66,6 @@ export const useNFTSaleInfo = () => {
   });
 
   useEffect(() => {
-
     if (isInitialized && !fetched) {
       setFetched(true);
       refresh();
@@ -82,7 +81,6 @@ export const useNFTSaleInfo = () => {
     }
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [isInitialized, fetched, startTime, revealTime, startingIndex, maxPerTxOrOwner, pricePerToken, totalSupply]);
-
 
   const refresh = () => {
     startTimeFetch();

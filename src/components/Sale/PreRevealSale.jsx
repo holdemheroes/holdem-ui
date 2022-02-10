@@ -15,7 +15,7 @@ export default function PreRevealSale({ pricePerToken, mintedTokens, maxCanOwn, 
 
   const MAX_TOTAL_SUPPLY = 1326;
 
-  console.log(pricePerToken)
+  console.log({ totalSupply })
 
   async function preRevealMint(event) {
     event.preventDefault();
@@ -61,7 +61,7 @@ export default function PreRevealSale({ pricePerToken, mintedTokens, maxCanOwn, 
 
   const canMint = Math.min((maxCanOwn - balance, MAX_TOTAL_SUPPLY - totalSupply), 7);
   const options = [];
-  for (let i = 1; i <= canMint; i += 1) {
+  for (let i = 1; i <= canMint; i++) {
     options.push(<option value={i} key={`mint_option_${i}`}>{i}</option>);
   }
 
@@ -79,7 +79,7 @@ export default function PreRevealSale({ pricePerToken, mintedTokens, maxCanOwn, 
 
   return (
     <>
-      <p className="title">Pre-reveal minting sale - {1326 - mintedTokens.length} left!</p>
+      <p className="title">Pre-reveal minting sale - {1326 - totalSupply} left!</p>
       {block}
       {saleHeader}
     </>

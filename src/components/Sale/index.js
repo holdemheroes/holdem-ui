@@ -35,6 +35,16 @@ export default function Sale() {
     },
   );
 
+  // const [now, setNow] = useState(Math.floor(Date.now() / 1000));
+
+  // useEffect(() => {
+  //   const timerId = setInterval(() => {
+  //     setNow(Math.floor(Date.now() / 1000));
+  //   }, 1000);
+
+  //   return () => clearInterval(timerId);
+  // }, [now]);
+
   useEffect(() => {
     if (mintedRes) {
       const m = [];
@@ -55,6 +65,11 @@ export default function Sale() {
   const saleStartDiff = startTime - now;
   const revealTimeDiff = revealTime - now;
   const startIdx = parseInt(startingIndex, 10);
+
+  console.log({ minted })
+  console.log({ saleStartDiff })
+  console.log({ revealTimeDiff })
+  console.log({ startIdx })
 
   // const saleHeader = <SaleInfo
   //   startTime={startTime}
