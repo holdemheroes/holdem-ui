@@ -1,13 +1,13 @@
-import React, {useState, useEffect} from "react";
-import { useMoralis } from "react-moralis"
-import { useMoralisDapp } from "../../providers/MoralisDappProvider/MoralisDappProvider"
-import abis from "../../helpers/contracts"
-import { getHoldemHeroesAddress, getOpenSeaUrl } from "../../helpers/networks"
-import { Card, Image, Tooltip } from "antd"
-import { ShoppingCartOutlined } from "@ant-design/icons"
-import NFTMeta from "../NFTMeta"
-import { decodeNftUriToJson } from "../../helpers/nft"
-import { openNotification } from "helpers/notifications"
+import React, { useState, useEffect } from "react";
+import { useMoralis } from "react-moralis";
+import { useMoralisDapp } from "../../providers/MoralisDappProvider/MoralisDappProvider";
+import abis from "../../helpers/contracts";
+import { getHoldemHeroesAddress, getOpenSeaUrl } from "../../helpers/networks";
+import { Card, Image, Tooltip } from "antd";
+import { ShoppingCartOutlined } from "@ant-design/icons";
+import NFTMeta from "../NFTMeta/NFTMeta";
+import { decodeNftUriToJson } from "../../helpers/nft";
+import { openNotification } from "helpers/notifications";
 
 export default function NFT({ tokenId, canMint, mintedTokens, pricePerToken }) {
   const { Moralis } = useMoralis();
@@ -21,47 +21,46 @@ export default function NFT({ tokenId, canMint, mintedTokens, pricePerToken }) {
   const options = {
     abi,
     contractAddress,
-  }
+  };
 
-  Moralis.executeFunction( {
+  Moralis.executeFunction({
     functionName: "tokenURI",
     params: {
       _tokenId: String(tokenId),
     },
     ...options
-  }).then((response) =>
+  }).then((response) => {
     setNftData(response)
-  );
+  });
 
   useEffect(() => {
-    if(mintedTokens.includes(tokenId)) {
-      if(!nftOwner || nftOwner === "no") {
-        Moralis.executeFunction( {
+    if (mintedTokens.includes(tokenId)) {
+      if (!nftOwner || nftOwner === "no") {
+        Moralis.executeFunction({
           functionName: "ownerOf",
           params: {
-            tokenId: String( tokenId ),
+            tokenId: String(tokenId),
           },
           ...options
-        } ).then( ( response ) =>
-          setNftOwner( response )
-        ).catch( ( error ) => {
-            setError( error )
-          }
+        }).then((response) =>
+          setNftOwner(response)
+        ).catch((error) =>
+          setError(error)
         );
       }
     } else {
-      setNftOwner( "no" )
+      setNftOwner("no");
     }
 
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [mintedTokens, tokenId, nftOwner]);
 
 
-  if(!nftData || !nftOwner) {
-    return(<>token {tokenId}</>)
+  if (!nftData || !nftOwner) {
+    return (<>token {tokenId}</>);
   }
 
-  const nft = decodeNftUriToJson(nftData)
+  const nft = decodeNftUriToJson(nftData);
 
   const postRevealMint = async (t) => {
     const options = {
@@ -72,7 +71,7 @@ export default function NFT({ tokenId, canMint, mintedTokens, pricePerToken }) {
       params: {
         tokenId: String(t)
       },
-    }
+    };
 
     const tx = await Moralis.executeFunction({ awaitReceipt: false, ...options });
     tx.on("transactionHash", (hash) => {
@@ -99,19 +98,19 @@ export default function NFT({ tokenId, canMint, mintedTokens, pricePerToken }) {
       });
   }
 
-  let block
-  if(nftOwner === "no") {
-    if(canMint) {
+  let block = null;
+  if (nftOwner === "no") {
+    if (canMint) {
       block = <Tooltip title={`Mint NFT #${tokenId}`}>
-        <ShoppingCartOutlined onClick={() => postRevealMint(tokenId)}/>
-      </Tooltip>
+        <a onClick={(e) => { e.preventDefault(); postRevealMint(tokenId); }}>Mint</a>
+      </Tooltip>;
     } else {
-      block = <p>Mint limit reached. Wait for open market</p>
+      block = <p>Mint limit reached. Wait for open market</p>;
     }
 
   } else {
-    const os = `${getOpenSeaUrl(chainId)}/assets/${contractAddress}/${tokenId}`
-    block = <a href={os} target={"_blank"} rel={"noreferrer"}>OpenSea</a>
+    const os = `${getOpenSeaUrl(chainId)}/assets/${contractAddress}/${tokenId}`;
+    block = <a href={os} target={"_blank"} rel={"noreferrer"} className="minted">View on OpenSea</a>;
   }
 
   return (
@@ -122,7 +121,7 @@ export default function NFT({ tokenId, canMint, mintedTokens, pricePerToken }) {
           block
         ]
       }
-      style={{ width: 240, border: "2px solid #e7eaf3" }}
+      title={nft.name}
       cover={
         <Image
           preview={false}
@@ -135,5 +134,5 @@ export default function NFT({ tokenId, canMint, mintedTokens, pricePerToken }) {
     >
       <NFTMeta metadata={nft} />
     </Card>
-  )
+  );
 }

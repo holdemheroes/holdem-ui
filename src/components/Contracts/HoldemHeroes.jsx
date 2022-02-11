@@ -1,10 +1,10 @@
 import { Button, Card, Input, Typography, Form, notification } from "antd";
 import { useMemo, useState } from "react";
-import abis from "helpers/contracts"
-import Address from "components/Address/Address";
+import abis from "../../helpers/contracts"
+import Address from "../Address/Address";
 import { useMoralis } from "react-moralis";
-import { getHoldemHeroesAddress } from "../../helpers/networks"
-import { useMoralisDapp } from "../../providers/MoralisDappProvider/MoralisDappProvider"
+import { getHoldemHeroesAddress } from "../../helpers/networks";
+import { useMoralisDapp } from "../../providers/MoralisDappProvider/MoralisDappProvider";
 
 const { Text } = Typography;
 
@@ -12,7 +12,7 @@ export default function HoldemHeroes() {
   const { Moralis } = useMoralis();
   const { chainId } = useMoralisDapp();
   const abi = abis.heh_nft;
-  const contractName = "HoldemHeroes"
+  const contractName = "HoldemHeroes";
   const [responses, setResponses] = useState({});
   const contractAddress = getHoldemHeroesAddress(chainId);
 
@@ -62,7 +62,7 @@ export default function HoldemHeroes() {
               params,
             };
 
-            console.log(options)
+            console.log(options);
 
             if (!isView) {
               const tx = await Moralis.executeFunction({ awaitReceipt: false, ...options });
@@ -93,38 +93,38 @@ export default function HoldemHeroes() {
           }}
         >
           {displayedContractFunctions &&
-          displayedContractFunctions.map((item, key) => (
-            <Card
-              title={`${key + 1}. ${item?.name}`}
-              size="small"
-              style={{ marginBottom: "20px" }}
-            >
-              <Form layout="vertical" name={`${item.name}`}>
-                {item.inputs.map((input, key) => (
-                  <Form.Item
-                    label={`${input.name} (${input.type})`}
-                    name={`${input.name}`}
-                    required
-                    style={{ marginBottom: "15px" }}
-                  >
-                    <Input placeholder="input placeholder" />
+            displayedContractFunctions.map((item, key) => (
+              <Card
+                title={`${key + 1}. ${item?.name}`}
+                size="small"
+                style={{ marginBottom: "20px" }}
+              >
+                <Form layout="vertical" name={`${item.name}`}>
+                  {item.inputs.map((input, key) => (
+                    <Form.Item
+                      label={`${input.name} (${input.type})`}
+                      name={`${input.name}`}
+                      required
+                      style={{ marginBottom: "15px" }}
+                    >
+                      <Input placeholder="input placeholder" />
+                    </Form.Item>
+                  ))}
+                  <Form.Item style={{ marginBottom: "5px" }}>
+                    <Text style={{ display: "block" }}>
+                      {responses[item.name]?.result && JSON.stringify(responses[item.name]?.result)}
+                    </Text>
+                    <Button
+                      type="primary"
+                      htmlType="submit"
+                      loading={responses[item?.name]?.isLoading}
+                    >
+                      {item.stateMutability === "view" ? "Read🔎" : "Transact💸"}
+                    </Button>
                   </Form.Item>
-                ))}
-                <Form.Item style={{ marginBottom: "5px" }}>
-                  <Text style={{ display: "block" }}>
-                    {responses[item.name]?.result && JSON.stringify(responses[item.name]?.result)}
-                  </Text>
-                  <Button
-                    type="primary"
-                    htmlType="submit"
-                    loading={responses[item?.name]?.isLoading}
-                  >
-                    {item.stateMutability === "view" ? "Read🔎" : "Transact💸"}
-                  </Button>
-                </Form.Item>
-              </Form>
-            </Card>
-          ))}
+                </Form>
+              </Card>
+            ))}
         </Form.Provider>
       </Card>
     </div>

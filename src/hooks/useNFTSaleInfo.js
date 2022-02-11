@@ -1,8 +1,8 @@
 import { useEffect, useState } from "react";
 import { useMoralis, useWeb3ExecuteFunction } from "react-moralis";
-import { useMoralisDapp } from "providers/MoralisDappProvider/MoralisDappProvider";
-import abis from "helpers/contracts"
-import { getHoldemHeroesAddress } from "../helpers/networks"
+import { useMoralisDapp } from "../providers/MoralisDappProvider/MoralisDappProvider";
+import abis from "../helpers/contracts";
+import { getHoldemHeroesAddress } from "../helpers/networks";
 
 export const useNFTSaleInfo = () => {
   const { isInitialized } = useMoralis();
@@ -10,12 +10,12 @@ export const useNFTSaleInfo = () => {
   const abi = abis.heh_nft;
   const contractAddress = getHoldemHeroesAddress(chainId);
 
-  const [ fetched, setFetched ] = useState(false)
-  const [ dataInitialised, setDataInitialised ] = useState(false)
+  const [fetched, setFetched] = useState(false);
+  const [dataInitialised, setDataInitialised] = useState(false);
 
   const options = {
     contractAddress, abi,
-  }
+  };
 
   const {
     data: startTime,
@@ -23,7 +23,7 @@ export const useNFTSaleInfo = () => {
   } = useWeb3ExecuteFunction({
     ...options,
     functionName: "SALE_START_TIMESTAMP",
-  })
+  });
 
   const {
     data: revealTime,
@@ -31,7 +31,7 @@ export const useNFTSaleInfo = () => {
   } = useWeb3ExecuteFunction({
     ...options,
     functionName: "REVEAL_TIMESTAMP",
-  })
+  });
 
   const {
     data: startingIndex,
@@ -39,7 +39,7 @@ export const useNFTSaleInfo = () => {
   } = useWeb3ExecuteFunction({
     ...options,
     functionName: "startingIndex",
-  })
+  });
 
   const {
     data: maxPerTxOrOwner,
@@ -47,15 +47,15 @@ export const useNFTSaleInfo = () => {
   } = useWeb3ExecuteFunction({
     ...options,
     functionName: "MAX_PER_ADDRESS_OR_TX",
-  })
+  });
 
   const {
     data: pricePerToken,
     fetch: pricePerTokenFetch,
   } = useWeb3ExecuteFunction({
     ...options,
-    functionName: "NFT_MINT_PRICE",
-  })
+    functionName: "getNftPrice",
+  });
 
   const {
     data: totalSupply,
@@ -63,35 +63,33 @@ export const useNFTSaleInfo = () => {
   } = useWeb3ExecuteFunction({
     ...options,
     functionName: "totalSupply",
-  })
+  });
 
-  useEffect( () => {
-
-    if(isInitialized && !fetched) {
-      setFetched(true)
-      refresh()
+  useEffect(() => {
+    if (isInitialized && !fetched) {
+      setFetched(true);
+      refresh();
     }
 
-    if(startTime !== null &&
+    if (startTime !== null &&
       revealTime !== null &&
       startingIndex !== null &&
       maxPerTxOrOwner !== null &&
       pricePerToken !== null &&
       totalSupply !== null) {
-      setDataInitialised(true)
+      setDataInitialised(true);
     }
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [isInitialized, fetched, startTime, revealTime, startingIndex, maxPerTxOrOwner, pricePerToken, totalSupply]);
 
-
   const refresh = () => {
-    startTimeFetch()
-    revealTimeFetch()
-    startingIndexFetch()
-    maxPerTxOrOwnerFetch()
-    pricePerTokenFetch()
-    totalSupplyFetch()
-  }
+    startTimeFetch();
+    revealTimeFetch();
+    startingIndexFetch();
+    maxPerTxOrOwnerFetch();
+    pricePerTokenFetch();
+    totalSupplyFetch();
+  };
 
   return {
     refresh,

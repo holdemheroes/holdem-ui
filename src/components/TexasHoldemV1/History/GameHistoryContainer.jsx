@@ -1,144 +1,141 @@
-import { useMoralis } from "react-moralis"
-import { useEffect, useState } from "react"
-import { Spin } from "antd"
-import { GameHistoryCompleted } from "./GameHistoryCompleted"
-import { GameHistoryRefunded } from "./GameHistoryRefunded"
+import { useMoralis } from "react-moralis";
+import { useEffect, useState } from "react";
+import { Spin } from "antd";
+import { GameHistoryCompleted } from "./GameHistoryCompleted";
+import { GameHistoryRefunded } from "./GameHistoryRefunded";
 
-export const GameHistoryContainer = ( {gameId, gamesInProgress}) => {
+export const GameHistoryContainer = ({ gameId, gamesInProgress }) => {
 
-  const { Moralis } = useMoralis()
+  const { Moralis } = useMoralis();
 
+  const [gameStartedData, setGameStartedData] = useState(null);
+  const [gameEndedData, setGameEndedData] = useState(null);
+  const [gameStartedDataInitialised, setGameStartedDataInitialised] = useState(false);
 
-  const [ gameStartedData, setGameStartedData ] = useState(null)
-  const [ gameEndedData, setGameEndedData ] = useState(null)
-  const [ gameStartedDataInitialised, setGameStartedDataInitialised ] = useState(false)
+  const [gameIsFinished, setGameIsFinished] = useState(null);
+  const [gameIsFinishedLoading, setGameIsFinishedLoading] = useState(false);
+  const [gameIsFinishedFetched, setGameIsFinishedFetched] = useState(false);
 
-  const [ gameIsFinished, setGameIsFinished ] = useState(null)
-  const [ gameIsFinishedLoading, setGameIsFinishedLoading ] = useState(false)
-  const [ gameIsFinishedFetched, setGameIsFinishedFetched ] = useState(false)
-
-  const [ gameIsRefunded, setGameIsRefunded ] = useState(null)
-  const [ gameIsRefundedLoading, setGameIsRefundedLoading ] = useState(false)
-  const [ gameIsRefundedFetched, setGameIsRefundedFetched ] = useState(false)
+  const [gameIsRefunded, setGameIsRefunded] = useState(null);
+  const [gameIsRefundedLoading, setGameIsRefundedLoading] = useState(false);
+  const [gameIsRefundedFetched, setGameIsRefundedFetched] = useState(false);
 
   function fetchGameIsFinished() {
-    setGameIsFinishedLoading(true)
+    setGameIsFinishedLoading(true);
     // get any hands already played
-    const THWinningsCalculated = Moralis.Object.extend( "THWinningsCalculated" )
-    const queryTHWinningsCalculated = new Moralis.Query( THWinningsCalculated )
+    const THWinningsCalculated = Moralis.Object.extend("THWinningsCalculated");
+    const queryTHWinningsCalculated = new Moralis.Query(THWinningsCalculated);
     queryTHWinningsCalculated
-      .equalTo( "gameId", String( gameId ) )
+      .equalTo("gameId", String(gameId));
     queryTHWinningsCalculated.find()
       .then((result) => {
-        setGameIsFinishedFetched(true)
-        if(result.length > 0) {
-          setGameIsFinished(true)
+        setGameIsFinishedFetched(true);
+        if (result.length > 0) {
+          setGameIsFinished(true);
           const d = {
             txHash: result[0].get("transaction_hash"),
             timestamp: result[0].get("block_timestamp"),
-          }
-          setGameEndedData(d)
+          };
+          setGameEndedData(d);
         } else {
-          setGameIsFinished(false)
+          setGameIsFinished(false);
         }
       })
-      .catch((e) => console.log(e.message))
+      .catch((e) => console.log(e.message));
   }
 
   function fetchGameIsRefunded() {
-    setGameIsRefundedLoading(true)
+    setGameIsRefundedLoading(true);
     // get any hands already played
-    const THRefundableGame = Moralis.Object.extend( "THRefundableGame" )
-    const queryTHRefundableGame = new Moralis.Query( THRefundableGame )
+    const THRefundableGame = Moralis.Object.extend("THRefundableGame");
+    const queryTHRefundableGame = new Moralis.Query(THRefundableGame);
     queryTHRefundableGame
-      .equalTo( "gameId", String( gameId ) )
+      .equalTo("gameId", String(gameId));
     queryTHRefundableGame.find()
       .then((result) => {
-        setGameIsRefundedFetched(true)
-        if(result.length > 0) {
-          setGameIsRefunded(true)
+        setGameIsRefundedFetched(true);
+        if (result.length > 0) {
+          setGameIsRefunded(true);
           const d = {
             txHash: result[0].get("transaction_hash"),
             timestamp: result[0].get("block_timestamp"),
-          }
-          setGameEndedData(d)
+          };
+          setGameEndedData(d);
         } else {
-          setGameIsRefunded(false)
+          setGameIsRefunded(false);
         }
       })
-      .catch((e) => console.log(e.message))
+      .catch((e) => console.log(e.message));
   }
 
   useState(() => {
     async function getGameStartedData() {
-      const THGameStarted = Moralis.Object.extend( "THGameStarted" )
-      const query = new Moralis.Query( THGameStarted )
+      const THGameStarted = Moralis.Object.extend("THGameStarted");
+      const query = new Moralis.Query(THGameStarted);
       query
-        .equalTo( "gameId", String(gameId) )
+        .equalTo("gameId", String(gameId));
 
       query.first()
         .then((result) => {
-          if(result) {
+          if (result) {
             const d = {
               round1Price: result.get("round1Price"),
               round2Price: result.get("round2Price"),
               txHash: result.get("transaction_hash"),
               timestamp: result.get("block_timestamp"),
-            }
-            setGameStartedData(d)
+            };
+            setGameStartedData(d);
           }
         })
         .catch((e) => console.log(e.message));
     }
 
-    if(!gameStartedDataInitialised) {
-      setGameStartedDataInitialised(true)
-      getGameStartedData()
+    if (!gameStartedDataInitialised) {
+      setGameStartedDataInitialised(true);
+      getGameStartedData();
     }
 
     // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [gameId, gameStartedDataInitialised])
+  }, [gameId, gameStartedDataInitialised]);
 
   // check if it is a completed game.
   useEffect(() => {
-    if(gameIsFinished === null && !gameIsFinishedLoading && !gameIsFinishedFetched) {
-      fetchGameIsFinished()
+    if (gameIsFinished === null && !gameIsFinishedLoading && !gameIsFinishedFetched) {
+      fetchGameIsFinished();
     }
     // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [gameId, gameIsFinished, gameIsFinishedLoading, gameIsFinishedFetched])
+  }, [gameId, gameIsFinished, gameIsFinishedLoading, gameIsFinishedFetched]);
 
   // check if it's refunded
   useEffect(() => {
-    if(gameIsFinished === true && gameIsRefunded === null && !gameIsRefundedLoading && !gameIsRefundedFetched) {
-      setGameIsRefunded(false)
-      setGameIsRefundedLoading(true)
-      setGameIsRefundedFetched(true)
+    if (gameIsFinished === true && gameIsRefunded === null && !gameIsRefundedLoading && !gameIsRefundedFetched) {
+      setGameIsRefunded(false);
+      setGameIsRefundedLoading(true);
+      setGameIsRefundedFetched(true);
     }
-    if(gameIsFinished === false && gameIsRefunded === null && !gameIsRefundedLoading && !gameIsRefundedFetched) {
-      fetchGameIsRefunded()
+    if (gameIsFinished === false && gameIsRefunded === null && !gameIsRefundedLoading && !gameIsRefundedFetched) {
+      fetchGameIsRefunded();
     }
     // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [gameId, gameIsFinished, gameIsRefunded, gameIsRefundedLoading, gameIsRefundedFetched])
+  }, [gameId, gameIsFinished, gameIsRefunded, gameIsRefundedLoading, gameIsRefundedFetched]);
 
 
   // first check if it's in progress
-  if(gamesInProgress.includes(String(gameId))) {
+  if (gamesInProgress.includes(String(gameId))) {
     return (
-      <div>Game #{gameId} has not yet ended. Historical data will be displayed once it has ended.</div>
-    )
+      <div className="game_history_main_body">
+        <p className="desc">Game #{gameId} has not yet ended. Historical data will be displayed once it has ended.</p>
+      </div>
+    );
   }
 
-  if(gameIsFinished === null || gameIsRefunded === null) {
-    return (
-      <>
-        <Spin />Loading
-      </>
-    )
+  if (gameIsFinished === null || gameIsRefunded === null) {
+    return <Spin className="spin_loader" />;
   }
 
   return (
-    <div>
-      <h2>Game #{gameId} History</h2>
+    <div className="game_history_main_body">
+      {/* <p>Game #{gameId} History</p> */}
       {
         gameIsFinished && gameStartedData !== null && gameEndedData !== null &&
         <GameHistoryCompleted
@@ -156,8 +153,8 @@ export const GameHistoryContainer = ( {gameId, gamesInProgress}) => {
         />
       }
       {
-        !gameIsFinished && !gameIsRefunded && <p>No players entered this game</p>
+        !gameIsFinished && !gameIsRefunded && <p className="desc">No players entered this game</p>
       }
     </div>
-  )
+  );
 }

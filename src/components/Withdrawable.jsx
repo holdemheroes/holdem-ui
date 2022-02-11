@@ -1,31 +1,31 @@
-import { useGetUserWithdrawable } from "../hooks/useGetUserWithdrawable"
-import { n4 } from "helpers/formatters";
-import { openNotification } from "../helpers/notifications"
-import { useMoralisDapp } from "../providers/MoralisDappProvider/MoralisDappProvider"
-import { useMoralis } from "react-moralis"
-import abis from "../helpers/contracts"
-import { getTexasHoldemV1Address } from "../helpers/networks"
-import { Button } from "antd"
+import { useMoralis } from "react-moralis";
+import { useGetUserWithdrawable } from "../hooks/useGetUserWithdrawable";
+import { n4 } from "../helpers/formatters";
+import { openNotification } from "../helpers/notifications";
+import { useMoralisDapp } from "../providers/MoralisDappProvider/MoralisDappProvider";
+import abis from "../helpers/contracts";
+import { getTexasHoldemV1Address } from "../helpers/networks";
+// import { Button } from "antd"
 
 function Withdrawable() {
 
   const { chainId } = useMoralisDapp();
-  const { Moralis } = useMoralis()
+  const { Moralis } = useMoralis();
 
-  const { balance } = useGetUserWithdrawable()
+  const { balance } = useGetUserWithdrawable();
 
   const abi = abis.texas_holdem_v1;
-  const contractAddress = getTexasHoldemV1Address( chainId );
+  const contractAddress = getTexasHoldemV1Address(chainId);
 
   const options = {
     contractAddress, abi,
-  }
+  };
 
   const handleWithdraw = async () => {
     const opts = {
       ...options,
       functionName: "withdrawWinnings",
-    }
+    };
 
     const tx = await Moralis.executeFunction({ awaitReceipt: false, ...opts });
     tx.on("transactionHash", (hash) => {
@@ -42,13 +42,14 @@ function Withdrawable() {
 
   return (
     <>
-      <Button onClick={() => handleWithdraw()}
-           style={{ textAlign: "center", whiteSpace: "nowrap" }}>
+      <button onClick={() => handleWithdraw()}
+        className="btn-withdrawable btn-shadow btn-hover-pointer">
         Withdraw {`${n4.format(
-        Moralis.Units.FromWei(balance, 18)
-      )} ETH`}</Button>
+          Moralis.Units.FromWei(balance, 18)
+        )} ETH`}</button>
     </>
   );
 }
-export default Withdrawable
+
+export default Withdrawable;
 

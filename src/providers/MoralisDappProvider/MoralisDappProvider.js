@@ -6,6 +6,7 @@ function MoralisDappProvider({ children }) {
   const { web3, Moralis, user } = useMoralis();
   const [walletAddress, setWalletAddress] = useState();
   const [chainId, setChainId] = useState();
+
   useEffect(() => {
     Moralis.onChainChanged(function (chain) {
       setChainId(chain);
@@ -19,6 +20,7 @@ function MoralisDappProvider({ children }) {
 
   // eslint-disable-next-line react-hooks/exhaustive-deps
   useEffect(() => setChainId(web3.givenProvider?.chainId));
+  
   useEffect(
     () => setWalletAddress(web3.givenProvider?.selectedAddress || user?.get("ethAddress")),
     [web3, user]
