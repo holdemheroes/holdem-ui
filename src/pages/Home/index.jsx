@@ -2,6 +2,7 @@ import React from "react";
 import { NavLink } from "react-router-dom";
 import "./style.scss";
 import AnimateButton from "../../components/AnimateButton";
+import Timeline from "../../components/Timeline";
 import { useNFTSaleInfo } from "../../hooks/useNFTSaleInfo";
 import Countdown from 'react-countdown';
 import { useMoralisDapp } from "../../providers/MoralisDappProvider/MoralisDappProvider";
@@ -137,6 +138,10 @@ export default function Home() {
             <img src="../assets/images/cards2.png" alt="" />
             {revealTimeDiff > 0 ? <><p>NFT Distribution and Reveal in</p><Countdown date={revealTime * 1000} renderer={renderer} /></> : null}
           </div>
+        </div>
+
+        <div style={{ marginTop: "160px" }}>
+          <Timeline />
         </div>
       </div>
 

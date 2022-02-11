@@ -54,7 +54,6 @@ export default function NFT({ tokenId, canMint, mintedTokens, pricePerToken }) {
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [mintedTokens, tokenId, nftOwner]);
 
-
   if (!nftData || !nftOwner) {
     return (<>token {tokenId}</>);
   }
