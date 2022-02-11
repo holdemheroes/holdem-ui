@@ -49,6 +49,7 @@ export default function PostRevealSale({ pricePerToken, canMint, mintedTokens })
       setTokens([]);
       query = null;
     }
+    // eslint-disable-next-line
   }, [minted, mintedTokens, shape, ranksRange]);
 
   useEffect(() => {
@@ -74,12 +75,10 @@ export default function PostRevealSale({ pricePerToken, canMint, mintedTokens })
   }
 
   function handleShapeChange(checkedValues) {
-    // console.log(checkedValues);
     setShape([...checkedValues]);
   }
 
   function handleRankChange(value) {
-    // console.log("Rank: ", value);
     setMarks({ [value[0]]: `${value[0]}`, [value[1]]: `${value[1]}` });
     setRanksRange([...value]);
   }
@@ -87,11 +86,10 @@ export default function PostRevealSale({ pricePerToken, canMint, mintedTokens })
   return (
     <>
       <div className="sales-header">
-        {/* <h2 style={{ divor: "white" }}>Post Reveal Mint Sale</h2> */}
         <p className="title">NFT Marketplace</p>
         <ul className="tabs" onClick={switchTab}>
-          <li><a className={!minted ? "active" : ""}>Not minted</a></li>
-          <li><a className={minted ? "active" : ""}>Minted</a></li>
+          <li><p className={!minted ? "active" : ""}>Not minted</p></li>
+          <li><p className={minted ? "active" : ""}>Minted</p></li>
         </ul>
       </div>
 

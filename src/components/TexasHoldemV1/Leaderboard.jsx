@@ -6,7 +6,6 @@ import { PlayingCard } from "../PlayingCards/PlayingCard";
 import { getEllipsisTxt, sortFinalHand } from "../../helpers/formatters";
 import { RankName } from "./RankName";
 import { getExplorer } from "../../helpers/networks";
-import Moment from "react-moment";
 
 export const Leaderboard = ({ gameId, showWinnings = false }) => {
   const { walletAddress } = useMoralisDapp();
@@ -41,11 +40,6 @@ export const Leaderboard = ({ gameId, showWinnings = false }) => {
       dataIndex: 'tx_hash',
       key: 'tx_hash',
     },
-    // {
-    //   title: 'Time',
-    //   dataIndex: 'timestamp',
-    //   key: 'timestamp',
-    // },
     {
       title: 'Rank',
       dataIndex: 'rank',
@@ -121,7 +115,6 @@ export const Leaderboard = ({ gameId, showWinnings = false }) => {
         fh.card5 = cTmp[4];
         fh.rank = parseInt(res.get("rank"), 10);
         fh.txHash = res.get("transaction_hash");
-        // fh.timestamp = res.get("block_timestamp");
         lb.push(fh);
       }
 
@@ -240,7 +233,6 @@ export const Leaderboard = ({ gameId, showWinnings = false }) => {
               rel={"noreferrer"}>
               {getEllipsisTxt(leaderboard[i].txHash, 4)}
             </a>,
-          // timestamp: <Moment format="YYYY/MM/DD HH:mm:ss">{leaderboard[i].timestamp.toString()}</Moment>,
         };
 
         if (showWinnings) {

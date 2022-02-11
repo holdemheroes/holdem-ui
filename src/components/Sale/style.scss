@@ -127,7 +127,7 @@
                     margin-right: 32px;
                 }
 
-                &>a {
+                &>p {
                     font-family  : Karla;
                     font-size    : 17px;
                     line-height  : 27px;
@@ -138,6 +138,7 @@
                     &:hover {
                         color       : #426BFF;
                         border-color: #426BFF;
+                        cursor      : pointer;
                     }
 
                     &.active {
@@ -296,7 +297,6 @@
                     }
 
                     .ant-card-actions {
-                        // background-color: #174aff;
                         transition: all 0.3s ease-in-out;
                         border-top: unset;
 
@@ -334,18 +334,6 @@
                                 }
                             }
                         }
-
-                        // a {
-                        //     color: white;
-                        // }
-
-                        // &:hover {
-                        //     background-color: white;
-
-                        //     a {
-                        //         color: #174aff;
-                        //     }
-                        // }
                     }
                 }
             }

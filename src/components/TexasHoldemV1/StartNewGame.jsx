@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from "react";
+import React, { useState } from "react";
 import { useMoralis } from "react-moralis";
 import { Form, Input, Button, Spin } from 'antd';
 import { useMoralisDapp } from "../../providers/MoralisDappProvider/MoralisDappProvider";

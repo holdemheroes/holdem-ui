@@ -42,7 +42,7 @@ function Community() {
         {
           menuItems.map((item) => (
             <li key={item.key} className="dropdown-item">
-              <a href={item.link} target="_blank">
+              <a href={item.link} target="_blank" rel="noreferrer">
                 {item.icon}
                 <span>{item.value}</span>
               </a>

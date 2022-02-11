@@ -135,7 +135,6 @@ export const GameHistoryContainer = ({ gameId, gamesInProgress }) => {
 
   return (
     <div className="game_history_main_body">
-      {/* <p>Game #{gameId} History</p> */}
       {
         gameIsFinished && gameStartedData !== null && gameEndedData !== null &&
         <GameHistoryCompleted
