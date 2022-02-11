@@ -62,8 +62,6 @@ export default function HoldemHeroes() {
               params,
             };
 
-            console.log(options);
-
             if (!isView) {
               const tx = await Moralis.executeFunction({ awaitReceipt: false, ...options });
               tx.on("transactionHash", (hash) => {

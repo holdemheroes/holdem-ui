@@ -167,18 +167,6 @@ button {
     display    : flex;
     align-items: center;
 
-    // .discord_btn {
-    //   font-family  : Karla;
-    //   font-size    : 17px;
-    //   line-height  : 30px;
-    //   border-bottom: 1px solid transparent;
-
-    //   &:hover {
-    //     color        : white;
-    //     border-bottom: 1px solid white;
-    //   }
-    // }
-
     &>div:first-child {
       display    : flex;
       align-items: center;
@@ -247,7 +235,6 @@ button {
       }
 
       .dropdown-body {
-        // display        : none;
         visibility     : hidden;
         transition     : all 0.3s ease-in-out;
         width          : 100%;
@@ -293,7 +280,6 @@ button {
       }
 
       &:hover .dropdown-body {
-        // display: block;
         visibility: visible;
       }
     }

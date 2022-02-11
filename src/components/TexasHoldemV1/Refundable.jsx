@@ -3,7 +3,6 @@ import { useMoralisDapp } from "../../providers/MoralisDappProvider/MoralisDappP
 import abis from "../../helpers/contracts";
 import { getTexasHoldemV1Address } from "../../helpers/networks";
 import { useMoralis } from "react-moralis";
-import { Button } from "antd";
 import { openNotification } from "../../helpers/notifications";
 
 export default function Refundable({ gameId, amount }) {

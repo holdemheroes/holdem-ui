@@ -1,5 +1,4 @@
 import React from "react";
-// import { Card } from "antd";
 import "./style.scss";
 
 export default function NFTMeta({ metadata }) {

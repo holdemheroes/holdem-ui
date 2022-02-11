@@ -1,24 +1,15 @@
-import React, { useState, useEffect } from "react";
-import { Spin } from "antd";
+import React from "react";
 import { useMoralisDapp } from "../../providers/MoralisDappProvider/MoralisDappProvider";
 import { useMyNFTHands } from "../../hooks/useMyNFTHands";
 import NFTCard from "../NFTCard";
 import "./style.scss";
-import { Pagination } from "antd";
 import { NavLink } from "react-router-dom";
 
 export default function NFTBalance() {
   const { NFTHands } = useMyNFTHands();
   const { chainId } = useMoralisDapp();
 
-  // const [currentItems, setCurrentItems] = useState(null);
-  // const [tokensPerPage, setTokensPerPage] = useState(10);
-  // const [pageNumber, setPageNumber] = useState(1);
-
-  console.log("*********", { NFTHands })
-
   if (!NFTHands.length || !NFTHands) {
-    // return <Spin className="spin_loader" />;
     return (
       <div className="no_nfts-body">
         <p className="title">You don't have any Holdem Heroes NFTs yet.</p>
@@ -45,17 +36,6 @@ export default function NFTBalance() {
           })
         }
       </div>
-
-      {/* <div>
-        <Pagination
-          showQuickJumper
-          showSizeChanger
-          onShowSizeChange={onShowSizeChange}
-          defaultCurrent={1}
-          total={NFTHands.length}
-          onChange={handlePageClick}
-        />
-      </div> */}
     </div>
   );
 }

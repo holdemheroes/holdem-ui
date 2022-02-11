@@ -35,16 +35,6 @@ export default function Sale() {
     },
   );
 
-  // const [now, setNow] = useState(Math.floor(Date.now() / 1000));
-
-  // useEffect(() => {
-  //   const timerId = setInterval(() => {
-  //     setNow(Math.floor(Date.now() / 1000));
-  //   }, 1000);
-
-  //   return () => clearInterval(timerId);
-  // }, [now]);
-
   useEffect(() => {
     if (mintedRes) {
       const m = [];
@@ -66,57 +56,10 @@ export default function Sale() {
   const revealTimeDiff = revealTime - now;
   const startIdx = parseInt(startingIndex, 10);
 
-  console.log({ minted })
-  console.log({ saleStartDiff })
-  console.log({ revealTimeDiff })
-  console.log({ startIdx })
-
-  // const saleHeader = <SaleInfo
-  //   startTime={startTime}
-  //   revealTime={revealTime}
-  //   startingIndex={startingIndex}
-  // />;
-  // let mainContent = null;
-
-  // if (saleStartDiff > 0) {
-  //   mainContent = <>
-  //     <p className="title">NFT Sale</p>
-  //     <p className="desc">Pre-reveal sale not started yet</p>
-  //     {saleHeader}
-  //   </>;
-  // }
-
-  // if (saleStartDiff <= 0 && revealTimeDiff > 0 && startIdx === 0) {
-  //   mainContent = <>
-  //     {
-  //       totalSupply < 1326 ? (
-  //         <PreRevealSale pricePerToken={pricePerToken} mintedTokens={minted} maxCanOwn={maxPerTxOrOwner} balance={NFTHands.length} totalSupply={totalSupply} saleHeader={saleHeader} />
-  //       ) : (
-  //         <>
-  //           <p className="title">Pre-reveal minting sale</p>
-  //           <p className="desc">Sold out!</p>
-  //         </>
-  //       )
-  //     }
-  //   </>;
-  // }
-
-  // if (startIdx === 0) {
-  //   if (!mainContent) {
-  //     mainContent = <>
-  //       <p className="title">NFT Sale</p>
-  //       <p className="desc">pre-reveal sale ended. Waiting for distribution</p>
-  //     </>;
-  //   }
-  // }
-
   const canMint = (NFTHands.length < maxPerTxOrOwner)
 
   return (
     <div className="sales_page-wrapper">
-      {/* {
-        mainContent ? mainContent : <PostRevealSale pricePerToken={pricePerToken} canMint={canMint} maxCanOwn={maxPerTxOrOwner} mintedTokens={minted} />
-      } */}
       {
         saleStartDiff > 0 ? (<>
           <p className="title">NFT Sale</p>

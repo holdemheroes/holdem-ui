@@ -5,7 +5,6 @@ import { openNotification } from "../helpers/notifications";
 import { useMoralisDapp } from "../providers/MoralisDappProvider/MoralisDappProvider";
 import abis from "../helpers/contracts";
 import { getTexasHoldemV1Address } from "../helpers/networks";
-// import { Button } from "antd"
 
 function Withdrawable() {
 

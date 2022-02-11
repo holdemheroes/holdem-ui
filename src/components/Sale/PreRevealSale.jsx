@@ -15,8 +15,6 @@ export default function PreRevealSale({ pricePerToken, mintedTokens, maxCanOwn, 
 
   const MAX_TOTAL_SUPPLY = 1326;
 
-  console.log({ totalSupply })
-
   async function preRevealMint(event) {
     event.preventDefault();
     const formData = new FormData(event.target),
