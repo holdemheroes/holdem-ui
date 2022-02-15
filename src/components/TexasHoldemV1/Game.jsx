@@ -46,6 +46,19 @@ export default function Game({ gameId }) {
   // eslint-disable-next-line
   const [potentialFinalHandScore, setPotentialFinalHandScore] = useState(-1);
 
+  const [checkedNum, setCheckedNum] = useState(0);
+  const [checkStatus, setCheckStatus] = useState([0, 0, 0, 0, 0]);
+
+  const handleOnClick = (e, idx) => {
+    if (e.target.checked) { setCheckedNum(checkedNum + 1); } else { setCheckedNum(checkedNum - 1); }
+
+    let tmp = checkStatus.map((item, index) => {
+      return (idx === index) ? (1 - item) : item;
+    });
+
+    setCheckStatus([...tmp]);
+  }
+
   const handleHandPlayed = async (t) => {
     let cost = gameData.round1Price;
     let functionName = "addNFTFlop";
@@ -159,7 +172,7 @@ export default function Game({ gameId }) {
         console.log(error);
       });
   };
-  
+
   // eslint-disable-next-line
   const handlePotentialFinalHandScore = async () => {
 
@@ -277,7 +290,7 @@ export default function Game({ gameId }) {
                             {
                               lastRoundPlayed !== 6 && <>
                                 <br />
-                                <Checkbox value={String(item)} key={`checkbox_river${item}_${gameId}`} />
+                                <Checkbox value={String(item)} key={`checkbox_river${item}_${gameId}`} onClick={(e) => handleOnClick(e, idx)} disabled={checkedNum === 3 && !checkStatus[idx]} />
                               </>
                             }
                           </>
