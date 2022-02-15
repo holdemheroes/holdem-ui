@@ -100,7 +100,7 @@ export default function NFT({ tokenId, canMint, mintedTokens, pricePerToken }) {
   if (nftOwner === "no") {
     if (canMint) {
       block = <Tooltip title={`Mint NFT #${tokenId}`}>
-        <p onClick={(e) => { e.preventDefault(); postRevealMint(tokenId); }}>Mint</p>
+        <a href={"/"} onClick={(e) => { e.preventDefault(); postRevealMint(tokenId); }}>Mint</a>
       </Tooltip>;
     } else {
       block = <p>Mint limit reached. Wait for open market</p>;
