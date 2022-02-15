@@ -13,21 +13,30 @@ import Withdrawable from "./components/Withdrawable";
 import RefundableGames from "./components/TexasHoldemV1/RefundableGames";
 import { History } from "./components/TexasHoldemV1/History/History";
 import Home from "./pages/Home";
+import HomeL2 from "./pages/HomeL2";
 import GamePlay from "./pages/GamePlay";
 import "./App.scss";
 import { useMoralisDapp } from "./providers/MoralisDappProvider/MoralisDappProvider";
 import { getEllipsisTxt } from "./helpers/formatters";
 import Logout from "./components/Logout";
 import { logo } from "./logo";
+import { getChainType } from "./helpers/networks"
 
 const App = () => {
-  const { isWeb3Enabled, enableWeb3, isAuthenticated, isWeb3EnableLoading } = useMoralis();
-  const { walletAddress } = useMoralisDapp();
+  const { isWeb3Enabled, enableWeb3, isAuthenticated, isWeb3EnableLoading, Moralis } = useMoralis();
+  const { walletAddress, chainId } = useMoralisDapp();
+
+  const unsubscribe = Moralis.onChainChanged((chain) => {
+    window.location.reload()
+  });
 
   useEffect(() => {
     if (isAuthenticated && !isWeb3Enabled && !isWeb3EnableLoading) enableWeb3();
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [isAuthenticated, isWeb3Enabled]);
+
+
+  const chainType = getChainType(chainId)
 
   return (
     <Router>
@@ -69,7 +78,8 @@ const App = () => {
       <>
         <Switch>
           <Route exact path="/">
-            <Home />
+            { chainType === "l1" && <Home /> }
+            { chainType === "l2" && <HomeL2 /> }
           </Route>
           {
             isAuthenticated && <>

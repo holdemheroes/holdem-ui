@@ -3,7 +3,7 @@ import { useMoralis } from "react-moralis";
 import { Spin } from "antd";
 import { useMoralisDapp } from "../../providers/MoralisDappProvider/MoralisDappProvider";
 import abis from "../../helpers/contracts";
-import { getTexasHoldemV1Address } from "../../helpers/networks";
+import { getBakendObjPrefix, getTexasHoldemV1Address } from "../../helpers/networks"
 import Refundable from "./Refundable";
 import "./style.scss";
 
@@ -12,6 +12,7 @@ export default function RefundableGames() {
   const abi = abis.texas_holdem_v1;
   const contractAddress = getTexasHoldemV1Address(chainId);
   const { Moralis, isInitialized } = useMoralis();
+  const backendPrefix = getBakendObjPrefix(chainId);
 
   const [refundableGames, setRefundableGames] = useState(null);
   const [initialDataFetched, setInitialDataFetched] = useState(false);
@@ -36,7 +37,7 @@ export default function RefundableGames() {
         return;
       }
 
-      const THRefundableGame = Moralis.Object.extend("THRefundableGame");
+      const THRefundableGame = Moralis.Object.extend(`${backendPrefix}THRefundableGame`);
       const query = new Moralis.Query(THRefundableGame)
       query.descending("gameId");
       query.limit(100);

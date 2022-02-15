@@ -1,7 +1,7 @@
 import { useMoralisDapp } from "../providers/MoralisDappProvider/MoralisDappProvider";
 import { useMoralis, useMoralisSubscription } from "react-moralis";
 import abis from "../helpers/contracts";
-import { getTexasHoldemV1Address } from "../helpers/networks";
+import { getBakendObjPrefix, getTexasHoldemV1Address } from "../helpers/networks"
 import { useEffect, useState } from "react";
 import { openNotification } from "../helpers/notifications";
 import { getDealRequestedText, sortFinalHand } from "../helpers/formatters";
@@ -11,6 +11,7 @@ import { useMyNFTHands } from "./useMyNFTHands";
 export const useGameData = (gameId) => {
   const { chainId, walletAddress } = useMoralisDapp();
   const { Moralis } = useMoralis();
+  const backendPrefix = getBakendObjPrefix(chainId);
 
   const { NFTHands } = useMyNFTHands();
 
@@ -452,7 +453,7 @@ export const useGameData = (gameId) => {
   function fetchHandsPlayed() {
     setHandsPlayedLoading(true);
     // get any hands already played
-    const THHandAdded = Moralis.Object.extend("THHandAdded");
+    const THHandAdded = Moralis.Object.extend(`${backendPrefix}THHandAdded`);
     const queryTHHandAdded = new Moralis.Query(THHandAdded);
     queryTHHandAdded.equalTo("gameId", String(gameId));
     queryTHHandAdded.equalTo("player", walletAddress);
@@ -463,7 +464,7 @@ export const useGameData = (gameId) => {
 
   function fetchFeesPaid() {
     setFeesPaidLoading(true);
-    const THFeePaid = Moralis.Object.extend("THFeePaid");
+    const THFeePaid = Moralis.Object.extend(`${backendPrefix}THFeePaid`);
     const queryTHFeePaid = new Moralis.Query(THFeePaid);
     queryTHFeePaid.equalTo("gameId", String(gameId));
     queryTHFeePaid.find()
@@ -473,7 +474,7 @@ export const useGameData = (gameId) => {
 
   function fetchFinalHand() {
     setFinalHandLoading(true);
-    const THFinalHandPlayed = Moralis.Object.extend("THFinalHandPlayed");
+    const THFinalHandPlayed = Moralis.Object.extend(`${backendPrefix}THFinalHandPlayed`);
     const queryTHFinalHandPlayed = new Moralis.Query(THFinalHandPlayed);
     queryTHFinalHandPlayed.equalTo("gameId", String(gameId));
     queryTHFinalHandPlayed.find()
@@ -625,7 +626,7 @@ export const useGameData = (gameId) => {
    */
 
   // subscribe to CardDealRequested - THCardDealRequested
-  useMoralisSubscription("THCardDealRequested",
+  useMoralisSubscription(`${backendPrefix}THCardDealRequested`,
     q => q.equalTo("gameId", String(gameId)),
     [gameId],
     {
@@ -633,7 +634,7 @@ export const useGameData = (gameId) => {
     });
 
   // subscribe to CardDealt events - THCardDealt
-  useMoralisSubscription("THCardDealt",
+  useMoralisSubscription(`${backendPrefix}THCardDealt`,
     q => q.equalTo("gameId", String(gameId)),
     [gameId],
     {
@@ -641,7 +642,7 @@ export const useGameData = (gameId) => {
     });
 
   // subscribe to HandAdded events - THHandAdded
-  useMoralisSubscription("THHandAdded",
+  useMoralisSubscription(`${backendPrefix}THHandAdded`,
     q => q.equalTo("gameId", String(gameId)).equalTo("player", walletAddress),
     [gameId, walletAddress],
     {
@@ -649,7 +650,7 @@ export const useGameData = (gameId) => {
     });
 
   // subscribe to FeePaid events - THFeePaid
-  useMoralisSubscription("THFeePaid",
+  useMoralisSubscription(`${backendPrefix}THFeePaid`,
     q => q.equalTo("gameId", String(gameId)),
     [gameId],
     {
@@ -657,7 +658,7 @@ export const useGameData = (gameId) => {
     });
 
   // subscribe to FinalHandPlayed events - THFinalHandPlayed
-  useMoralisSubscription("THFinalHandPlayed",
+  useMoralisSubscription(`${backendPrefix}THFinalHandPlayed`,
     q => q.equalTo("gameId", String(gameId)).equalTo("player", walletAddress),
     [gameId, walletAddress],
     {

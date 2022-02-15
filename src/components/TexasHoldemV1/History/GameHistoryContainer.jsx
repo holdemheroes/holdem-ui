@@ -3,10 +3,14 @@ import { useEffect, useState } from "react";
 import { Spin } from "antd";
 import { GameHistoryCompleted } from "./GameHistoryCompleted";
 import { GameHistoryRefunded } from "./GameHistoryRefunded";
+import { useMoralisDapp } from "../../../providers/MoralisDappProvider/MoralisDappProvider"
+import { getBakendObjPrefix } from "../../../helpers/networks"
 
 export const GameHistoryContainer = ({ gameId, gamesInProgress }) => {
 
   const { Moralis } = useMoralis();
+  const { chainId } = useMoralisDapp();
+  const backendPrefix = getBakendObjPrefix(chainId);
 
   const [gameStartedData, setGameStartedData] = useState(null);
   const [gameEndedData, setGameEndedData] = useState(null);
@@ -23,7 +27,7 @@ export const GameHistoryContainer = ({ gameId, gamesInProgress }) => {
   function fetchGameIsFinished() {
     setGameIsFinishedLoading(true);
     // get any hands already played
-    const THWinningsCalculated = Moralis.Object.extend("THWinningsCalculated");
+    const THWinningsCalculated = Moralis.Object.extend(`${backendPrefix}THWinningsCalculated`);
     const queryTHWinningsCalculated = new Moralis.Query(THWinningsCalculated);
     queryTHWinningsCalculated
       .equalTo("gameId", String(gameId));
@@ -47,7 +51,7 @@ export const GameHistoryContainer = ({ gameId, gamesInProgress }) => {
   function fetchGameIsRefunded() {
     setGameIsRefundedLoading(true);
     // get any hands already played
-    const THRefundableGame = Moralis.Object.extend("THRefundableGame");
+    const THRefundableGame = Moralis.Object.extend(`${backendPrefix}THRefundableGame`);
     const queryTHRefundableGame = new Moralis.Query(THRefundableGame);
     queryTHRefundableGame
       .equalTo("gameId", String(gameId));
@@ -70,7 +74,7 @@ export const GameHistoryContainer = ({ gameId, gamesInProgress }) => {
 
   useState(() => {
     async function getGameStartedData() {
-      const THGameStarted = Moralis.Object.extend("THGameStarted");
+      const THGameStarted = Moralis.Object.extend(`${backendPrefix}THGameStarted`);
       const query = new Moralis.Query(THGameStarted);
       query
         .equalTo("gameId", String(gameId));

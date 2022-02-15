@@ -5,12 +5,13 @@ import { Spin, Table } from "antd";
 import { PlayingCard } from "../PlayingCards/PlayingCard";
 import { getEllipsisTxt, sortFinalHand } from "../../helpers/formatters";
 import { RankName } from "./RankName";
-import { getExplorer } from "../../helpers/networks";
+import { getBakendObjPrefix, getExplorer } from "../../helpers/networks"
 
 export const Leaderboard = ({ gameId, showWinnings = false }) => {
   const { walletAddress } = useMoralisDapp();
   const { Moralis } = useMoralis();
   const { chainId } = useMoralisDapp();
+  const backendPrefix = getBakendObjPrefix(chainId);
 
   const [leaderboard, setLeaderboard] = useState([]);
   const [leaderboardTableData, setLeaderboardTableData] = useState([]);
@@ -94,7 +95,7 @@ export const Leaderboard = ({ gameId, showWinnings = false }) => {
 
   useEffect(() => {
     async function getLeaderboard() {
-      const THFinalHandPlayed = Moralis.Object.extend("THFinalHandPlayed");
+      const THFinalHandPlayed = Moralis.Object.extend(`${backendPrefix}THFinalHandPlayed`);
       const queryTHFinalHandPlayed = new Moralis.Query(THFinalHandPlayed);
       queryTHFinalHandPlayed
         .equalTo("gameId", String(gameId));
@@ -130,7 +131,7 @@ export const Leaderboard = ({ gameId, showWinnings = false }) => {
 
   useEffect(() => {
     async function getWinnings() {
-      const THWinningsCalculated = Moralis.Object.extend("THWinningsCalculated");
+      const THWinningsCalculated = Moralis.Object.extend(`${backendPrefix}THWinningsCalculated`);
       const queryTHWinningsCalculated = new Moralis.Query(THWinningsCalculated);
       queryTHWinningsCalculated
         .equalTo("gameId", String(gameId));
@@ -248,7 +249,7 @@ export const Leaderboard = ({ gameId, showWinnings = false }) => {
   }, [leaderboard, winnings, leaderboardInitialised, winningsInitialised]);
 
   // subscribe to FinalHandPlayed events - THFinalHandPlayed
-  useMoralisSubscription("THFinalHandPlayed",
+  useMoralisSubscription(`${backendPrefix}THFinalHandPlayed`,
     q => q.equalTo("gameId", String(gameId)),
     [gameId, walletAddress],
     {

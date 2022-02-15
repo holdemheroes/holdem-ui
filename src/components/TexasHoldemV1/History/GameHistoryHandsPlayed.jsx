@@ -5,13 +5,14 @@ import { Spin, Table } from "antd";
 import { PlayingCard } from "../../PlayingCards/PlayingCard";
 import BN from "bn.js";
 import Moment from "react-moment";
-import { getExplorer } from "../../../helpers/networks";
+import { getBakendObjPrefix, getExplorer } from "../../../helpers/networks"
 import { useMoralisDapp } from "../../../providers/MoralisDappProvider/MoralisDappProvider";
 
 export const GameHistoryHandsPlayed = ({ gameId, round1Price, round2Price, finished = false }) => {
 
   const { Moralis } = useMoralis();
   const { chainId } = useMoralisDapp();
+  const backendPrefix = getBakendObjPrefix(chainId);
 
   const [totalFeesPaidFlop, setTotalFeesPaidFlop] = useState("0");
   const [totalFeesPaidTurn, setTotalFeesPaidTurn] = useState("0");
@@ -59,7 +60,7 @@ export const GameHistoryHandsPlayed = ({ gameId, round1Price, round2Price, finis
   ];
 
   const fetchHandsPlayedInRound = async (round) => {
-    const THHandAdded = Moralis.Object.extend("THHandAdded");
+    const THHandAdded = Moralis.Object.extend(`${backendPrefix}THHandAdded`);
     const queryTHHandAdded = new Moralis.Query(THHandAdded);
     queryTHHandAdded
       .equalTo("gameId", String(gameId))
@@ -146,7 +147,7 @@ export const GameHistoryHandsPlayed = ({ gameId, round1Price, round2Price, finis
   useEffect(() => {
 
     async function getTotalWinnings() {
-      const THWinningsCalculated = Moralis.Object.extend("THWinningsCalculated");
+      const THWinningsCalculated = Moralis.Object.extend(`${backendPrefix}THWinningsCalculated`);
       const query = new Moralis.Query(THWinningsCalculated);
       query
         .equalTo("gameId", String(gameId));

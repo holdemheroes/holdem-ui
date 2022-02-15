@@ -2,7 +2,7 @@ import { useMoralis } from "react-moralis";
 import React, { useEffect, useState } from "react";
 import { Spin, Table } from "antd";
 import BN from "bn.js";
-import { getExplorer } from "../../../helpers/networks";
+import { getBakendObjPrefix, getExplorer } from "../../../helpers/networks"
 import { getEllipsisTxt } from "../../../helpers/formatters";
 import Moment from "react-moment";
 import { useMoralisDapp } from "../../../providers/MoralisDappProvider/MoralisDappProvider";
@@ -11,6 +11,7 @@ export const GameHistoryProcessedRefunds = ({ gameId }) => {
 
   const { Moralis } = useMoralis();
   const { chainId } = useMoralisDapp();
+  const backendPrefix = getBakendObjPrefix(chainId);
 
   const [gameRefundsData, setGameRefundsData] = useState(null);
   const [gameRefundsDataInitialised, setGameRefundsDataInitialised] = useState(false);
@@ -46,7 +47,7 @@ export const GameHistoryProcessedRefunds = ({ gameId }) => {
   useEffect(() => {
 
     async function getRefundData() {
-      const THRefunded = Moralis.Object.extend("THRefunded");
+      const THRefunded = Moralis.Object.extend(`${backendPrefix}THRefunded`);
       const query = new Moralis.Query(THRefunded);
       query
         .equalTo("gameId", String(gameId))

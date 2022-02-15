@@ -6,20 +6,14 @@ import "./style.scss";
 
 const menuItems = [
   {
-    key: "0x1",
-    value: "Ethereum",
-    icon: <ETHLogo size="S" />,
-    iconL: <ETHLogo size="L" />,
-  },
-  {
     key: "0x4",
     value: "Rinkeby",
     icon: <ETHLogo size="S" />,
     iconL: <ETHLogo size="L" />,
   },
   {
-    key: "0x###",
-    value: "Polygon",
+    key: "0x13881",
+    value: "Polygon Mumbai",
     icon: <PolygonLogo />,
     iconL: <PolygonLogo />,
   },
