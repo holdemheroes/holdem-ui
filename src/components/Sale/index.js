@@ -7,6 +7,8 @@ import PostRevealSale from "./PostRevealSale";
 import { useNFTSaleInfo } from "../../hooks/useNFTSaleInfo";
 import { useMyNFTHands } from "../../hooks/useMyNFTHands";
 import "./style.scss";
+import { getBakendObjPrefix } from "../../helpers/networks"
+import { useMoralisDapp } from "../../providers/MoralisDappProvider/MoralisDappProvider"
 
 export default function Sale() {
   const {
@@ -23,8 +25,12 @@ export default function Sale() {
 
   const { NFTHands, isLoading: nftBalanceIsLoading } = useMyNFTHands();
 
+
+  const { chainId } = useMoralisDapp();
+  const backendPrefix = getBakendObjPrefix(chainId);
+
   const { data: mintedRes } = useMoralisQuery(
-    "HEHTransfer",
+    `${backendPrefix}HEHTransfer`,
     query =>
       query
         .equalTo("from", "0x0000000000000000000000000000000000000000")
