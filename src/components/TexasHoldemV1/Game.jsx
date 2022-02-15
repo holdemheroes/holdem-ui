@@ -332,7 +332,7 @@ export default function Game({ gameId }) {
               gameHasEnded &&
               <div className="leaderboard-wrapper">
                 <p className="title">Leaderboard</p>
-                <Leaderboard gameId={gameId} showWinnings={true} key={`leaderboard_game_${gameId}`} />
+                <Leaderboard gameId={gameId} showWinnings={false} key={`leaderboard_game_${gameId}`} />
                 <p className="desc">Distribute Winnings to all players on the Leaderboard.</p>
                 <Button className="distribute_btn" onClick={() => handleEndGame()}>
                   Distribute Pot
