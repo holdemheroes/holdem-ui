@@ -1,13 +1,14 @@
 import { useEffect, useState } from "react";
 import { useMoralis, useMoralisSubscription } from "react-moralis";
 import { useMoralisDapp } from "../providers/MoralisDappProvider/MoralisDappProvider";
-import { getTexasHoldemV1Address } from "../helpers/networks";
+import { getBakendObjPrefix, getTexasHoldemV1Address } from "../helpers/networks"
 import abis from "../helpers/contracts";
 import { openNotification } from "../helpers/notifications";
 
 export const useGetUserWithdrawable = () => {
   const { Moralis, isWeb3Enabled } = useMoralis();
   const { chainId, walletAddress } = useMoralisDapp();
+  const backendPrefix = getBakendObjPrefix(chainId);
 
   const [balance, setBalance] = useState(null);
   const [balanceLoading, setBalanceLoading] = useState(false);
@@ -75,7 +76,7 @@ export const useGetUserWithdrawable = () => {
     };
   });
 
-  useMoralisSubscription("THRefunded",
+  useMoralisSubscription(`${backendPrefix}THRefunded`,
     q => q.equalTo("player", walletAddress),
     [walletAddress],
     {
@@ -89,7 +90,7 @@ export const useGetUserWithdrawable = () => {
       },
     });
 
-  useMoralisSubscription("THWinningsCalculated",
+  useMoralisSubscription(`${backendPrefix}THWinningsCalculated`,
     q => q,
     [],
     {
@@ -98,7 +99,7 @@ export const useGetUserWithdrawable = () => {
       },
     });
 
-  useMoralisSubscription("THWithdrawal",
+  useMoralisSubscription(`${backendPrefix}THWithdrawal`,
     q => q.equalTo("player", walletAddress),
     [walletAddress],
     {

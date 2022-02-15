@@ -2,12 +2,13 @@ import { useEffect, useState } from "react";
 import { useMoralis, useMoralisSubscription } from "react-moralis";
 import { useMoralisDapp } from "../providers/MoralisDappProvider/MoralisDappProvider";
 import abis from "../helpers/contracts";
-import { getTexasHoldemV1Address } from "../helpers/networks";
+import { getBakendObjPrefix, getTexasHoldemV1Address } from "../helpers/networks"
 import { openNotification } from "../helpers/notifications";
 
 export const useGameMetadata = () => {
   const { chainId } = useMoralisDapp();
   const { Moralis } = useMoralis();
+  const backendPrefix = getBakendObjPrefix(chainId);
 
   const abi = abis.texas_holdem_v1;
   const contractAddress = getTexasHoldemV1Address(chainId);
@@ -138,11 +139,11 @@ export const useGameMetadata = () => {
   })
 
   // set up subs after initial game data fetched
-  useMoralisSubscription("THGameStarted", q => q, [], {
+  useMoralisSubscription(`${backendPrefix}THGameStarted`, q => q, [], {
     onCreate: data => handleGameCreated(data),
   });
 
-  useMoralisSubscription("THGameDeleted", q => q, [], {
+  useMoralisSubscription(`${backendPrefix}THGameDeleted`, q => q, [], {
     onCreate: data => handleGameDeleted(data),
   });
 
