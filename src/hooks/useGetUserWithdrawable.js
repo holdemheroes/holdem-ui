@@ -64,7 +64,7 @@ export const useGetUserWithdrawable = () => {
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [refetch]);
 
-  // // refresh withdrawable every 2nd block
+  // refresh withdrawable every 2nd block
   useEffect(() => {
     const timeout = setTimeout(() => {
       fetchOnChainWithdrawable();

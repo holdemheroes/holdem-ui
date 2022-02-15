@@ -170,7 +170,6 @@ export const useGameData = (gameId) => {
     const round = parseInt(data.attributes.turnRequested, 10);
     setGameData({ ...gameData, status: round });
 
-    // setPlayableHands([]);
     processPlayableHands();
 
     setRefetchGameData(true);
@@ -325,7 +324,6 @@ export const useGameData = (gameId) => {
       }
     };
     if (results.length > 0) {
-      // console.log("got hands played")
       for (let i = 0; i < results.length; i++) {
         const res = results[i];
         const round = parseInt(res.get("round"), 10);
@@ -440,7 +438,6 @@ export const useGameData = (gameId) => {
 
   function fetchOnChainGameData() {
     // get game data from contract
-    // console.log("fetchOnChainGameData", gameId)
     Moralis.executeFunction({
       functionName: "games",
       params: {
@@ -453,7 +450,6 @@ export const useGameData = (gameId) => {
   }
 
   function fetchHandsPlayed() {
-    // console.log(`fetchHandsPlayed ${walletAddress} ${gameId}`)
     setHandsPlayedLoading(true);
     // get any hands already played
     const THHandAdded = Moralis.Object.extend("THHandAdded");
@@ -489,7 +485,6 @@ export const useGameData = (gameId) => {
   // get the initial data - wait a second between each attempt while status is "NOT EXIST"
   // runs when first loaded until game status is > 0
   useEffect(() => {
-    // console.log(`get initial game data, status === 0 ${gameId}`)
     let timeout
     if (!gameData || gameData?.status === 0) {
       timeout = setTimeout(() => {
@@ -506,7 +501,6 @@ export const useGameData = (gameId) => {
   // fetch initial cards dealt from chain
   // runs when first loaded if status is > 1 until cards are populated
   useEffect(() => {
-    // console.log(`get initial cards dealt, status > 1 ${gameId}`)
     // get initial cards dealt
     let timeout;
     if (cardsDealt.length === 0 && gameData?.status > 1) {
@@ -523,7 +517,6 @@ export const useGameData = (gameId) => {
 
   // get any hands already played if status >= 2
   useEffect(() => {
-    // console.log(`check initial hands played ${gameId}`)
     if (gameData?.status >= 2 && !handsPlayedFetched && !handsPlayedLoading) {
       fetchHandsPlayed();
     }
@@ -532,7 +525,6 @@ export const useGameData = (gameId) => {
 
   // get fees paid if status >= 2
   useEffect(() => {
-    // console.log(`check initial fees paid ${gameId}`)
     if (gameData?.status >= 2 && !feesPaidFetched && !feesPaidLoading) {
       fetchFeesPaid();
     }
@@ -541,7 +533,6 @@ export const useGameData = (gameId) => {
 
   // fetch final hand if status == 6
   useEffect(() => {
-    // console.log(`check initial final hand ${gameId}`)
     if (gameData?.status === 6 && !finalHandFetched && !finalHandLoading) {
       fetchFinalHand();
     }
@@ -550,7 +541,6 @@ export const useGameData = (gameId) => {
 
   // monitor changes to wallet address
   useEffect(() => {
-    // console.log(`wallet address changed ${gameId}`)
     fetchHandsPlayed();
     fetchFeesPaid();
     fetchFinalHand();
@@ -560,7 +550,6 @@ export const useGameData = (gameId) => {
 
   // refresh gameData every block while game in progress
   useEffect(() => {
-    // console.log(`refresh game data every block ${gameId}`)
     let timeout;
     if (gameData?.status > 0 && !gameHasEnded) {
       timeout = setTimeout(() => {
@@ -577,7 +566,6 @@ export const useGameData = (gameId) => {
   // check game ended every second if status == 6
   // and game hasn't been flagged as ended yet
   useEffect(() => {
-    // console.log(`check game ended ${gameId}`)
     let timeout;
     if (gameData?.status === 6 && !gameHasEnded) {
       timeout = setTimeout(() => {
@@ -605,7 +593,6 @@ export const useGameData = (gameId) => {
 
     if (gameData?.status === 1 || gameData?.status === 3 || gameData?.status === 5) {
       timeout = setTimeout(() => {
-        // setPlayableHands([]);
         processPlayableHands();
       }, 1000);
     }

@@ -69,9 +69,6 @@ const App = () => {
       <>
         <Switch>
           <Route exact path="/">
-            <Redirect to="/Home" />
-          </Route>
-          <Route path="/Home">
             <Home />
           </Route>
           {
@@ -97,7 +94,7 @@ const App = () => {
             </>
           }
           {
-            !isAuthenticated && <Redirect to="/Home" />
+            !isAuthenticated && <Redirect to="/" />
           }
         </Switch>
       </>
@@ -106,7 +103,7 @@ const App = () => {
 };
 
 export const Logo = () => (
-  <NavLink to="/Home">{logo()}</NavLink>
+  <NavLink to="/">{logo()}</NavLink>
 );
 
 export default App;

@@ -1,10 +1,10 @@
-import React, { useState, useEffect } from "react";
+import React from "react";
 import { NavLink } from "react-router-dom";
 import "./style.scss";
 import AnimateButton from "../../components/AnimateButton";
+import Timeline from "../../components/Timeline";
 import { useNFTSaleInfo } from "../../hooks/useNFTSaleInfo";
 import Countdown from 'react-countdown';
-import { Spin } from "antd";
 import { useMoralisDapp } from "../../providers/MoralisDappProvider/MoralisDappProvider";
 import { useMoralis } from "react-moralis";
 import abis from "../../helpers/contracts";
@@ -15,43 +15,27 @@ const BN = require('bn.js');
 
 export default function Home() {
   const {
-    startTime,
+    // startTime,
     revealTime,
-    startingIndex,
-    maxPerTxOrOwner,
+    // startingIndex,
+    // maxPerTxOrOwner,
     pricePerToken,
     totalSupply,
-    dataInitialised
+    // dataInitialised
   } = useNFTSaleInfo();
-
-  // const [now, setNow] = useState(Math.floor(Date.now() / 1000));
-
-  // useEffect(() => {
-  //   const timerId = setInterval(() => {
-  //     setNow(Math.floor(Date.now() / 1000));
-  //   }, 1000);
-
-  //   return () => clearInterval(timerId);
-  // }, [now]);
 
   const now = Math.floor(Date.now() / 1000);
 
-  const saleStartDiff = startTime - now;
+  // const saleStartDiff = startTime - now;
   const revealTimeDiff = revealTime - now;
-  const startIdx = parseInt(startingIndex, 10);
-
-  console.log("----", { saleStartDiff })
-  console.log("----", { revealTimeDiff })
-  console.log("----", { startIdx })
+  // const startIdx = parseInt(startingIndex, 10);
 
   const { chainId } = useMoralisDapp();
   const { Moralis } = useMoralis();
   const abi = abis.heh_nft;
   const contractAddress = getHoldemHeroesAddress(chainId);
 
-  const MAX_TOTAL_SUPPLY = 1326;
-
-  console.log({ totalSupply })
+  // const MAX_TOTAL_SUPPLY = 1326;
 
   async function preRevealMint(event) {
     event.preventDefault();
@@ -155,6 +139,10 @@ export default function Home() {
             {revealTimeDiff > 0 ? <><p>NFT Distribution and Reveal in</p><Countdown date={revealTime * 1000} renderer={renderer} /></> : null}
           </div>
         </div>
+
+        <div style={{ marginTop: "160px" }}>
+          <Timeline />
+        </div>
       </div>
 
       <div className="section--game_play">
@@ -170,7 +158,7 @@ export default function Home() {
               By owning an NFT, you hold these Hole Cards and can play poker games with them.
             </p>
             <p>
-              Games take place on the Ethereum blockchain, can start at any time, and include up to 1326 players.
+              Games take place on both the Ethereum and Polygon blockchains, can start at any time, and include up to 1326 players.
             </p>
             <p>
               You can choose your game duration, bet size, and play multiple games in parallel.</p>

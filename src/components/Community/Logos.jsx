@@ -23,5 +23,5 @@ export const DocumentationLogo = () => (
 );
 
 export const MediumLogo = () => (
-  <img src="assets/images/mediumlogo.png" width={"20px"} height={"20px"} />
+  <img src="assets/images/mediumlogo.png" alt="Medium logo" width={"20px"} height={"20px"} />
 )

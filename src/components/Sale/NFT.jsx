@@ -4,7 +4,6 @@ import { useMoralisDapp } from "../../providers/MoralisDappProvider/MoralisDappP
 import abis from "../../helpers/contracts";
 import { getHoldemHeroesAddress, getOpenSeaUrl } from "../../helpers/networks";
 import { Card, Image, Tooltip } from "antd";
-import { ShoppingCartOutlined } from "@ant-design/icons";
 import NFTMeta from "../NFTMeta/NFTMeta";
 import { decodeNftUriToJson } from "../../helpers/nft";
 import { openNotification } from "helpers/notifications";
@@ -55,7 +54,6 @@ export default function NFT({ tokenId, canMint, mintedTokens, pricePerToken }) {
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [mintedTokens, tokenId, nftOwner]);
 
-
   if (!nftData || !nftOwner) {
     return (<>token {tokenId}</>);
   }
@@ -102,7 +100,7 @@ export default function NFT({ tokenId, canMint, mintedTokens, pricePerToken }) {
   if (nftOwner === "no") {
     if (canMint) {
       block = <Tooltip title={`Mint NFT #${tokenId}`}>
-        <a onClick={(e) => { e.preventDefault(); postRevealMint(tokenId); }}>Mint</a>
+        <p onClick={(e) => { e.preventDefault(); postRevealMint(tokenId); }}>Mint</p>
       </Tooltip>;
     } else {
       block = <p>Mint limit reached. Wait for open market</p>;
