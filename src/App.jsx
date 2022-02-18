@@ -78,8 +78,8 @@ const App = () => {
       <>
         <Switch>
           <Route exact path="/">
-            { chainType === "l1" && <Home /> }
-            { chainType === "l2" && <HomeL2 /> }
+            {chainType === "l1" && <Home />}
+            {chainType === "l2" && <HomeL2 />}
           </Route>
           {
             isAuthenticated && <>

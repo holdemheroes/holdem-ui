@@ -125,13 +125,13 @@ export default function Home() {
                       <option value="3">6</option>
                       <option value="3">7</option>
                     </select>
-                    <p>Ξ {Moralis.Units.FromWei(pricePerToken)}</p>
+                    <p>Ξ {Moralis.Units.FromWei(pricePerToken !== null ? pricePerToken : "0")}</p>
                   </div>
                   <p>* Max 7 NFTs per address</p>
                   <input className="btn-shadow btn-hover-pointer" type="submit" value="Mint" />
                 </form>
               </div>
-              <p>Total NFTs minted: {totalSupply}/1326</p>
+              <p>{`Total NFTs minted: ${totalSupply !== null ? totalSupply : ''}/1326`}</p>
             </div>
           </div>
           <div>
