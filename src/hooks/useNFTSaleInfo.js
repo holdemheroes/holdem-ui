@@ -7,8 +7,12 @@ import { getHoldemHeroesAddress } from "../helpers/networks";
 export const useNFTSaleInfo = () => {
   const { isInitialized } = useMoralis();
   const { chainId } = useMoralisDapp();
-  const abi = abis.heh_nft;
+
+  const getPriceFunc = (parseInt(process.env.REACT_APP_HEH_VERSION, 10) === 1) ? "NFT_MINT_PRICE" : "getNftPrice"
+  const abi = (parseInt(process.env.REACT_APP_HEH_VERSION, 10) === 1) ? abis.heh_old : abis.heh_nft;
   const contractAddress = getHoldemHeroesAddress(chainId);
+
+  console.log("getPriceFunc", getPriceFunc)
 
   const [fetched, setFetched] = useState(false);
   const [dataInitialised, setDataInitialised] = useState(false);
@@ -54,7 +58,7 @@ export const useNFTSaleInfo = () => {
     fetch: pricePerTokenFetch,
   } = useWeb3ExecuteFunction({
     ...options,
-    functionName: "getNftPrice",
+    functionName: getPriceFunc,
   });
 
   const {
