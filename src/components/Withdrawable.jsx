@@ -44,7 +44,7 @@ function Withdrawable() {
       <button onClick={() => handleWithdraw()}
         className="btn-withdrawable btn-shadow btn-hover-pointer">
         Withdraw {`${n4.format(
-          Moralis.Units.FromWei(balance, 18)
+          Moralis.Units.FromWei(balance === null ? "0" : balance, 18)
         )} ETH`}</button>
     </>
   );
