@@ -1,6 +1,5 @@
 import React, { useState, useEffect } from "react";
 import { useMoralis } from "react-moralis";
-import { useMoralisDapp } from "../../providers/MoralisDappProvider/MoralisDappProvider";
 import abis from "../../helpers/contracts";
 import { getHoldemHeroesAddress, getOpenSeaUrl } from "../../helpers/networks";
 import { Card, Image, Tooltip } from "antd";
@@ -9,11 +8,10 @@ import { decodeNftUriToJson } from "../../helpers/nft";
 import { openNotification } from "helpers/notifications";
 
 export default function NFT({ tokenId, canMint, mintedTokens, pricePerToken }) {
-  const { Moralis } = useMoralis();
+  const { Moralis, chainId } = useMoralis();
   const [nftData, setNftData] = useState(null);
   const [nftOwner, setNftOwner] = useState(null);
   const [setError] = useState(null);
-  const { chainId } = useMoralisDapp();
   const abi = abis.heh_nft;
   const contractAddress = getHoldemHeroesAddress(chainId);
 
@@ -71,29 +69,22 @@ export default function NFT({ tokenId, canMint, mintedTokens, pricePerToken }) {
       },
     };
 
-    const tx = await Moralis.executeFunction({ awaitReceipt: false, ...options });
-    tx.on("transactionHash", (hash) => {
+    try {
+      const tx = await Moralis.executeFunction({ awaitReceipt: false, ...options });
       openNotification({
         message: "🔊 New Transaction",
-        description: `📃 Tx Hash: ${hash}`,
+        description: `📃 Tx Hash: ${tx.hash}`,
         type: "success"
       });
-    })
-      .on("receipt", (receipt) => {
-        openNotification({
-          message: "🔊 New Receipt",
-          description: `📃 Receipt: ${receipt.transactionHash}`,
-          type: "success"
-        });
-      })
-      .on("error", (error) => {
-        openNotification({
-          message: "🔊 Error",
-          description: `📃 Receipt: ${error.toString()}`,
-          type: "error"
-        });
-        console.log(error);
+    } catch(e) {
+      openNotification({
+        message: "🔊 Error",
+        description: `📃 ${e.message}`,
+        type: "error"
       });
+      console.log(e);
+    }
+
   }
 
   let block = null;

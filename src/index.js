@@ -3,7 +3,6 @@ import ReactDOM from "react-dom";
 import App from "./App";
 import { MoralisProvider } from "react-moralis";
 import "./index.scss";
-import { MoralisDappProvider } from "./providers/MoralisDappProvider/MoralisDappProvider";
 
 const APP_ID = process.env.REACT_APP_MORALIS_APPLICATION_ID || null;
 const SERVER_URL = process.env.REACT_APP_MORALIS_SERVER_URL || null;
@@ -12,9 +11,7 @@ const Application = () => {
   if (APP_ID && SERVER_URL)
     return (
       <MoralisProvider appId={APP_ID} serverUrl={SERVER_URL}>
-        <MoralisDappProvider>
-          <App />
-        </MoralisDappProvider>
+        <App />
       </MoralisProvider>
     );
   else

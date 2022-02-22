@@ -5,12 +5,10 @@ import BN from "bn.js";
 import { getBakendObjPrefix, getExplorer } from "../../../helpers/networks"
 import { getEllipsisTxt } from "../../../helpers/formatters";
 import Moment from "react-moment";
-import { useMoralisDapp } from "../../../providers/MoralisDappProvider/MoralisDappProvider";
 
 export const GameHistoryProcessedRefunds = ({ gameId }) => {
 
-  const { Moralis } = useMoralis();
-  const { chainId } = useMoralisDapp();
+  const { Moralis, chainId } = useMoralis();
   const backendPrefix = getBakendObjPrefix(chainId);
 
   const [gameRefundsData, setGameRefundsData] = useState(null);

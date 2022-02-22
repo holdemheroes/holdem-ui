@@ -6,12 +6,10 @@ import { PlayingCard } from "../../PlayingCards/PlayingCard";
 import BN from "bn.js";
 import Moment from "react-moment";
 import { getBakendObjPrefix, getExplorer } from "../../../helpers/networks"
-import { useMoralisDapp } from "../../../providers/MoralisDappProvider/MoralisDappProvider";
 
 export const GameHistoryHandsPlayed = ({ gameId, round1Price, round2Price, finished = false }) => {
 
-  const { Moralis } = useMoralis();
-  const { chainId } = useMoralisDapp();
+  const { Moralis, chainId } = useMoralis();
   const backendPrefix = getBakendObjPrefix(chainId);
 
   const [totalFeesPaidFlop, setTotalFeesPaidFlop] = useState("0");

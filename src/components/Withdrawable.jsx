@@ -2,14 +2,12 @@ import { useMoralis } from "react-moralis";
 import { useGetUserWithdrawable } from "../hooks/useGetUserWithdrawable";
 import { n4 } from "../helpers/formatters";
 import { openNotification } from "../helpers/notifications";
-import { useMoralisDapp } from "../providers/MoralisDappProvider/MoralisDappProvider";
 import abis from "../helpers/contracts";
 import { getTexasHoldemV1Address } from "../helpers/networks";
 
 function Withdrawable() {
 
-  const { chainId } = useMoralisDapp();
-  const { Moralis } = useMoralis();
+  const { Moralis, chainId } = useMoralis();
 
   const { balance } = useGetUserWithdrawable();
 
@@ -26,19 +24,26 @@ function Withdrawable() {
       functionName: "withdrawWinnings",
     };
 
-    const tx = await Moralis.executeFunction({ awaitReceipt: false, ...opts });
-    tx.on("transactionHash", (hash) => {
+    try {
+      const tx = await Moralis.executeFunction({ awaitReceipt: false, ...opts });
       openNotification({
-        message: "🔊 Withdraw requested!",
-        description: `📃 Tx Hash: ${hash}`,
+        message: "🔊 New Transaction",
+        description: `📃 Tx Hash: ${tx.hash}`,
         type: "success"
       });
-    })
-      .on("error", (error) => {
-        console.log(error);
+    } catch(e) {
+      openNotification({
+        message: "🔊 Error",
+        description: `📃 Receipt: ${e.message}`,
+        type: "error"
       });
+      console.log(e);
+    }
   }
 
+  if (!balance) {
+    return <></>
+  }
   return (
     <>
       <button onClick={() => handleWithdraw()}

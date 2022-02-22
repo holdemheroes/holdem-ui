@@ -1,5 +1,4 @@
 import React, { useEffect, useState } from "react";
-import { useMoralisDapp } from "../../providers/MoralisDappProvider/MoralisDappProvider";
 import { useMoralis, useMoralisSubscription } from "react-moralis";
 import { Spin, Table } from "antd";
 import { PlayingCard } from "../PlayingCards/PlayingCard";
@@ -8,9 +7,7 @@ import { RankName } from "./RankName";
 import { getBakendObjPrefix, getExplorer } from "../../helpers/networks"
 
 export const Leaderboard = ({ gameId, showWinnings = false }) => {
-  const { walletAddress } = useMoralisDapp();
-  const { Moralis } = useMoralis();
-  const { chainId } = useMoralisDapp();
+  const { Moralis, chainId, account } = useMoralis();
   const backendPrefix = getBakendObjPrefix(chainId);
 
   const [leaderboard, setLeaderboard] = useState([]);
@@ -200,9 +197,9 @@ export const Leaderboard = ({ gameId, showWinnings = false }) => {
 
         const d = {
           key: i,
-          position: leaderboard[i].player === walletAddress ? <>{i < 2 ? <GoldCup /> : <Cup />}<strong>{i + 1}</strong></> : <>{i < 2 ? <GoldCup /> : <Cup />}{i + 1}</>,
+          position: leaderboard[i].player === account ? <>{i < 2 ? <GoldCup /> : <Cup />}<strong>{i + 1}</strong></> : <>{i < 2 ? <GoldCup /> : <Cup />}{i + 1}</>,
           hand: h,
-          player: leaderboard[i].player === walletAddress ?
+          player: leaderboard[i].player === account ?
             <strong>
               <a
                 href={`${getExplorer(chainId)}/address/${leaderboard[i].player}`}
@@ -217,9 +214,9 @@ export const Leaderboard = ({ gameId, showWinnings = false }) => {
               rel={"noreferrer"}>
               {player}
             </a>,
-          rank: leaderboard[i].player === walletAddress ? <strong>{leaderboard[i].rank}</strong> : leaderboard[i].rank,
-          rank_name: leaderboard[i].player === walletAddress ? <strong>{rankName}</strong> : rankName,
-          tx_hash: leaderboard[i].player === walletAddress ?
+          rank: leaderboard[i].player === account ? <strong>{leaderboard[i].rank}</strong> : leaderboard[i].rank,
+          rank_name: leaderboard[i].player === account ? <strong>{rankName}</strong> : rankName,
+          tx_hash: leaderboard[i].player === account ?
             <strong>
               <a
                 href={`${getExplorer(chainId)}/tx/${leaderboard[i].txHash}`}
@@ -238,7 +235,7 @@ export const Leaderboard = ({ gameId, showWinnings = false }) => {
 
         if (showWinnings) {
           const w = Moralis.Units.FromWei(winnings[leaderboard[i].player], 18);
-          d.winnings = leaderboard[i].player === walletAddress ? <strong>{w} ETH</strong> : <>{w} ETH</>;
+          d.winnings = leaderboard[i].player === account ? <strong>{w} ETH</strong> : <>{w} ETH</>;
         }
 
         data.push(d);
@@ -251,9 +248,9 @@ export const Leaderboard = ({ gameId, showWinnings = false }) => {
   // subscribe to FinalHandPlayed events - THFinalHandPlayed
   useMoralisSubscription(`${backendPrefix}THFinalHandPlayed`,
     q => q.equalTo("gameId", String(gameId)),
-    [gameId, walletAddress],
+    [gameId, account],
     {
-      onCreate: data => handleFinalHandPlayed(data),
+      onEnter: data => handleFinalHandPlayed(data),
     });
 
   if (!leaderboardInitialised || !winningsInitialised) {
