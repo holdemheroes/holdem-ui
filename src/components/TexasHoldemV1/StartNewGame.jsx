@@ -3,12 +3,13 @@ import { useMoralis } from "react-moralis";
 import { Form, Input, Button, Spin } from 'antd';
 import { openNotification } from "../../helpers/notifications";
 import abis from "../../helpers/contracts";
-import { getTexasHoldemV1Address } from "../../helpers/networks";
+import { getCurrencySymbol, getTexasHoldemV1Address } from "../../helpers/networks"
 
 export default function StartNewGame({ gameIdsInProgress, maxConcurrentGames }) {
   const { Moralis, chainId } = useMoralis();
   const abi = abis.texas_holdem_v1;
   const contractAddress = getTexasHoldemV1Address(chainId);
+  const currencySymbol = getCurrencySymbol(chainId)
   const [started, setStarted] = useState(false);
 
   if (!gameIdsInProgress || !maxConcurrentGames) {
@@ -108,7 +109,7 @@ export default function StartNewGame({ gameIdsInProgress, maxConcurrentGames }) 
             name="round_1_price"
             rules={[{ required: true, message: 'Please input flop bet' }]}
           >
-            <Input addonAfter={"ETH Per NFT"} />
+            <Input addonAfter={`${currencySymbol} Per NFT`} />
           </Form.Item>
 
           <Form.Item
@@ -117,7 +118,7 @@ export default function StartNewGame({ gameIdsInProgress, maxConcurrentGames }) 
             name="round_2_price"
             rules={[{ required: true, message: 'Please input turn bet' }]}
           >
-            <Input addonAfter={"ETH Per NFT"} />
+            <Input addonAfter={`${currencySymbol} Per NFT`} />
           </Form.Item>
 
           <Form.Item className="start_btn-wrapper">

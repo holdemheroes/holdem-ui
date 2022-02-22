@@ -3,7 +3,7 @@ import { useGetUserWithdrawable } from "../hooks/useGetUserWithdrawable";
 import { n4 } from "../helpers/formatters";
 import { openNotification } from "../helpers/notifications";
 import abis from "../helpers/contracts";
-import { getTexasHoldemV1Address } from "../helpers/networks";
+import { getCurrencySymbol, getTexasHoldemV1Address } from "../helpers/networks"
 
 function Withdrawable() {
 
@@ -13,6 +13,7 @@ function Withdrawable() {
 
   const abi = abis.texas_holdem_v1;
   const contractAddress = getTexasHoldemV1Address(chainId);
+  const currencySymbol = getCurrencySymbol(chainId)
 
   const options = {
     contractAddress, abi,
@@ -50,7 +51,7 @@ function Withdrawable() {
         className="btn-withdrawable btn-shadow btn-hover-pointer">
         Withdraw {`${n4.format(
           Moralis.Units.FromWei(balance === null ? "0" : balance, 18)
-        )} ETH`}</button>
+        )} ${currencySymbol}`}</button>
     </>
   );
 }
