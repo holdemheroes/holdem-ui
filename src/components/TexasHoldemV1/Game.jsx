@@ -1,7 +1,6 @@
 import React, { useState } from "react";
 import { useMoralis } from "react-moralis";
 import { Button, Checkbox, Form, Radio, Spin } from "antd";
-import { useMoralisDapp } from "../../providers/MoralisDappProvider/MoralisDappProvider";
 import { PlayingCard } from "../PlayingCards/PlayingCard";
 import { Leaderboard } from "./Leaderboard";
 import { Hand } from "./Hand";
@@ -9,15 +8,15 @@ import { GameMetaData } from "./GameMetaData";
 import { useGameData } from "../../hooks/useGameData";
 import abis from "../../helpers/contracts";
 import { openNotification } from "../../helpers/notifications";
-import { getTexasHoldemV1Address } from "../../helpers/networks";
+import { getBakendObjPrefix, getTexasHoldemV1Address } from "../../helpers/networks"
 import { getRoundStatusText } from "../../helpers/formatters";
 
 export default function Game({ gameId }) {
 
   const stageName = ['', 'flop', '', 'turn', '', 'river'];
 
-  const { chainId } = useMoralisDapp();
-  const { Moralis } = useMoralis();
+  const { Moralis, chainId } = useMoralis();
+  const backendPrefix = getBakendObjPrefix(chainId)
 
   const abi = abis.texas_holdem_v1;
   const contractAddress = getTexasHoldemV1Address(chainId);
@@ -37,7 +36,7 @@ export default function Game({ gameId }) {
     numHands,
     numFinalHands,
     finalHand,
-    gameHasEnded } = useGameData(gameId);
+    gameHasEnded } = useGameData(gameId, backendPrefix);
 
   const [potentialFinalRiver, setPotentialFinalRiver] = useState([]);
   const [potentialFinalToken, setPotentialFinalToken] = useState([]);
@@ -76,22 +75,22 @@ export default function Game({ gameId }) {
       },
     };
 
-    const tx = await Moralis.executeFunction({ awaitReceipt: false, ...opts });
-    tx.on("transactionHash", (hash) => {
+    try {
+      const tx = await Moralis.executeFunction({ awaitReceipt: false, ...opts });
       openNotification({
-        message: "🔊 Hand played!",
-        description: `📃 Tx Hash: ${hash}`,
+        message: "🔊 Hand Played",
+        description: `📃 Tx Hash: ${tx.hash}`,
         type: "success"
       });
-    })
-      .on("error", (error) => {
-        openNotification({
-          message: "🔊 Error",
-          description: `📃 Receipt: ${error.toString()}`,
-          type: "error"
-        });
-        console.log(error);
+    } catch(e) {
+      openNotification({
+        message: "🔊 Error",
+        description: `📃 ${e.message}`,
+        type: "error"
       });
+      console.log(e);
+    }
+
   };
 
   const handlePlayFinalHand = async (values) => {
@@ -133,22 +132,21 @@ export default function Game({ gameId }) {
       },
     };
 
-    const tx = await Moralis.executeFunction({ awaitReceipt: false, ...opts });
-    tx.on("transactionHash", (hash) => {
+    try {
+      const tx = await Moralis.executeFunction({ awaitReceipt: false, ...opts });
       openNotification({
-        message: "🔊 Final Hand played!",
-        description: `📃 Tx Hash: ${hash}`,
+        message: "🔊 Final Hand Played",
+        description: `📃 Tx Hash: ${tx.hash}`,
         type: "success"
       });
-    })
-      .on("error", (error) => {
-        openNotification({
-          message: "🔊 Error",
-          description: `📃 Receipt: ${error.toString()}`,
-          type: "error"
-        });
-        console.log(error);
+    } catch(e) {
+      openNotification({
+        message: "🔊 Error",
+        description: `📃 ${e.message}`,
+        type: "error"
       });
+      console.log(e);
+    }
   };
 
   const handleEndGame = async () => {
@@ -160,17 +158,22 @@ export default function Game({ gameId }) {
       },
     };
 
-    const tx = await Moralis.executeFunction({ awaitReceipt: false, ...opts });
-    tx.on("transactionHash", (hash) => {
+    try {
+      const tx = await Moralis.executeFunction({ awaitReceipt: false, ...opts });
       openNotification({
-        message: "🔊 End game requested!",
-        description: `📃 Tx Hash: ${hash}`,
+        message: "🔊 End Game Requested",
+        description: `📃 Tx Hash: ${tx.hash}`,
         type: "success"
       });
-    })
-      .on("error", (error) => {
-        console.log(error);
+    } catch(e) {
+      openNotification({
+        message: "🔊 Error",
+        description: `📃 ${e.message}`,
+        type: "error"
       });
+      console.log(e);
+    }
+
   };
 
   // eslint-disable-next-line

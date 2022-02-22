@@ -5,7 +5,6 @@ import AnimateButton from "../../components/AnimateButton";
 import Timeline from "../../components/Timeline";
 import { useNFTSaleInfo } from "../../hooks/useNFTSaleInfo";
 import Countdown from 'react-countdown';
-import { useMoralisDapp } from "../../providers/MoralisDappProvider/MoralisDappProvider";
 import { useMoralis } from "react-moralis";
 import abis from "../../helpers/contracts";
 import { getHoldemHeroesAddress } from "../../helpers/networks";
@@ -30,8 +29,7 @@ export default function Home() {
   const revealTimeDiff = revealTime - now;
   // const startIdx = parseInt(startingIndex, 10);
 
-  const { chainId } = useMoralisDapp();
-  const { Moralis } = useMoralis();
+  const { Moralis, chainId } = useMoralis();
   const abi = abis.heh_nft;
   const contractAddress = getHoldemHeroesAddress(chainId);
 
@@ -103,6 +101,10 @@ export default function Home() {
       );
     }
   };
+
+  if(!pricePerToken) {
+    return <></>
+  }
 
   return (
     <div className="main-wrapper">

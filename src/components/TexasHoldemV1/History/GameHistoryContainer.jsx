@@ -3,13 +3,11 @@ import { useEffect, useState } from "react";
 import { Spin } from "antd";
 import { GameHistoryCompleted } from "./GameHistoryCompleted";
 import { GameHistoryRefunded } from "./GameHistoryRefunded";
-import { useMoralisDapp } from "../../../providers/MoralisDappProvider/MoralisDappProvider"
 import { getBakendObjPrefix } from "../../../helpers/networks"
 
 export const GameHistoryContainer = ({ gameId, gamesInProgress }) => {
 
-  const { Moralis } = useMoralis();
-  const { chainId } = useMoralisDapp();
+  const { Moralis, chainId } = useMoralis();
   const backendPrefix = getBakendObjPrefix(chainId);
 
   const [gameStartedData, setGameStartedData] = useState(null);

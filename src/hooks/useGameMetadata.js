@@ -1,21 +1,16 @@
 import { useEffect, useState } from "react";
 import { useMoralis, useMoralisSubscription } from "react-moralis";
-import { useMoralisDapp } from "../providers/MoralisDappProvider/MoralisDappProvider";
 import abis from "../helpers/contracts";
-import { getBakendObjPrefix, getTexasHoldemV1Address } from "../helpers/networks"
+import { getTexasHoldemV1Address } from "../helpers/networks"
 import { openNotification } from "../helpers/notifications";
 
-export const useGameMetadata = () => {
-  const { chainId } = useMoralisDapp();
-  const { Moralis } = useMoralis();
-  const backendPrefix = getBakendObjPrefix(chainId);
+export const useGameMetadata = (backendPrefix) => {
+  const { Moralis, chainId } = useMoralis();
 
   const abi = abis.texas_holdem_v1;
-  const contractAddress = getTexasHoldemV1Address(chainId);
 
-  const options = {
-    contractAddress, abi,
-  };
+  const [options, setOptions] = useState(null);
+  const [contractAddress, setContractAddress] = useState(getTexasHoldemV1Address(chainId));
 
   const [maxConcurrentGames, setMaxConcurrentGames] = useState(null);
   const [maxConcurrentGamesLoading, setMaxConcurrentGamesLoading] = useState(false);
@@ -103,29 +98,37 @@ export const useGameMetadata = () => {
       .catch((e) => console.log(e.message));
   }
 
+  useEffect(() => {
+    setContractAddress(getTexasHoldemV1Address(chainId))
+    const opts = {
+      contractAddress, abi,
+    }
+    setOptions(opts)
+  }, [chainId, abi, contractAddress])
+
   //get initial maxConcurrentGames
   useEffect(() => {
-    if (!maxConcurrentGames && !maxConcurrentGamesLoading && !maxConcurrentGamesFetched) {
+    if (!maxConcurrentGames && !maxConcurrentGamesLoading && !maxConcurrentGamesFetched && options) {
       fetchOnChainMaxConcurrentGames();
     }
     // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [maxConcurrentGames, maxConcurrentGamesLoading, maxConcurrentGamesFetched]);
+  }, [maxConcurrentGames, maxConcurrentGamesLoading, maxConcurrentGamesFetched, options]);
 
   //get initial gamesInProgress
   useEffect(() => {
-    if (!gamesInProgressLoading && !gamesInProgressFetched) {
+    if (!gamesInProgressLoading && !gamesInProgressFetched && options) {
       fetchOnChainGamesInProgress();
     }
     // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [gamesInProgressLoading, gamesInProgressFetched]);
+  }, [gamesInProgressLoading, gamesInProgressFetched, options]);
 
   //get initial gamesNumGames
   useEffect(() => {
-    if (!numGamesLoading && !numGamesFetched) {
+    if (!numGamesLoading && !numGamesFetched && options) {
       fetchOnChainNumGames();
     }
     // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [numGamesLoading, numGamesFetched]);
+  }, [numGamesLoading, numGamesFetched, options]);
 
   // refresh games in progress every block
   useEffect(() => {
@@ -140,11 +143,11 @@ export const useGameMetadata = () => {
 
   // set up subs after initial game data fetched
   useMoralisSubscription(`${backendPrefix}THGameStarted`, q => q, [], {
-    onCreate: data => handleGameCreated(data),
+    onEnter: data => handleGameCreated(data),
   });
 
   useMoralisSubscription(`${backendPrefix}THGameDeleted`, q => q, [], {
-    onCreate: data => handleGameDeleted(data),
+    onEnter: data => handleGameDeleted(data),
   });
 
   return { maxConcurrentGames, gamesInProgress, numGames };

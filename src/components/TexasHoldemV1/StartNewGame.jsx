@@ -1,14 +1,12 @@
 import React, { useState } from "react";
 import { useMoralis } from "react-moralis";
 import { Form, Input, Button, Spin } from 'antd';
-import { useMoralisDapp } from "../../providers/MoralisDappProvider/MoralisDappProvider";
 import { openNotification } from "../../helpers/notifications";
 import abis from "../../helpers/contracts";
 import { getTexasHoldemV1Address } from "../../helpers/networks";
 
 export default function StartNewGame({ gameIdsInProgress, maxConcurrentGames }) {
-  const { Moralis } = useMoralis();
-  const { chainId } = useMoralisDapp();
+  const { Moralis, chainId } = useMoralis();
   const abi = abis.texas_holdem_v1;
   const contractAddress = getTexasHoldemV1Address(chainId);
   const [started, setStarted] = useState(false);
@@ -58,31 +56,22 @@ export default function StartNewGame({ gameIdsInProgress, maxConcurrentGames }) 
       }
     };
 
-    const tx = await Moralis.executeFunction({ awaitReceipt: false, ...options });
-    tx.on("transactionHash", (hash) => {
+    try {
+      const tx = await Moralis.executeFunction( { awaitReceipt: false, ...options } );
       openNotification({
         message: "🔊 New Transaction",
-        description: `📃 Tx Hash: ${hash}`,
+        description: `📃 Tx Hash: ${tx.hash}`,
         type: "success"
       });
       setStarted(false);
-    })
-      .on("receipt", (receipt) => {
-        openNotification({
-          message: "🔊 New Receipt",
-          description: `📃 Receipt: ${receipt.transactionHash}`,
-          type: "success"
-        });
-        setStarted(false);
-      })
-      .on("error", (error) => {
-        openNotification({
-          message: "🔊 Error",
-          description: `📃 Receipt: ${error.message}`,
-          type: "error"
-        });
-        console.log(error);
+    } catch(e) {
+      openNotification({
+        message: "🔊 Error",
+        description: `📃 Receipt: ${e.message}`,
+        type: "error"
       });
+      console.log(e);
+    }
   }
 
   if (gameIdsInProgress.length === maxConcurrentGames) {

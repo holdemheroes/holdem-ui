@@ -1,17 +1,15 @@
 import React, { useState, useEffect } from "react";
 import { useMoralis } from "react-moralis";
 import { Spin } from "antd";
-import { useMoralisDapp } from "../../providers/MoralisDappProvider/MoralisDappProvider";
 import abis from "../../helpers/contracts";
 import { getBakendObjPrefix, getTexasHoldemV1Address } from "../../helpers/networks"
 import Refundable from "./Refundable";
 import "./style.scss";
 
 export default function RefundableGames() {
-  const { chainId, walletAddress } = useMoralisDapp();
   const abi = abis.texas_holdem_v1;
+  const { Moralis, isInitialized, chainId, account } = useMoralis();
   const contractAddress = getTexasHoldemV1Address(chainId);
-  const { Moralis, isInitialized } = useMoralis();
   const backendPrefix = getBakendObjPrefix(chainId);
 
   const [refundableGames, setRefundableGames] = useState(null);
@@ -24,7 +22,7 @@ export default function RefundableGames() {
         functionName: "getPlayerAmountPaidIn",
         abi,
         params: {
-          "_player": walletAddress,
+          "_player": account,
           "_gameId": String(gameId),
         },
       })

@@ -1,25 +1,35 @@
 import { useEffect, useState } from "react";
 import { useMoralis, useMoralisWeb3Api, useMoralisWeb3ApiCall } from "react-moralis";
-import { useMoralisDapp } from "../providers/MoralisDappProvider/MoralisDappProvider";
 import { useIPFS } from "./useIPFS";
-import { getHoldemHeroesAddress, getTexasHoldemV1Address } from "../helpers/networks";
+import { getHoldemHeroesAddress, getTexasHoldemV1Address } from "../helpers/networks"
 import abis from "../helpers/contracts";
 
 export const useMyNFTHands = (options) => {
   const { account } = useMoralisWeb3Api();
-  const { Moralis } = useMoralis();
-  const { chainId, walletAddress } = useMoralisDapp();
-  const hehContractAddress = getHoldemHeroesAddress(chainId);
-  const texasHoldemAddress = getTexasHoldemV1Address(chainId);
+  const { Moralis, chainId, account: walletAddress } = useMoralis();
+
   const thAbi = abis.texas_holdem_v1;
   const { resolveLink } = useIPFS();
   const [NFTHands, setNFTHands] = useState([]);
+
+  const [hehContractAddress, setHehContractAddress] = useState(getHoldemHeroesAddress(chainId));
+  const [texasHoldemAddress, setTexasHoldemAddress] = useState(getTexasHoldemV1Address(chainId));
+
   const {
     fetch: getMyNFTHands,
     data,
     error,
     isLoading,
-  } = useMoralisWeb3ApiCall(account.getNFTsForContract, { chain: chainId, token_address: hehContractAddress, address: walletAddress, ...options });
+  } = useMoralisWeb3ApiCall(
+    account.getNFTsForContract,
+    { chain: chainId, token_address: hehContractAddress, address: walletAddress, ...options }
+  );
+
+  useEffect(() => {
+    setHehContractAddress(getHoldemHeroesAddress(chainId))
+    setTexasHoldemAddress(getTexasHoldemV1Address(chainId))
+    getMyNFTHands()
+  }, [chainId, getMyNFTHands])
 
   useEffect(() => {
     if (data?.result) {
@@ -45,7 +55,7 @@ export const useMyNFTHands = (options) => {
       setNFTHands(NFTs);
     }
     // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [data]);
+  }, [data, texasHoldemAddress]);
 
   const fetchHandData = async (tokenId) => {
     return await Moralis.executeFunction({
