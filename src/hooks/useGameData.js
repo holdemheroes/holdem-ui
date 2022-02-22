@@ -662,8 +662,8 @@ export const useGameData = (gameId, backendPrefix) => {
 
   // subscribe to FinalHandPlayed events - THFinalHandPlayed
   useMoralisSubscription(`${backendPrefix}THFinalHandPlayed`,
-    q => q.equalTo("gameId", String(gameId)).equalTo("player", account),
-    [gameId, account],
+    q => q.equalTo("gameId", String(gameId)),
+    [gameId],
     {
       onEnter: data => handleFinalHandPlayedEvent(data),
     });
