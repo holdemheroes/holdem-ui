@@ -2,6 +2,7 @@ import React from "react";
 import { useMyNFTHands } from "../../hooks/useMyNFTHands";
 import NFTCard from "../NFTCard";
 import "./style.scss";
+import { Spin } from "antd";
 import { NavLink } from "react-router-dom";
 import { useMoralis } from "react-moralis"
 
@@ -10,7 +11,7 @@ export default function NFTBalance() {
   const { chainId } = useMoralis();
 
   if(isLoading) {
-    return <>Loading</>
+    return <Spin className="spin_loader" />;
   }
 
   if (!NFTHands.length || !NFTHands) {

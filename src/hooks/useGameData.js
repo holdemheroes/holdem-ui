@@ -654,7 +654,7 @@ export const useGameData = (gameId, backendPrefix) => {
 
   // subscribe to FeePaid events - THFeePaid
   useMoralisSubscription(`${backendPrefix}THFeePaid`,
-    q => q.equalTo("gameId", String(gameId)),
+    q => q.equalTo("gameId", String(gameId)).equalTo("player", account),
     [gameId],
     {
       onEnter: data => handleFeePaidEvent(data),
