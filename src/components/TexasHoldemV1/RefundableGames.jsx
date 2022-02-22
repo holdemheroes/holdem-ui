@@ -46,7 +46,8 @@ export default function RefundableGames() {
       for (let i = 0; i < results.length; i++) {
         const gameId = results[i].get("gameId");
         const amount = await fetchPaidIn(gameId);
-        if (amount && amount !== "0" && !rs.includes({
+
+        if (amount && amount?.toString() !== "0" && !rs.includes({
           gameId, amount
         })) {
           rs.push({

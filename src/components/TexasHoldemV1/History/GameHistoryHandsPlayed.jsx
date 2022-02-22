@@ -5,12 +5,13 @@ import { Spin, Table } from "antd";
 import { PlayingCard } from "../../PlayingCards/PlayingCard";
 import BN from "bn.js";
 import Moment from "react-moment";
-import { getBakendObjPrefix, getExplorer } from "../../../helpers/networks"
+import { getBakendObjPrefix, getCurrencySymbol, getExplorer } from "../../../helpers/networks"
 
 export const GameHistoryHandsPlayed = ({ gameId, round1Price, round2Price, finished = false }) => {
 
   const { Moralis, chainId } = useMoralis();
   const backendPrefix = getBakendObjPrefix(chainId);
+  const currencySymbol = getCurrencySymbol(chainId)
 
   const [totalFeesPaidFlop, setTotalFeesPaidFlop] = useState("0");
   const [totalFeesPaidTurn, setTotalFeesPaidTurn] = useState("0");
@@ -181,14 +182,14 @@ export const GameHistoryHandsPlayed = ({ gameId, round1Price, round2Price, finis
     <div>
       <p className="subtitle">Bets, Winnings and House summary</p>
 
-      <p className="desc">Total Flop Bets: {Moralis.Units.FromWei(totalFeesPaidFlop, 18)} ETH</p>
-      <p className="desc">Total Turn Bets: {Moralis.Units.FromWei(totalFeesPaidTurn, 18)} ETH</p>
-      <p className="desc">Total Bets: {Moralis.Units.FromWei(totalFeesPaid, 18)} ETH</p>
+      <p className="desc">Total Flop Bets: {Moralis.Units.FromWei(totalFeesPaidFlop, 18)} {currencySymbol}</p>
+      <p className="desc">Total Turn Bets: {Moralis.Units.FromWei(totalFeesPaidTurn, 18)} {currencySymbol}</p>
+      <p className="desc">Total Bets: {Moralis.Units.FromWei(totalFeesPaid, 18)} {currencySymbol}</p>
 
       {
         finished && <>
-          <p className="desc">Total Winnings: {Moralis.Units.FromWei(totalWinnings, 18)} ETH</p>
-          <p className="desc">House Cut: {Moralis.Units.FromWei(houseCut, 18)} ETH</p>
+          <p className="desc">Total Winnings: {Moralis.Units.FromWei(totalWinnings, 18)} {currencySymbol}</p>
+          <p className="desc">House Cut: {Moralis.Units.FromWei(houseCut, 18)} {currencySymbol}</p>
         </>
       }
 

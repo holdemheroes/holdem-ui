@@ -4,11 +4,12 @@ import { Spin, Table } from "antd";
 import { PlayingCard } from "../PlayingCards/PlayingCard";
 import { getEllipsisTxt, sortFinalHand } from "../../helpers/formatters";
 import { RankName } from "./RankName";
-import { getBakendObjPrefix, getExplorer } from "../../helpers/networks"
+import { getBakendObjPrefix, getCurrencySymbol, getExplorer } from "../../helpers/networks"
 
 export const Leaderboard = ({ gameId, showWinnings = false }) => {
   const { Moralis, chainId, account } = useMoralis();
   const backendPrefix = getBakendObjPrefix(chainId);
+  const currencySymbol = getCurrencySymbol(chainId)
 
   const [leaderboard, setLeaderboard] = useState([]);
   const [leaderboardTableData, setLeaderboardTableData] = useState([]);
@@ -235,7 +236,7 @@ export const Leaderboard = ({ gameId, showWinnings = false }) => {
 
         if (showWinnings) {
           const w = Moralis.Units.FromWei(winnings[leaderboard[i].player], 18);
-          d.winnings = leaderboard[i].player === account ? <strong>{w} ETH</strong> : <>{w} ETH</>;
+          d.winnings = leaderboard[i].player === account ? <strong>{w} {currencySymbol}</strong> : <>{w} {currencySymbol}</>;
         }
 
         data.push(d);
