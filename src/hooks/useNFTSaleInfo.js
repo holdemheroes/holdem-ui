@@ -10,8 +10,6 @@ export const useNFTSaleInfo = () => {
   const abi = (parseInt(process.env.REACT_APP_HEH_VERSION, 10) === 1) ? abis.heh_old : abis.heh_nft;
   const contractAddress = getHoldemHeroesAddress(chainId);
 
-  console.log("getPriceFunc", getPriceFunc)
-
   const [fetched, setFetched] = useState(false);
   const [dataInitialised, setDataInitialised] = useState(false);
 
