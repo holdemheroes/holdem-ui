@@ -22,18 +22,12 @@ import { logo } from "./logo";
 import { getChainType } from "./helpers/networks"
 
 const App = () => {
-  const { isWeb3Enabled, enableWeb3, isAuthenticated, isWeb3EnableLoading, chainId, account, Moralis, disableWeb3 } = useMoralis();
-
+  const { isWeb3Enabled, enableWeb3, isAuthenticated, isWeb3EnableLoading, chainId, account } = useMoralis();
   useEffect(() => {
     if (isAuthenticated && !isWeb3Enabled && !isWeb3EnableLoading)
       enableWeb3();
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [isAuthenticated, isWeb3Enabled]);
-
-  Moralis.onChainChanged(function () {
-    window.location.reload()
-  });
-
 
   const chainType = getChainType(chainId)
 

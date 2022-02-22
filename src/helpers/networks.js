@@ -105,7 +105,7 @@ export const networkConfigs = {
   },
 };
 
-export const getNativeByChain = (chain) => networkConfigs[chain]?.currencySymbol || "NATIVE";
+export const getCurrencySymbol = (chain) => networkConfigs[chain]?.currencySymbol || "NATIVE";
 
 export const getExplorer = (chain) => networkConfigs[chain]?.blockExplorerUrl;
 

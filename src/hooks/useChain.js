@@ -7,6 +7,7 @@ const useChain = () => {
     if (isWeb3Enabled) {
       try {
         await Moralis.switchNetwork(chain);
+        window.location.reload()
       } catch (error) {
         if (error.code === 4902) {
           try {
