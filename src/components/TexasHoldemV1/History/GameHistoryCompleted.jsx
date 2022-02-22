@@ -4,11 +4,11 @@ import { GameHistoryHandsPlayed } from "./GameHistoryHandsPlayed";
 import Moment from "react-moment";
 import { getExplorer } from "../../../helpers/networks";
 import { getEllipsisTxt } from "../../../helpers/formatters";
-import { useMoralisDapp } from "../../../providers/MoralisDappProvider/MoralisDappProvider";
+import { useMoralis } from "react-moralis";
 
 export const GameHistoryCompleted = ({ gameId, gameStartedData, gameEndedData }) => {
 
-  const { chainId } = useMoralisDapp();
+  const { chainId } = useMoralis();
 
   return (
     <div>

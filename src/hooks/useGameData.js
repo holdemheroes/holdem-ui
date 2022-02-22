@@ -1,26 +1,21 @@
-import { useMoralisDapp } from "../providers/MoralisDappProvider/MoralisDappProvider";
 import { useMoralis, useMoralisSubscription } from "react-moralis";
 import abis from "../helpers/contracts";
-import { getBakendObjPrefix, getTexasHoldemV1Address } from "../helpers/networks"
+import { getTexasHoldemV1Address } from "../helpers/networks"
 import { useEffect, useState } from "react";
 import { openNotification } from "../helpers/notifications";
 import { getDealRequestedText, sortFinalHand } from "../helpers/formatters";
 import BN from "bn.js";
 import { useMyNFTHands } from "./useMyNFTHands";
 
-export const useGameData = (gameId) => {
-  const { chainId, walletAddress } = useMoralisDapp();
-  const { Moralis } = useMoralis();
-  const backendPrefix = getBakendObjPrefix(chainId);
+export const useGameData = (gameId, backendPrefix) => {
+  const { Moralis, chainId, account } = useMoralis();
 
   const { NFTHands } = useMyNFTHands();
 
   const abi = abis.texas_holdem_v1;
-  const contractAddress = getTexasHoldemV1Address(chainId);
 
-  const options = {
-    contractAddress, abi,
-  };
+  const [options, setOptions] = useState(null);
+  const [contractAddress, setContractAddress] = useState(getTexasHoldemV1Address(chainId));
 
   const [gameData, setGameData] = useState(null);
   const [refetchGameData, setRefetchGameData] = useState(false);
@@ -152,7 +147,7 @@ export const useGameData = (gameId) => {
       gameStartTime: parseInt(data.gameStartTime),
       roundEndTime: parseInt(data.roundEndTime),
       status: parseInt(data.status),
-      totalPaidIn: data.totalPaidIn,
+      totalPaidIn: data.totalPaidIn.toString(),
     };
 
     setGameData(gameCleaned);
@@ -211,34 +206,35 @@ export const useGameData = (gameId) => {
   }
 
   function handleHandAddedEvent(data) {
+    if (data.attributes.player === account) {
+      const round = parseInt( data.attributes.round, 10 );
+      const tokenId = parseInt( data.attributes.tokenId, 10 );
+      const handId = parseInt( data.attributes.handId, 10 );
+      const card1 = parseInt( data.attributes.card1, 10 );
+      const card2 = parseInt( data.attributes.card2, 10 );
 
-    const round = parseInt(data.attributes.round, 10);
-    const tokenId = parseInt(data.attributes.tokenId, 10);
-    const handId = parseInt(data.attributes.handId, 10);
-    const card1 = parseInt(data.attributes.card1, 10);
-    const card2 = parseInt(data.attributes.card2, 10);
+      const newHandsPlayed = { ...handsPlayed };
+      const hand = {
+        round, tokenId, handId, card1, card2
+      };
 
-    const newHandsPlayed = { ...handsPlayed };
-    const hand = {
-      round, tokenId, handId, card1, card2
-    };
+      newHandsPlayed[round].hands.push( hand );
+      newHandsPlayed[round].tokenRefs.push( tokenId );
 
-    newHandsPlayed[round].hands.push(hand);
-    newHandsPlayed[round].tokenRefs.push(tokenId);
+      setHandsPlayed( newHandsPlayed );
+      if ( round > lastRoundPlayed ) {
+        setLastRoundPlayed( round );
+      }
 
-    setHandsPlayed(newHandsPlayed);
-    if (round > lastRoundPlayed) {
-      setLastRoundPlayed(round);
+      processPlayableHands();
+      setRefetchGameData( true );
+
+      openNotification( {
+        message: "🔊 Hand added!",
+        description: `You hand was added to ${getDealRequestedText( round )} in game #${gameId}`,
+        type: "success"
+      } );
     }
-
-    processPlayableHands();
-    setRefetchGameData(true);
-
-    openNotification({
-      message: "🔊 Hand added!",
-      description: `You hand was added to ${getDealRequestedText(round)} in game #${gameId}`,
-      type: "success"
-    });
   }
 
   function handleFeePaidEvent(data) {
@@ -256,7 +252,7 @@ export const useGameData = (gameId) => {
     const newPlayersPerRound = { ...playersPerRound };
     const newNumHands = { ...numHands };
 
-    if (player === walletAddress) {
+    if (player === account) {
       const newAmnt = new BN(feesPaid[round].me).add(amount);
       newFeesPaid[round].me = newAmnt.toString();
       if (round > lastRoundPlayed) {
@@ -283,7 +279,7 @@ export const useGameData = (gameId) => {
 
   function handleFinalHandPlayedEvent(data) {
 
-    if (data.attributes.player === walletAddress) {
+    if (data.attributes.player === account) {
       const newFinalHand = {};
       const cTmp = sortFinalHand(
         parseInt(data.attributes.card1, 10),
@@ -369,7 +365,7 @@ export const useGameData = (gameId) => {
       const player = res.get("player");
       const round = parseInt(res.get("round"), 10);
       const amount = new BN(res.get("amount"));
-      if (player === walletAddress) {
+      if (player === account) {
         const newMeAmnt = new BN(newFeesPaid[round].me).add(amount);
         newFeesPaid[round].me = newMeAmnt.toString();
       }
@@ -403,7 +399,7 @@ export const useGameData = (gameId) => {
     for (let i = 0; i < results.length; i += 1) {
       const res = results[i];
       const player = res.get("player");
-      if (player === walletAddress) {
+      if (player === account) {
         const cTmp = sortFinalHand(
           parseInt(res.get("card1"), 10),
           parseInt(res.get("card2"), 10),
@@ -456,7 +452,7 @@ export const useGameData = (gameId) => {
     const THHandAdded = Moralis.Object.extend(`${backendPrefix}THHandAdded`);
     const queryTHHandAdded = new Moralis.Query(THHandAdded);
     queryTHHandAdded.equalTo("gameId", String(gameId));
-    queryTHHandAdded.equalTo("player", walletAddress);
+    queryTHHandAdded.equalTo("player", account);
     queryTHHandAdded.find()
       .then((result) => handleHandsPlayedData(result))
       .catch((e) => console.log(e.message));
@@ -482,12 +478,19 @@ export const useGameData = (gameId) => {
       .catch((e) => console.log(e.message));
   }
 
+  useEffect(() => {
+    setContractAddress(getTexasHoldemV1Address(chainId))
+    const opts = {
+      contractAddress, abi,
+    }
+    setOptions(opts)
+  }, [chainId, abi, contractAddress])
 
   // get the initial data - wait a second between each attempt while status is "NOT EXIST"
   // runs when first loaded until game status is > 0
   useEffect(() => {
     let timeout
-    if (!gameData || gameData?.status === 0) {
+    if ((!gameData || gameData?.status === 0) && options) {
       timeout = setTimeout(() => {
         fetchOnChainGameData()
       }, 1000);
@@ -497,14 +500,14 @@ export const useGameData = (gameId) => {
       clearTimeout(timeout);
     };
     // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [gameData, walletAddress]); // depends on gameData and walletAddress - called when it's changed
+  }, [gameData, account, gameId, options]); // depends on gameData and account - called when it's changed
 
   // fetch initial cards dealt from chain
   // runs when first loaded if status is > 1 until cards are populated
   useEffect(() => {
     // get initial cards dealt
     let timeout;
-    if (cardsDealt.length === 0 && gameData?.status > 1) {
+    if (cardsDealt.length === 0 && gameData?.status > 1 && options) {
       timeout = setTimeout(() => {
         fetchCardsDealt();
       }, 1000);
@@ -514,7 +517,7 @@ export const useGameData = (gameId) => {
       clearTimeout(timeout);
     };
     // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [cardsDealt, gameData]);
+  }, [cardsDealt, gameData, options]);
 
   // get any hands already played if status >= 2
   useEffect(() => {
@@ -522,7 +525,7 @@ export const useGameData = (gameId) => {
       fetchHandsPlayed();
     }
     // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [gameData, walletAddress, NFTHands, handsPlayedFetched, handsPlayedLoading]);
+  }, [gameData, account, NFTHands, handsPlayedFetched, handsPlayedLoading]);
 
   // get fees paid if status >= 2
   useEffect(() => {
@@ -530,7 +533,7 @@ export const useGameData = (gameId) => {
       fetchFeesPaid();
     }
     // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [gameData, walletAddress, NFTHands, feesPaidFetched, feesPaidLoading]);
+  }, [gameData, account, NFTHands, feesPaidFetched, feesPaidLoading]);
 
   // fetch final hand if status == 6
   useEffect(() => {
@@ -538,7 +541,7 @@ export const useGameData = (gameId) => {
       fetchFinalHand();
     }
     // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [gameData, walletAddress, NFTHands, finalHandFetched, finalHandLoading]);
+  }, [gameData, account, NFTHands, finalHandFetched, finalHandLoading]);
 
   // monitor changes to wallet address
   useEffect(() => {
@@ -547,12 +550,12 @@ export const useGameData = (gameId) => {
     fetchFinalHand();
     processPlayableHands();
     // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [walletAddress, NFTHands]);
+  }, [account, NFTHands]);
 
   // refresh gameData every block while game in progress
   useEffect(() => {
     let timeout;
-    if (gameData?.status > 0 && !gameHasEnded) {
+    if (gameData?.status > 0 && !gameHasEnded && options) {
       timeout = setTimeout(() => {
         fetchOnChainGameData();
       }, 15000);
@@ -562,7 +565,7 @@ export const useGameData = (gameId) => {
       clearTimeout(timeout);
     };
     // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [gameData, gameHasEnded]);
+  }, [gameData, gameHasEnded, gameId, options]);
 
   // check game ended every second if status == 6
   // and game hasn't been flagged as ended yet
@@ -630,7 +633,7 @@ export const useGameData = (gameId) => {
     q => q.equalTo("gameId", String(gameId)),
     [gameId],
     {
-      onCreate: data => handleCardDealRequestedEvent(data),
+      onEnter: data => handleCardDealRequestedEvent(data),
     });
 
   // subscribe to CardDealt events - THCardDealt
@@ -638,31 +641,31 @@ export const useGameData = (gameId) => {
     q => q.equalTo("gameId", String(gameId)),
     [gameId],
     {
-      onCreate: data => handleCardDealtEvent(data),
+      onEnter: data => handleCardDealtEvent(data),
     });
 
   // subscribe to HandAdded events - THHandAdded
   useMoralisSubscription(`${backendPrefix}THHandAdded`,
-    q => q.equalTo("gameId", String(gameId)).equalTo("player", walletAddress),
-    [gameId, walletAddress],
+    query => query.equalTo("gameId", String(gameId)).equalTo("player", account),
+    [gameId, account],
     {
-      onCreate: data => handleHandAddedEvent(data),
+      onEnter: data => handleHandAddedEvent(data),
     });
 
   // subscribe to FeePaid events - THFeePaid
   useMoralisSubscription(`${backendPrefix}THFeePaid`,
-    q => q.equalTo("gameId", String(gameId)),
+    q => q.equalTo("gameId", String(gameId)).equalTo("player", account),
     [gameId],
     {
-      onCreate: data => handleFeePaidEvent(data),
+      onEnter: data => handleFeePaidEvent(data),
     });
 
   // subscribe to FinalHandPlayed events - THFinalHandPlayed
   useMoralisSubscription(`${backendPrefix}THFinalHandPlayed`,
-    q => q.equalTo("gameId", String(gameId)).equalTo("player", walletAddress),
-    [gameId, walletAddress],
+    q => q.equalTo("gameId", String(gameId)).equalTo("player", account),
+    [gameId, account],
     {
-      onCreate: data => handleFinalHandPlayedEvent(data),
+      onEnter: data => handleFinalHandPlayedEvent(data),
     });
 
   return {

@@ -1,13 +1,11 @@
 import React from "react";
-import { useMoralisDapp } from "../../providers/MoralisDappProvider/MoralisDappProvider";
 import abis from "../../helpers/contracts";
 import { getTexasHoldemV1Address } from "../../helpers/networks";
 import { useMoralis } from "react-moralis";
 import { openNotification } from "../../helpers/notifications";
 
 export default function Refundable({ gameId, amount }) {
-  const { chainId } = useMoralisDapp();
-  const { Moralis } = useMoralis();
+  const { Moralis, chainId } = useMoralis();
 
   const abi = abis.texas_holdem_v1;
   const contractAddress = getTexasHoldemV1Address(chainId);
@@ -25,17 +23,21 @@ export default function Refundable({ gameId, amount }) {
       },
     };
 
-    const tx = await Moralis.executeFunction({ awaitReceipt: false, ...opts });
-    tx.on("transactionHash", (hash) => {
+    try {
+      const tx = await Moralis.executeFunction({ awaitReceipt: false, ...opts });
       openNotification({
-        message: "🔊 Claim refund requested!",
-        description: `📃 Tx Hash: ${hash}`,
+        message: "🔊 New Transaction",
+        description: `📃 Tx Hash: ${tx.hash}`,
         type: "success"
       });
-    })
-      .on("error", (error) => {
-        console.log(error);
+    } catch(e) {
+      openNotification({
+        message: "🔊 Error",
+        description: `📃 Receipt: ${e.message}`,
+        type: "error"
       });
+      console.log(e);
+    }
   }
 
   return (

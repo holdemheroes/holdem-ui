@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from "react";
-import { useMoralisQuery } from "react-moralis";
+import { useMoralis, useMoralisQuery } from "react-moralis"
 import { Spin } from "antd";
 import SaleInfo from "./SaleInfo";
 import PreRevealSale from "./PreRevealSale";
@@ -8,7 +8,6 @@ import { useNFTSaleInfo } from "../../hooks/useNFTSaleInfo";
 import { useMyNFTHands } from "../../hooks/useMyNFTHands";
 import "./style.scss";
 import { getBakendObjPrefix } from "../../helpers/networks"
-import { useMoralisDapp } from "../../providers/MoralisDappProvider/MoralisDappProvider"
 
 export default function Sale() {
   const {
@@ -26,7 +25,7 @@ export default function Sale() {
   const { NFTHands, isLoading: nftBalanceIsLoading } = useMyNFTHands();
 
 
-  const { chainId } = useMoralisDapp();
+  const { chainId } = useMoralis();
   const backendPrefix = getBakendObjPrefix(chainId);
 
   const { data: mintedRes } = useMoralisQuery(
@@ -34,7 +33,8 @@ export default function Sale() {
     query =>
       query
         .equalTo("from", "0x0000000000000000000000000000000000000000")
-        .equalTo("confirmed", true),
+        .equalTo("confirmed", true)
+        .limit(1326),
     [],
     {
       live: true,

@@ -16,24 +16,23 @@ import Home from "./pages/Home";
 import HomeL2 from "./pages/HomeL2";
 import GamePlay from "./pages/GamePlay";
 import "./App.scss";
-import { useMoralisDapp } from "./providers/MoralisDappProvider/MoralisDappProvider";
 import { getEllipsisTxt } from "./helpers/formatters";
 import Logout from "./components/Logout";
 import { logo } from "./logo";
 import { getChainType } from "./helpers/networks"
 
 const App = () => {
-  const { isWeb3Enabled, enableWeb3, isAuthenticated, isWeb3EnableLoading, Moralis } = useMoralis();
-  const { walletAddress, chainId } = useMoralisDapp();
-
-  const unsubscribe = Moralis.onChainChanged((chain) => {
-    window.location.reload()
-  });
+  const { isWeb3Enabled, enableWeb3, isAuthenticated, isWeb3EnableLoading, chainId, account, Moralis, disableWeb3 } = useMoralis();
 
   useEffect(() => {
-    if (isAuthenticated && !isWeb3Enabled && !isWeb3EnableLoading) enableWeb3();
+    if (isAuthenticated && !isWeb3Enabled && !isWeb3EnableLoading)
+      enableWeb3();
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [isAuthenticated, isWeb3Enabled]);
+
+  Moralis.onChainChanged(function () {
+    window.location.reload()
+  });
 
 
   const chainType = getChainType(chainId)
@@ -61,7 +60,7 @@ const App = () => {
               <div className="dropdown-wrapper account" style={{ marginRight: "15px" }}>
                 <button className="dropdown-btn address_btn">
                   <Blockie className="circle" currentWallet size={5} scale={5} />
-                  {getEllipsisTxt(walletAddress, 6)}
+                  {getEllipsisTxt(account, 6)}
                 </button>
                 <ul className="dropdown-body">
                   <li className="dropdown-item"><Withdrawable /></li>
