@@ -11,7 +11,7 @@ export default function NFTBalance() {
   const { chainId } = useMoralis();
 
   if(isLoading) {
-    return <>Loading</>
+    return <Spin className="spin_loader" />;
   }
 
   if (!NFTHands.length || !NFTHands) {
