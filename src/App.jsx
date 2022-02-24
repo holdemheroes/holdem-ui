@@ -36,20 +36,14 @@ const App = () => {
       <div className="header">
         <Logo />
         <div className="topnav">
-          {
-            !isAuthenticated && <>
-              <a href='https://discord.gg/wqZdRNruHG' target='_blank' rel="noreferrer" className="color-white discord_btn mr-40">Discord</a>
-              <Account />
-            </>
-          }
+          <div>
+            <NavLink to="/Marketplace">Marketplace</NavLink>
+            <NavLink to="/NFTwallet">NFT Wallet</NavLink>
+            <NavLink to="/Rules">Rules</NavLink>
+            <Community />
+          </div>
           {
             isAuthenticated && <>
-              <div>
-                <NavLink to="/Marketplace">Marketplace</NavLink>
-                <NavLink to="/NFTwallet">NFT Wallet</NavLink>
-                <NavLink to="/Rules">Rules</NavLink>
-                <Community />
-              </div>
               <NavLink to="/Play" className="btn-play" style={{ marginRight: "35px" }}>Play</NavLink>
               <div className="dropdown-wrapper account" style={{ marginRight: "15px" }}>
                 <button className="dropdown-btn address_btn">
@@ -65,6 +59,9 @@ const App = () => {
               </div>
               <Chains />
             </>
+          }
+          {
+            !isAuthenticated && <Account />
           }
         </div>
       </div>
@@ -95,9 +92,6 @@ const App = () => {
                 <History />
               </Route>
             </>
-          }
-          {
-            !isAuthenticated && <Redirect to="/" />
           }
         </Switch>
       </>

@@ -13,6 +13,9 @@ export default function HomeL2() {
             <p>NFT Poker</p>
             <p>Holdem Heroes is the on-chain NFT Poker game.<br />Mint the 1326 Hole Card combinations as NFTs.<br />Then play Texas Hold&#x27;em with them!</p>
           </div>
+          <div>
+            <img src="../assets/images/cards2.png" alt="" />
+          </div>
         </div>
 
         <div style={{ marginTop: "160px" }}>
@@ -65,7 +68,7 @@ export default function HomeL2() {
 
           <div>
             <AnimateButton><a href='#section--nft_poker' rel="noreferrer">Mint Poker Nfts</a></AnimateButton>
-            <AnimateButton><a href='https://discord.gg/wqZdRNruHG' target='_blank' rel="noreferrer">Join Our Community</a></AnimateButton>
+            <AnimateButton><a href='https://discord.gg/dmgga7b72Y' target='_blank' rel="noreferrer">Join Our Community</a></AnimateButton>
             <AnimateButton><NavLink to='/Play'>Play Hold&#x27;em Heroes</NavLink></AnimateButton>
           </div>
         </div>
