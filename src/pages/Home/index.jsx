@@ -52,29 +52,43 @@ export default function Home() {
       },
     };
 
-    const tx = await Moralis.executeFunction({ awaitReceipt: false, ...options });
-    tx.on("transactionHash", (hash) => {
+    try {
+      const tx = await Moralis.executeFunction({ awaitReceipt: false, ...options });
       openNotification({
         message: "🔊 New Transaction",
-        description: `📃 Tx Hash: ${hash}`,
+        description: `📃 Tx Hash: ${tx.hash}`,
         type: "success"
       });
-    })
-      .on("receipt", (receipt) => {
-        openNotification({
-          message: "🔊 New Receipt",
-          description: `📃 Receipt: ${receipt.transactionHash}`,
-          type: "success"
-        });
-      })
-      .on("error", (error) => {
-        openNotification({
-          message: "🔊 Error",
-          description: `📃 Receipt: ${error.toString()}`,
-          type: "error"
-        });
-        console.log(error);
+    } catch (error) {
+      openNotification({
+        message: "🔊 Error",
+        description: `📃 Receipt: ${error.message}`,
+        type: "error"
       });
+      console.log(error);
+    }
+    // tx.on("transactionHash", (hash) => {
+    //   openNotification({
+    //     message: "🔊 New Transaction",
+    //     description: `📃 Tx Hash: ${hash}`,
+    //     type: "success"
+    //   });
+    // })
+    //   .on("receipt", (receipt) => {
+    //     openNotification({
+    //       message: "🔊 New Receipt",
+    //       description: `📃 Receipt: ${receipt.transactionHash}`,
+    //       type: "success"
+    //     });
+    //   })
+    //   .on("error", (error) => {
+    //     openNotification({
+    //       message: "🔊 Error",
+    //       description: `📃 Receipt: ${error.toString()}`,
+    //       type: "error"
+    //     });
+    //     console.log(error);
+    //   });
   }
 
   const renderer = ({ days, hours, minutes, seconds, completed }) => {
@@ -101,10 +115,6 @@ export default function Home() {
       );
     }
   };
-
-  if(!pricePerToken) {
-    return <></>
-  }
 
   return (
     <div className="main-wrapper">
@@ -133,7 +143,7 @@ export default function Home() {
                   <input className="btn-shadow btn-hover-pointer" type="submit" value="Mint" />
                 </form>
               </div>
-              <p>{`Total NFTs minted: ${totalSupply !== null ? totalSupply : ''}/1326`}</p>
+              <p>{`Total NFTs minted: ${totalSupply !== null ? totalSupply : '0'}/1326`}</p>
             </div>
           </div>
           <div>
@@ -192,7 +202,7 @@ export default function Home() {
 
           <div>
             <AnimateButton><a href='#section--nft_poker' rel="noreferrer">Mint Poker Nfts</a></AnimateButton>
-            <AnimateButton><a href='https://discord.gg/wqZdRNruHG' target='_blank' rel="noreferrer">Join Our Community</a></AnimateButton>
+            <AnimateButton><a href='https://discord.gg/dmgga7b72Y' target='_blank' rel="noreferrer">Join Our Community</a></AnimateButton>
             <AnimateButton><NavLink to='/Play'>Play Hold&#x27;em Heroes</NavLink></AnimateButton>
           </div>
         </div>

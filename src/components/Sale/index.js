@@ -43,11 +43,7 @@ export default function Sale() {
 
   useEffect(() => {
     if (mintedRes) {
-      const m = [];
-      for (let i = 0; i < mintedRes.length; i += 1) {
-        const t = mintedRes[i].get("tokenId");
-        m.push(parseInt(t, 10));
-      }
+      let m = mintedRes.map((item, i) => parseInt(item.get("tokenId"), 10));
       setMinted(m);
     }
   }, [mintedRes]);
