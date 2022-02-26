@@ -192,7 +192,7 @@ export default function Home() {
                 <p>They can be used freely in any way.<br />For example, for private games, for Texas Hold’em with higher stakes, for different variants of poker such as Omaha Hold’em, or indeed for distinct card games such as Blackjack.</p>
                 <p>While NFT games such as Axie Infinity have recently gained in popularity, a gap exists to serve casual gamers &amp; more traditional games.<br />The Holdem Heroes card deck fulfills this need by providing the cards and contracts to offer Poker as well as a plethora of other card games. These can be be played by thousands of people at the same time, who share in a common and accumulating jackpot.</p>
                 <p>People can design their own card sets, games, betting systems and more...</p>
-                <p>Please see the <a href="https://github.com/holdemheroes/holdem-ui" target="_blank" rel="noreferrer">documentation</a> for full details, as well as card provenance and proof of randomn.</p>
+                <p>Please see the <a href="https://docs.holdemheroes.com" target="_blank" rel="noreferrer">documentation</a> for full details, as well as card provenance and proof of randomness.</p>
               </div>
             </div>
             <div>
