@@ -73,7 +73,7 @@ export default function RefundableGames() {
   return (
     <div className="refundable_wrapper">
       <p className="title">Refundable Games</p>
-      <p className="desc">Collect refunds from games in which you were the only player here</p>
+      <p className="desc">Collect refunds from games in which you were the only player</p>
       <div className="refundable_games">
         {refundableGames &&
           refundableGames.map((item) => (

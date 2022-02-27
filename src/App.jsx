@@ -20,6 +20,7 @@ import { getEllipsisTxt } from "./helpers/formatters";
 import Logout from "./components/Logout";
 import { logo } from "./logo";
 import { getChainType } from "./helpers/networks"
+import ScrollToTop from "./ScrollToTop";
 
 const App = () => {
   const { isWeb3Enabled, enableWeb3, isAuthenticated, isWeb3EnableLoading, chainId, account } = useMoralis();
@@ -66,34 +67,36 @@ const App = () => {
         </div>
       </div>
       <>
-        <Switch>
-          <Route exact path="/">
-            {chainType === "l1" && <Home />}
-            {chainType === "l2" && <HomeL2 />}
-          </Route>
-          {
-            isAuthenticated && <>
-              <Route path="/Marketplace">
-                <Sale />
-              </Route>
-              <Route path="/Rules">
-                <GamePlay />
-              </Route>
-              <Route path="/NFTwallet">
-                <NFTBalance />
-              </Route>
-              <Route path="/Play">
-                <GamesV1 />
-              </Route>
-              <Route path="/Refunds">
-                <RefundableGames />
-              </Route>
-              <Route path="/History">
-                <History />
-              </Route>
-            </>
-          }
-        </Switch>
+        <ScrollToTop>
+          <Switch>
+            <Route exact path="/">
+              {chainType === "l1" && <Home />}
+              {chainType === "l2" && <HomeL2 />}
+            </Route>
+            {
+              isAuthenticated && <>
+                <Route path="/Marketplace">
+                  <Sale />
+                </Route>
+                <Route path="/Rules">
+                  <GamePlay />
+                </Route>
+                <Route path="/NFTwallet">
+                  <NFTBalance />
+                </Route>
+                <Route path="/Play">
+                  <GamesV1 />
+                </Route>
+                <Route path="/Refunds">
+                  <RefundableGames />
+                </Route>
+                <Route path="/History">
+                  <History />
+                </Route>
+              </>
+            }
+          </Switch>
+        </ScrollToTop>
       </>
     </Router>
   );

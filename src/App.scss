@@ -163,16 +163,6 @@ button {
   justify-content: space-between;
   align-items    : center;
 
-  a[href="/"] {
-    width : 80px;
-    height: 80px;
-
-    &>svg {
-      width : 100%;
-      height: 100%;
-    }
-  }
-
   .topnav {
     display    : flex;
     align-items: center;
@@ -182,8 +172,8 @@ button {
       align-items: center;
 
       &>a {
-        margin-left  : 22px;
-        margin-right : 35px;
+        margin-left  : 10px;
+        margin-right : 18px;
         color        : white;
         font-family  : Karla;
         font-size    : 17px;
@@ -195,6 +185,11 @@ button {
           border-bottom: 1px solid white;
         }
       }
+    }
+
+    .dropdown-wrapper.community {
+      margin-left : 10px;
+      margin-right: 18px;
     }
 
     .btn-play {
