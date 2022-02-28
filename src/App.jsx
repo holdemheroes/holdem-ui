@@ -34,36 +34,38 @@ const App = () => {
 
   return (
     <Router>
-      <div className="header">
-        <Logo />
-        <div className="topnav">
-          <div>
-            <NavLink to="/Marketplace">Marketplace</NavLink>
-            <NavLink to="/NFTwallet">NFT Wallet</NavLink>
-            <NavLink to="/Rules">Rules</NavLink>
-            <Community />
+      <div className="header-wrapper">
+        <div className="header">
+          <Logo />
+          <div className="topnav">
+            <div>
+              <NavLink to="/Marketplace">Marketplace</NavLink>
+              <NavLink to="/NFTwallet">NFT Wallet</NavLink>
+              <NavLink to="/Rules">Rules</NavLink>
+              <Community />
+            </div>
+            {
+              isAuthenticated && <>
+                <NavLink to="/Play" className="btn-play" style={{ marginRight: "35px" }}>Play</NavLink>
+                <div className="dropdown-wrapper account" style={{ marginRight: "15px" }}>
+                  <button className="dropdown-btn address_btn">
+                    <Blockie className="circle" currentWallet size={5} scale={5} />
+                    {getEllipsisTxt(account, 6)}
+                  </button>
+                  <ul className="dropdown-body">
+                    <li className="dropdown-item"><Withdrawable /></li>
+                    <li className="dropdown-item"><NavLink to="/History">Game History</NavLink></li>
+                    <li className="dropdown-item"><NavLink to="/Refunds">Refunds</NavLink></li>
+                    <li className="dropdown-item"><Logout /></li>
+                  </ul>
+                </div>
+                <Chains />
+              </>
+            }
+            {
+              !isAuthenticated && <Account />
+            }
           </div>
-          {
-            isAuthenticated && <>
-              <NavLink to="/Play" className="btn-play" style={{ marginRight: "35px" }}>Play</NavLink>
-              <div className="dropdown-wrapper account" style={{ marginRight: "15px" }}>
-                <button className="dropdown-btn address_btn">
-                  <Blockie className="circle" currentWallet size={5} scale={5} />
-                  {getEllipsisTxt(account, 6)}
-                </button>
-                <ul className="dropdown-body">
-                  <li className="dropdown-item"><Withdrawable /></li>
-                  <li className="dropdown-item"><NavLink to="/History">Game History</NavLink></li>
-                  <li className="dropdown-item"><NavLink to="/Refunds">Refunds</NavLink></li>
-                  <li className="dropdown-item"><Logout /></li>
-                </ul>
-              </div>
-              <Chains />
-            </>
-          }
-          {
-            !isAuthenticated && <Account />
-          }
         </div>
       </div>
       <>
