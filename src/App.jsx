@@ -19,7 +19,7 @@ import "./App.scss";
 import { getEllipsisTxt } from "./helpers/formatters";
 import Logout from "./components/Logout";
 import { logo } from "./logo";
-import { getChainType } from "./helpers/networks"
+import { getChainType } from "./helpers/networks";
 import ScrollToTop from "./ScrollToTop";
 
 const App = () => {
@@ -30,11 +30,11 @@ const App = () => {
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [isAuthenticated, isWeb3Enabled]);
 
-  const chainType = getChainType(chainId)
+  const chainType = getChainType(chainId);
 
   return (
     <Router>
-      <div className="header-wrapper">
+      <div className={`header-wrapper`}>
         <div className="header">
           <Logo />
           <div className="topnav">
