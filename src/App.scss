@@ -158,10 +158,6 @@ button {
 
 // new style
 .header-wrapper {
-  background-image   : url(./assets/images/header-background.png);
-  background-repeat  : repeat-y;
-  background-position: center;
-  background-size    : cover;
 
   &>.header {
     margin         : 0;
