@@ -5,7 +5,7 @@ import { getTexasHoldemV1Address } from "../helpers/networks"
 import { openNotification } from "../helpers/notifications";
 
 export const useGameMetadata = (backendPrefix) => {
-  const { Moralis, chainId } = useMoralis();
+  const { Moralis, chainId, isWeb3EnableLoading } = useMoralis();
 
   const abi = abis.texas_holdem_v1;
 
@@ -69,12 +69,11 @@ export const useGameMetadata = (backendPrefix) => {
 
   function fetchOnChainMaxConcurrentGames() {
     setMaxConcurrentGamesLoading(true);
-
     Moralis.executeFunction({
       functionName: "maxConcurrentGames",
       ...options
     })
-      .then((result) => handleOnChainMaxConcurrentGames(result))
+      .then(result => handleOnChainMaxConcurrentGames(result))
       .catch((e) => console.log(e.message));
   }
 
@@ -108,27 +107,27 @@ export const useGameMetadata = (backendPrefix) => {
 
   //get initial maxConcurrentGames
   useEffect(() => {
-    if (!maxConcurrentGames && !maxConcurrentGamesLoading && !maxConcurrentGamesFetched && options) {
+    if (!maxConcurrentGames && !maxConcurrentGamesLoading && !maxConcurrentGamesFetched && options && !isWeb3EnableLoading) {
       fetchOnChainMaxConcurrentGames();
     }
     // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [maxConcurrentGames, maxConcurrentGamesLoading, maxConcurrentGamesFetched, options]);
+  }, [maxConcurrentGames, maxConcurrentGamesLoading, maxConcurrentGamesFetched, options, isWeb3EnableLoading]);
 
   //get initial gamesInProgress
   useEffect(() => {
-    if (!gamesInProgressLoading && !gamesInProgressFetched && options) {
+    if (!gamesInProgressLoading && !gamesInProgressFetched && options && !isWeb3EnableLoading) {
       fetchOnChainGamesInProgress();
     }
     // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [gamesInProgressLoading, gamesInProgressFetched, options]);
+  }, [gamesInProgressLoading, gamesInProgressFetched, options, isWeb3EnableLoading]);
 
   //get initial gamesNumGames
   useEffect(() => {
-    if (!numGamesLoading && !numGamesFetched && options) {
+    if (!numGamesLoading && !numGamesFetched && options && !isWeb3EnableLoading) {
       fetchOnChainNumGames();
     }
     // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [numGamesLoading, numGamesFetched, options]);
+  }, [numGamesLoading, numGamesFetched, options, isWeb3EnableLoading]);
 
   // refresh games in progress every block
   useEffect(() => {
