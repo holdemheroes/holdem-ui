@@ -22,24 +22,27 @@ export default function GamesV1() {
     setGamesInProgress_r([...tmp]);
   }, [gamesInProgress]);
 
-  if (!maxConcurrentGames) {
-    return <Spin className="spin_loader" />;
-  }
-
   return (
-    <div className="play-wrapper">
-      <p className="title">Play Holdem Heroes</p>
-      <StartNewGame gameIdsInProgress={gamesInProgress} maxConcurrentGames={maxConcurrentGames} />
+    <>
+      {
+        maxConcurrentGames && <div className="play-wrapper">
+          <p className="title">Play Holdem Heroes</p>
+          <StartNewGame gameIdsInProgress={gamesInProgress} maxConcurrentGames={maxConcurrentGames} />
 
-      <Tabs>
-        {
-          gamesInProgress && gamesInProgress_r.map((item) => (
-            <Tabs.TabPane tab={`Game #${item}`} key={`game_tab_${item}_${account}`}>
-              <Game gameId={item.toNumber()} key={`game_outer_container_${item}_${account}`} />
-            </Tabs.TabPane>
-          ))
-        }
-      </Tabs>
-    </div>
+          <Tabs>
+            {
+              gamesInProgress && gamesInProgress_r.map((item) => (
+                <Tabs.TabPane tab={`Game #${item}`} key={`game_tab_${item}_${account}`}>
+                  <Game gameId={item.toNumber()} key={`game_outer_container_${item}_${account}`} />
+                </Tabs.TabPane>
+              ))
+            }
+          </Tabs>
+        </div>
+      }
+      {
+        !maxConcurrentGames && <Spin className="spin_loader" />
+      }
+    </>
   );
 }

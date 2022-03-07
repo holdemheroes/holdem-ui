@@ -24,7 +24,6 @@ export default function Sale() {
 
   const { NFTHands, isLoading: nftBalanceIsLoading } = useMyNFTHands();
 
-
   const { chainId } = useMoralis();
   const backendPrefix = getBakendObjPrefix(chainId);
 
