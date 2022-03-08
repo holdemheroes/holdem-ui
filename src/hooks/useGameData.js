@@ -155,8 +155,10 @@ export const useGameData = (gameId, backendPrefix) => {
 
   function handleOnChainCardsDealt(cards) {
     const cardsAsInts = [];
-    for (let i = 0; i < cards.length; i += 1) {
-      cardsAsInts.push(parseInt(cards[i], 10));
+    for (let i = 0; i < cards.length; i++) {
+      let card = parseInt(cards[i], 10);
+      if (cardsAsInts.includes(card)) continue;
+      cardsAsInts.push(card);
     }
     setCardsDealt(cardsAsInts);
     processPlayableHands();
@@ -186,12 +188,13 @@ export const useGameData = (gameId, backendPrefix) => {
 
     setGameData({ ...gameData, status: round, roundEndTime: blockTimestamp + gameData.gameRoundTimeSeconds });
 
-    for (let i = 0; i < cardsDealt.length; i += 1) {
+    for (let i = 0; i < cardsDealt.length; i++) {
       if (!newCardsDealt.includes(cardsDealt[i])) {
         newCardsDealt.push(cardsDealt[i]);
       }
     }
-    newCardsDealt.push(cardId);
+
+    if (!newCardsDealt.includes(cardId)) newCardsDealt.push(cardId);
 
     setCardsDealt(newCardsDealt);
 
@@ -207,33 +210,33 @@ export const useGameData = (gameId, backendPrefix) => {
 
   function handleHandAddedEvent(data) {
     if (data.attributes.player === account) {
-      const round = parseInt( data.attributes.round, 10 );
-      const tokenId = parseInt( data.attributes.tokenId, 10 );
-      const handId = parseInt( data.attributes.handId, 10 );
-      const card1 = parseInt( data.attributes.card1, 10 );
-      const card2 = parseInt( data.attributes.card2, 10 );
+      const round = parseInt(data.attributes.round, 10);
+      const tokenId = parseInt(data.attributes.tokenId, 10);
+      const handId = parseInt(data.attributes.handId, 10);
+      const card1 = parseInt(data.attributes.card1, 10);
+      const card2 = parseInt(data.attributes.card2, 10);
 
       const newHandsPlayed = { ...handsPlayed };
       const hand = {
         round, tokenId, handId, card1, card2
       };
 
-      newHandsPlayed[round].hands.push( hand );
-      newHandsPlayed[round].tokenRefs.push( tokenId );
+      if (!newHandsPlayed[round].hands.includes(hand)) newHandsPlayed[round].hands.push(hand);
+      if (!newHandsPlayed[round].tokenRefs.includes(tokenId)) newHandsPlayed[round].tokenRefs.push(tokenId);
 
-      setHandsPlayed( newHandsPlayed );
-      if ( round > lastRoundPlayed ) {
-        setLastRoundPlayed( round );
+      setHandsPlayed(newHandsPlayed);
+      if (round > lastRoundPlayed) {
+        setLastRoundPlayed(round);
       }
 
       processPlayableHands();
-      setRefetchGameData( true );
+      setRefetchGameData(true);
 
-      openNotification( {
+      openNotification({
         message: "🔊 Hand added!",
-        description: `You hand was added to ${getDealRequestedText( round )} in game #${gameId}`,
+        description: `You hand was added to ${getDealRequestedText(round)} in game #${gameId}`,
         type: "success"
-      } );
+      });
     }
   }
 
@@ -332,8 +335,9 @@ export const useGameData = (gameId, backendPrefix) => {
           round, tokenId, handId, card1, card2
         };
 
-        newHandsPlayed[round].hands.push(hand);
-        newHandsPlayed[round].tokenRefs.push(tokenId);
+        if (!newHandsPlayed[round].hands.includes(hand)) newHandsPlayed[round].hands.push(hand);
+        if (!newHandsPlayed[round].tokenRefs.includes(tokenId)) newHandsPlayed[round].tokenRefs.push(tokenId);
+        
         if (round > lastRoundPlayed) {
           setLastRoundPlayed(round);
         }
