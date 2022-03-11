@@ -82,7 +82,7 @@ export default function Game({ gameId }) {
         description: `📃 Tx Hash: ${tx.hash}`,
         type: "success"
       });
-    } catch(e) {
+    } catch (e) {
       openNotification({
         message: "🔊 Error",
         description: `📃 ${e.message}`,
@@ -139,7 +139,7 @@ export default function Game({ gameId }) {
         description: `📃 Tx Hash: ${tx.hash}`,
         type: "success"
       });
-    } catch(e) {
+    } catch (e) {
       openNotification({
         message: "🔊 Error",
         description: `📃 ${e.message}`,
@@ -165,7 +165,7 @@ export default function Game({ gameId }) {
         description: `📃 Tx Hash: ${tx.hash}`,
         type: "success"
       });
-    } catch(e) {
+    } catch (e) {
       openNotification({
         message: "🔊 Error",
         description: `📃 ${e.message}`,
