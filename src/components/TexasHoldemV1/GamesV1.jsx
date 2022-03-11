@@ -9,7 +9,7 @@ import { useMoralis } from "react-moralis"
 export default function GamesV1() {
 
   const { chainId, account } = useMoralis();
-  const backendPrefix = getBakendObjPrefix(chainId)
+  const backendPrefix = getBakendObjPrefix(chainId);
 
   const { maxConcurrentGames, gamesInProgress } = useGameMetadata(backendPrefix);
 

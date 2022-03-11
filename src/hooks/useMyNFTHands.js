@@ -10,8 +10,8 @@ export const useMyNFTHands = (options) => {
 
   const thAbi = abis.texas_holdem_v1;
   const { resolveLink } = useIPFS();
-  const [NFTHands, setNFTHands] = useState([]);
 
+  const [NFTHands, setNFTHands] = useState([]);
   const [hehContractAddress, setHehContractAddress] = useState(getHoldemHeroesAddress(chainId));
   const [texasHoldemAddress, setTexasHoldemAddress] = useState(getTexasHoldemV1Address(chainId));
 

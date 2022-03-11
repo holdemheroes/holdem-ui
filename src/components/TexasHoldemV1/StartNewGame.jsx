@@ -58,14 +58,14 @@ export default function StartNewGame({ gameIdsInProgress, maxConcurrentGames }) 
     };
 
     try {
-      const tx = await Moralis.executeFunction( { awaitReceipt: false, ...options } );
+      const tx = await Moralis.executeFunction({ awaitReceipt: false, ...options });
       openNotification({
         message: "🔊 New Transaction",
         description: `📃 Tx Hash: ${tx.hash}`,
         type: "success"
       });
       setStarted(false);
-    } catch(e) {
+    } catch (e) {
       openNotification({
         message: "🔊 Error",
         description: `📃 Receipt: ${e.message}`,

@@ -69,71 +69,43 @@ export const useGameData = (gameId, backendPrefix) => {
   const [gameHasEnded, setGameHasEnded] = useState(false);
 
   function handMatchesPlayed(h, round) {
-    for (let j = 0; j < handsPlayed[round].tokenRefs.length; j++) {
-      if (parseInt(h.token_id, 10) === handsPlayed[round].tokenRefs[j]) {
-        return true;
-      }
-    }
-    return false;
+    return handsPlayed[round].tokenRefs.some((item, index) => (parseInt(h.token_id, 10) === item));
   }
 
   function handMatchesDealt(h) {
-    for (let j = 0; j < cardsDealt.length; j += 1) {
-      if (h.card1 === cardsDealt[j] || h.card2 === cardsDealt[j]) {
-        return true;
-      }
-    }
-    return false;
+    return cardsDealt.some((item, index) => (h.card1 === item || h.card2 === item));
   }
 
   function processPlayableHands() {
-    const playable = [];
+    let playable = [];
     // handle initial playable hands
     switch (gameData?.status) {
       case 1:
       case 2:
         // can use any of my NFTs that have not yet been dealt or played
-        for (let i = 0; i < NFTHands.length; i += 1) {
-          const h = NFTHands[i];
-          const isDealt = handMatchesDealt(h);
-          const playedInFlop = handMatchesPlayed(h, 2);
-          if (!isDealt && !playedInFlop) {
-            playable.push(h);
-          }
-        }
+        playable = NFTHands.filter((h, index) => {
+          return (!handMatchesDealt(h) && !handMatchesPlayed(h, 2));
+        });
         break;
       case 3:
       case 4:
         // can only play hands already added to Flop
-        for (let i = 0; i < NFTHands.length; i += 1) {
-          const h = NFTHands[i];
-          const isDealt = handMatchesDealt(h);
-          const playedInFlop = handMatchesPlayed(h, 2);
-          const playedInTurn = handMatchesPlayed(h, 4);
-
-          if (!isDealt && playedInFlop && !playedInTurn) {
-            playable.push(h);
-          }
-        }
+        playable = NFTHands.filter((h, index) => {
+          return (!handMatchesDealt(h) && handMatchesPlayed(h, 2) && !handMatchesPlayed(h, 4));
+        });
         break;
       case 5:
       case 6:
         // can only play hands already added to Turn
-        for (let i = 0; i < NFTHands.length; i += 1) {
-          const h = NFTHands[i];
-          const isDealt = handMatchesDealt(h);
-          const playedInTurn = handMatchesPlayed(h, 4);
-
-          if (!isDealt && playedInTurn) {
-            playable.push(h);
-          }
-        }
+        playable = NFTHands.filter((h, index) => {
+          return (!handMatchesDealt(h) && handMatchesPlayed(h, 4));
+        });
         break;
       default:
         break;
     }
 
-    setPlayableHands(playable);
+    setPlayableHands([...playable]);
   }
 
   function handleOnChainGameData(data) {
@@ -154,13 +126,8 @@ export const useGameData = (gameId, backendPrefix) => {
   }
 
   function handleOnChainCardsDealt(cards) {
-    const cardsAsInts = [];
-    for (let i = 0; i < cards.length; i++) {
-      let card = parseInt(cards[i], 10);
-      if (cardsAsInts.includes(card)) continue;
-      cardsAsInts.push(card);
-    }
-    setCardsDealt(cardsAsInts);
+    let cardsAsInts = cards.map((card, index) => parseInt(card, 10));
+    setCardsDealt([...cardsAsInts]);
     processPlayableHands();
   }
 
@@ -184,19 +151,15 @@ export const useGameData = (gameId, backendPrefix) => {
     const cardId = parseInt(data.attributes.cardId, 10);
     const blockTimestamp = new Date(data.attributes.block_timestamp) / 1000;
 
-    const newCardsDealt = [];
+    let newCardsDealt = [];
 
     setGameData({ ...gameData, status: round, roundEndTime: blockTimestamp + gameData.gameRoundTimeSeconds });
 
-    for (let i = 0; i < cardsDealt.length; i++) {
-      if (!newCardsDealt.includes(cardsDealt[i])) {
-        newCardsDealt.push(cardsDealt[i]);
-      }
-    }
+    newCardsDealt = [...cardsDealt];
 
     if (!newCardsDealt.includes(cardId)) newCardsDealt.push(cardId);
 
-    setCardsDealt(newCardsDealt);
+    setCardsDealt([...newCardsDealt]);
 
     processPlayableHands();
     setRefetchGameData(true);
@@ -221,7 +184,7 @@ export const useGameData = (gameId, backendPrefix) => {
         round, tokenId, handId, card1, card2
       };
 
-      if (!newHandsPlayed[round].hands.includes(hand)) newHandsPlayed[round].hands.push(hand);
+      if (!newHandsPlayed[round].hands.some((item, idx) => item.handId === hand.handId)) newHandsPlayed[round].hands.push(hand);
       if (!newHandsPlayed[round].tokenRefs.includes(tokenId)) newHandsPlayed[round].tokenRefs.push(tokenId);
 
       setHandsPlayed(newHandsPlayed);
@@ -335,9 +298,9 @@ export const useGameData = (gameId, backendPrefix) => {
           round, tokenId, handId, card1, card2
         };
 
-        if (!newHandsPlayed[round].hands.includes(hand)) newHandsPlayed[round].hands.push(hand);
+        if (!newHandsPlayed[round].hands.some((item, idx) => item.handId === hand.handId)) newHandsPlayed[round].hands.push(hand);
         if (!newHandsPlayed[round].tokenRefs.includes(tokenId)) newHandsPlayed[round].tokenRefs.push(tokenId);
-        
+
         if (round > lastRoundPlayed) {
           setLastRoundPlayed(round);
         }
@@ -493,7 +456,7 @@ export const useGameData = (gameId, backendPrefix) => {
   // get the initial data - wait a second between each attempt while status is "NOT EXIST"
   // runs when first loaded until game status is > 0
   useEffect(() => {
-    let timeout
+    let timeout;
     if ((!gameData || gameData?.status === 0) && options) {
       timeout = setTimeout(() => {
         fetchOnChainGameData()
