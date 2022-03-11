@@ -1,7 +1,7 @@
 import { useEffect, useState } from "react";
 import { useMoralis, useMoralisSubscription } from "react-moralis";
 import abis from "../helpers/contracts";
-import { getTexasHoldemV1Address } from "../helpers/networks"
+import { getTexasHoldemV1Address } from "../helpers/networks";
 import { openNotification } from "../helpers/notifications";
 
 export const useGameMetadata = (backendPrefix) => {
