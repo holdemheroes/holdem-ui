@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from "react";
-import { useMoralis } from "react-moralis";
+import { useMoralis, useMoralisSubscription } from "react-moralis";
 import { Spin } from "antd";
 import abis from "../../helpers/contracts";
 import { getBakendObjPrefix, getTexasHoldemV1Address } from "../../helpers/networks"
@@ -37,8 +37,7 @@ export default function RefundableGames() {
 
       const THRefundableGame = Moralis.Object.extend(`${backendPrefix}THRefundableGame`);
       const query = new Moralis.Query(THRefundableGame)
-      query.descending("gameId");
-      query.limit(100);
+      query.equalTo("confirmed", true).descending("gameId").limit(100);
       const results = await query.find();
 
       const rs = [];
@@ -56,8 +55,36 @@ export default function RefundableGames() {
         }
       }
 
+      rs.sort((a, b) => +b.gameId - +a.gameId);
+
       setRefundableGames(rs);
       setInitialDataFetched(true);
+
+      // useMoralisSubscription(`${backendPrefix}THRefundableGame`,
+      //   q => q.equalTo("confirmed", true).descending("gameId").limit(100),
+      //   {
+      //     onEnter: async data => {
+      //       const rs = [];
+
+      //       for (let i = 0; i < data.length; i++) {
+      //         const gameId = data[i].get("gameId");
+      //         const amount = await fetchPaidIn(gameId);
+
+      //         if (amount && amount?.toString() !== "0" && !rs.includes({
+      //           gameId, amount
+      //         })) {
+      //           rs.push({
+      //             gameId, amount
+      //           });
+      //         }
+      //       }
+
+      //       rs.sort((a, b) => +b.gameId - +a.gameId);
+
+      //       setRefundableGames(rs);
+      //       setInitialDataFetched(true);
+      //     },
+      //   });
     }
 
     if (!initialDataFetched) {
