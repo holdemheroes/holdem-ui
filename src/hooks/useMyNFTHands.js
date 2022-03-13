@@ -43,7 +43,7 @@ export const useMyNFTHands = (options) => {
         if (NFT?.token_id) {
           fetchHandData(NFT.token_id)
             .then((d) => {
-              if (d?.card1 && d?.card2 && d?.handId) {
+              if (d?.card1.toString() && d?.card2.toString() && d?.handId.toString()) {
                 NFT.card1 = parseInt(d.card1, 10);
                 NFT.card2 = parseInt(d.card2, 10);
                 NFT.handId = parseInt(d.handId, 10);

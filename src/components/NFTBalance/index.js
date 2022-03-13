@@ -10,7 +10,7 @@ export default function NFTBalance() {
   const { NFTHands, isLoading } = useMyNFTHands();
   const { chainId } = useMoralis();
 
-  if(isLoading) {
+  if (isLoading) {
     return <Spin className="spin_loader" />;
   }
 

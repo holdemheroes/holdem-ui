@@ -1,6 +1,6 @@
 import React, { useState } from "react";
 import { useMoralis } from "react-moralis";
-import { Button, Checkbox, Form, Radio, Spin } from "antd";
+import { Button, Checkbox, Form, Radio, Spin, Tooltip } from "antd";
 import { PlayingCard } from "../PlayingCards/PlayingCard";
 import { Leaderboard } from "./Leaderboard";
 import { Hand } from "./Hand";
@@ -218,7 +218,11 @@ export default function Game({ gameId }) {
   }
 
   if (gameData?.status === 0) {
-    return <>Initialising on chain data</>;
+    return <div className="initialising_on_chain_data">Initialising on chain data</div>;
+  }
+
+  function handMatchesDealt(h) {
+    return cardsDealt.some((item, index) => (h.card1 === item || h.card2 === item));
   }
 
   return (
@@ -364,7 +368,10 @@ export default function Game({ gameId }) {
                           <>
                             {
                               (gameData.status === 2 || gameData.status === 4) && <>
-                                <Button onClick={() => handleHandPlayed(nft.token_id)} key={`play_button_${nft.token_id}`}>Play</Button>
+                                {
+                                  handMatchesDealt(nft) ? <Tooltip title="A card in this hand has already been dealt"><Button onClick={() => handleHandPlayed(nft.token_id)} key={`play_button_${nft.token_id}`} disabled={true}>Play</Button></Tooltip> :
+                                    <Button onClick={() => handleHandPlayed(nft.token_id)} key={`play_button_${nft.token_id}`}>Play</Button>
+                                }
                               </>
                             }
                           </>

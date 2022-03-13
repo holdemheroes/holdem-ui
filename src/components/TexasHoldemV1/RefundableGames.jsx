@@ -59,32 +59,6 @@ export default function RefundableGames() {
 
       setRefundableGames(rs);
       setInitialDataFetched(true);
-
-      // useMoralisSubscription(`${backendPrefix}THRefundableGame`,
-      //   q => q.equalTo("confirmed", true).descending("gameId").limit(100),
-      //   {
-      //     onEnter: async data => {
-      //       const rs = [];
-
-      //       for (let i = 0; i < data.length; i++) {
-      //         const gameId = data[i].get("gameId");
-      //         const amount = await fetchPaidIn(gameId);
-
-      //         if (amount && amount?.toString() !== "0" && !rs.includes({
-      //           gameId, amount
-      //         })) {
-      //           rs.push({
-      //             gameId, amount
-      //           });
-      //         }
-      //       }
-
-      //       rs.sort((a, b) => +b.gameId - +a.gameId);
-
-      //       setRefundableGames(rs);
-      //       setInitialDataFetched(true);
-      //     },
-      //   });
     }
 
     if (!initialDataFetched) {
@@ -93,14 +67,14 @@ export default function RefundableGames() {
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [refundableGames, initialDataFetched, isInitialized]);
 
-  if (!refundableGames) {
+  if (!initialDataFetched) {
     return <Spin className="spin_loader" />;
   }
 
   return (
     <div className="refundable_wrapper">
       <p className="title">Refundable Games</p>
-      <p className="desc">Collect refunds from games in which you were the only player</p>
+      <p className="desc">{Array.isArray(refundableGames) && refundableGames.length ? "Collect Refunds" : "No Refunds to collect at this time"}</p>
       <div className="refundable_games">
         {refundableGames &&
           refundableGames.map((item) => (

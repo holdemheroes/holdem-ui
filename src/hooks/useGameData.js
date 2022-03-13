@@ -84,21 +84,24 @@ export const useGameData = (gameId, backendPrefix) => {
       case 2:
         // can use any of my NFTs that have not yet been dealt or played
         playable = NFTHands.filter((h, index) => {
-          return (!handMatchesDealt(h) && !handMatchesPlayed(h, 2));
+          // return (!handMatchesDealt(h) && !handMatchesPlayed(h, 2));
+          return (!handMatchesPlayed(h, 2));
         });
         break;
       case 3:
       case 4:
         // can only play hands already added to Flop
         playable = NFTHands.filter((h, index) => {
-          return (!handMatchesDealt(h) && handMatchesPlayed(h, 2) && !handMatchesPlayed(h, 4));
+          // return (!handMatchesDealt(h) && handMatchesPlayed(h, 2) && !handMatchesPlayed(h, 4));
+          return (handMatchesPlayed(h, 2) && !handMatchesPlayed(h, 4));
         });
         break;
       case 5:
       case 6:
         // can only play hands already added to Turn
         playable = NFTHands.filter((h, index) => {
-          return (!handMatchesDealt(h) && handMatchesPlayed(h, 4));
+          // return (!handMatchesDealt(h) && handMatchesPlayed(h, 4));
+          return (handMatchesPlayed(h, 4));
         });
         break;
       default:
