@@ -1,58 +1,35 @@
 import React, { useState, useEffect } from "react";
-import { useMoralis, useMoralisSubscription } from "react-moralis";
+import { useMoralis } from "react-moralis";
 import { Spin } from "antd";
-import abis from "../../helpers/contracts";
-import { getBakendObjPrefix, getTexasHoldemV1Address } from "../../helpers/networks"
+import { getBakendObjPrefix } from "../../helpers/networks"
 import Refundable from "./Refundable";
 import "./style.scss";
 
 export default function RefundableGames() {
-  const abi = abis.texas_holdem_v1;
   const { Moralis, isInitialized, chainId, account } = useMoralis();
-  const contractAddress = getTexasHoldemV1Address(chainId);
   const backendPrefix = getBakendObjPrefix(chainId);
 
   const [refundableGames, setRefundableGames] = useState(null);
   const [initialDataFetched, setInitialDataFetched] = useState(false);
 
   useEffect(() => {
-    const fetchPaidIn = async (gameId) => {
-      return await Moralis.executeFunction({
-        contractAddress,
-        functionName: "getPlayerAmountPaidIn",
-        abi,
-        params: {
-          "_player": account,
-          "_gameId": String(gameId),
-        },
-      })
-        .then((result) => result)
-        .catch((e) => console.log(e.message));
-    };
-
     async function fetchRefundableGames() {
-      if (!isInitialized) {
+      if (!isInitialized || !backendPrefix || !account) {
         return;
       }
 
-      const THRefundableGame = Moralis.Object.extend(`${backendPrefix}THRefundableGame`);
-      const query = new Moralis.Query(THRefundableGame)
-      query.equalTo("confirmed", true).descending("gameId").limit(100);
-      const results = await query.find();
+      const params =  { player: account, prefix: backendPrefix };
+      const refunds = await Moralis.Cloud.run("getUserRefunds", params);
 
-      const rs = [];
+      const rs = []
 
-      for (let i = 0; i < results.length; i++) {
-        const gameId = results[i].get("gameId");
-        const amount = await fetchPaidIn(gameId);
-
-        if (amount && amount?.toString() !== "0" && !rs.includes({
-          gameId, amount
-        })) {
-          rs.push({
-            gameId, amount
-          });
-        }
+      for(let i = 0; i < refunds.length; i += 1) {
+        rs.push(
+          {
+            gameId: refunds[i].objectId,
+            amount: refunds[i].total,
+          }
+        )
       }
 
       rs.sort((a, b) => +b.gameId - +a.gameId);
@@ -65,7 +42,7 @@ export default function RefundableGames() {
       fetchRefundableGames();
     }
     // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [refundableGames, initialDataFetched, isInitialized]);
+  }, [refundableGames, initialDataFetched, isInitialized, backendPrefix, account]);
 
   if (!initialDataFetched) {
     return <Spin className="spin_loader" />;
