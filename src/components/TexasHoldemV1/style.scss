@@ -803,6 +803,10 @@
                 font-size     : 19px;
                 line-height   : 22px;
                 color         : #FFFFFF;
+
+                &:disabled {
+                    cursor: not-allowed !important;
+                }
             }
         }
     }

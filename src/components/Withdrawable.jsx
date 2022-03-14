@@ -32,7 +32,7 @@ function Withdrawable() {
         description: `📃 Tx Hash: ${tx.hash}`,
         type: "success"
       });
-    } catch(e) {
+    } catch (e) {
       openNotification({
         message: "🔊 Error",
         description: `📃 Receipt: ${e.message}`,
@@ -42,9 +42,6 @@ function Withdrawable() {
     }
   }
 
-  if (!balance) {
-    return <></>
-  }
   return (
     <>
       <button onClick={() => handleWithdraw()}
