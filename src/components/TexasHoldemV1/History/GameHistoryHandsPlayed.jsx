@@ -64,6 +64,7 @@ export const GameHistoryHandsPlayed = ({ gameId, round1Price, round2Price, finis
     queryTHHandAdded
       .equalTo("gameId", String(gameId))
       .equalTo("round", round)
+      .equalTo("confirmed", true)
       .ascending(["block_timestamp", "transaction_index"]);
     return queryTHHandAdded.find();
   };
