@@ -358,3 +358,25 @@ button {
 .btn-hover-pointer:hover {
   cursor: pointer;
 }
+
+// notification message
+.notification {
+  background-color: #0288d1;
+  transition      : box-shadow 300ms cubic-bezier(0.4, 0, 0.2, 1) 0ms;
+  border-radius   : 4px;
+  box-shadow      : 0px 3px 5px -1px rgb(0 0 0 / 20%), 0px 6px 10px 0px rgb(0 0 0 / 14%), 0px 1px 18px 0px rgb(0 0 0 / 12%);
+  opacity         : 0.8;
+
+  * {
+    color      : white;
+    font-family: Karla, sans-serif;
+  }
+
+  &.success {
+    background-color: #2e7d32;
+  }
+
+  &.error {
+    background-color: #d32f2f;
+  }
+}
