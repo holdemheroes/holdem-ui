@@ -15,11 +15,12 @@ import { History } from "./components/TexasHoldemV1/History/History";
 import Home from "./pages/Home";
 import HomeL2 from "./pages/HomeL2";
 import GamePlay from "./pages/GamePlay";
+import GameComingSoon from "./components/TexasHoldemV1/GameComingSoon";
 import "./App.scss";
 import { getEllipsisTxt } from "./helpers/formatters";
 import Logout from "./components/Logout";
 import { logo } from "./logo";
-import { getChainType } from "./helpers/networks";
+import { getChainType, getGameIsLive } from "./helpers/networks"
 import ScrollToTop from "./ScrollToTop";
 
 const App = () => {
@@ -31,6 +32,7 @@ const App = () => {
   }, [isAuthenticated, isWeb3Enabled]);
 
   const chainType = getChainType(chainId);
+  const gameIsLive = getGameIsLive(chainId);
 
   return (
     <Router>
@@ -87,13 +89,16 @@ const App = () => {
                   <NFTBalance />
                 </Route>
                 <Route path="/Play">
-                  <GamesV1 />
+                  {gameIsLive && <GamesV1 />}
+                  {!gameIsLive && <GameComingSoon />}
                 </Route>
                 <Route path="/Refunds">
-                  <RefundableGames />
+                  {gameIsLive && <RefundableGames />}
+                  {!gameIsLive && <GameComingSoon />}
                 </Route>
                 <Route path="/History">
-                  <History />
+                  {gameIsLive && <History />}
+                  {!gameIsLive && <GameComingSoon />}
                 </Route>
               </>
             }
