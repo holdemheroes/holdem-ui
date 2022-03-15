@@ -349,6 +349,43 @@
                     }
                 }
 
+                &.roadmap-wrapper {
+                    display        : flex;
+                    align-items    : center;
+                    justify-content: space-between;
+                    margin-top     : 150px;
+
+                    .roadmap-text {
+                        * {
+                            color: white;
+                        }
+
+                        .title {
+                            margin-bottom : 30 px;
+                            font-family   : "Josefin Sans", sans-serif;
+                            font-size     : 70px;
+                            font-weight   : 600;
+                            color         : #fff;
+                            line-height   : 75px;
+                            letter-spacing: 3px;
+                            text-align    : left;
+                        }
+
+                        .sub_title {
+                            font-family: Karla, sans-serif;
+                            font-size  : 25px;
+                            line-height: 29px;
+                        }
+
+                        .desc {
+                            font-family: Karla, sans-serif;
+                            font-size  : 17px;
+                            color      : rgba(255, 255, 255, 0.81);
+                            line-height: 27px;
+                        }
+                    }
+                }
+
                 &:last-child {
                     max-width     : 28%;
                     margin        : 0 auto;
