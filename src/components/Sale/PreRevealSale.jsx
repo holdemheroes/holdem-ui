@@ -3,13 +3,16 @@ import { useMoralis } from "react-moralis";
 import abis from "../../helpers/contracts";
 import { getHoldemHeroesAddress } from "../../helpers/networks";
 import { openNotification } from "../../helpers/notifications";
+import { getHasWhitelist, getMerkleProof } from "../../helpers/whitelist"
 
 const BN = require('bn.js');
 
 export default function PreRevealSale({ pricePerToken, mintedTokens, maxCanOwn, balance, totalSupply, saleHeader }) {
-  const { Moralis, chainId } = useMoralis();
+  const { Moralis, chainId, account } = useMoralis();
   const abi = abis.heh_nft;
   const contractAddress = getHoldemHeroesAddress(chainId);
+
+  const hasWhitelist = getHasWhitelist(chainId);
 
   const MAX_TOTAL_SUPPLY = 1326;
 
@@ -20,13 +23,20 @@ export default function PreRevealSale({ pricePerToken, mintedTokens, maxCanOwn, 
     const numToMint = parseInt(formDataObj.mint_amount, 10);
     const cost = new BN(pricePerToken).mul(new BN(numToMint));
 
+    let proof = []
+
+    if(hasWhitelist) {
+      proof = getMerkleProof(chainId, account)
+    }
+
     const options = {
       contractAddress,
       functionName: "mintNFTPreReveal",
       abi,
       msgValue: cost.toString(),
       params: {
-        numberOfNfts: numToMint
+        numberOfNfts: numToMint,
+        merkleProof: proof,
       },
     };
 
