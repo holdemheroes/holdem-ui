@@ -9,6 +9,7 @@ import { useMoralis } from "react-moralis";
 import abis from "../../helpers/contracts";
 import { getHoldemHeroesAddress } from "../../helpers/networks";
 import { openNotification } from "../../helpers/notifications";
+import { Roadmap } from "../../roadmap";
 
 const BN = require('bn.js');
 
@@ -199,6 +200,29 @@ export default function Home() {
               </div>
               <div>
                 <img src="../../assets/images/cardshq.png" alt="" />
+              </div>
+            </div>
+
+            <div className="roadmap-wrapper">
+              <div className="roadmap-img">
+                <Roadmap />
+              </div>
+
+              <div className="roadmap-text">
+                <p className="title">Roadmap</p>
+                
+                <p className="sub_title">MORE GAMES</p>
+                <p className="desc">Further games of poker and other card games with the open-source card contract</p>
+
+                <p className="sub_title">MORE CHAINS</p>
+                <p className="desc">Deploying games to EVM chains by community vote (AVAX, BSC, Fantom...)</p>
+
+                <p className="sub_title">MORE DECKS</p>
+                <p className="desc">Whitelisting card decks for custom-branded poker games</p>
+
+                <p className="sub_title">GOVERNANCE BY DAO</p>
+                <p className="desc">Decentralizing governance to community ownership by formalizing the DAO structure</p>
+
               </div>
             </div>
 

@@ -269,19 +269,13 @@ export default function Game({ gameId }) {
                       <Radio.Group>
                         <div className="available_hands-wrapper">
                           {
-                            playableHands.length === 1 ? <Hand nft={playableHands[0]} key={`hand_${playableHands[0].token_id}_${gameId}`}>
-                              <Radio.Button
-                                key={`final_hand_token_${playableHands[0].token_id}`}
-                                value={playableHands[0].token_id}
-                                defaultChecked={true}
-                              >
-                              </Radio.Button>
-                            </Hand> : playableHands.map((nft, index) => (
+                            playableHands.map((nft, index) => (
                               <Hand nft={nft} key={`hand_${nft.token_id}_${gameId}`}>
                                 <Radio.Button
                                   key={`final_hand_token_${nft.token_id}`}
                                   value={nft.token_id}
                                   onClick={() => handleFinalTokenChange([nft.card1, nft.card2])}
+                                  checked={index === 0}
                                 >
                                 </Radio.Button>
                               </Hand>
