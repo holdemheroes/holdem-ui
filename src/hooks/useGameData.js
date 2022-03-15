@@ -423,7 +423,6 @@ export const useGameData = (gameId, backendPrefix) => {
     const queryTHHandAdded = new Moralis.Query(THHandAdded);
     queryTHHandAdded.equalTo("gameId", String(gameId));
     queryTHHandAdded.equalTo("player", account);
-    queryTHHandAdded.equalTo("confirmed", true);
     queryTHHandAdded.find()
       .then((result) => handleHandsPlayedData(result))
       .catch((e) => console.log(e.message));
@@ -617,7 +616,7 @@ export const useGameData = (gameId, backendPrefix) => {
 
   // subscribe to HandAdded events - THHandAdded
   useMoralisSubscription(`${backendPrefix}THHandAdded`,
-    query => query.equalTo("gameId", String(gameId)).equalTo("player", account).equalTo("confirmed", true),
+    query => query.equalTo("gameId", String(gameId)).equalTo("player", account),
     [gameId, account],
     {
       onEnter: data => handleHandAddedEvent(data),
