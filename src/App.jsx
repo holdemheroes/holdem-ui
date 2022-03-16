@@ -74,7 +74,7 @@ const App = () => {
         <ScrollToTop>
           <Switch>
             <Route exact path="/">
-              {chainType === "l1" && <Home />}
+              {(!chainType || chainType === "l1") && <Home />}
               {chainType === "l2" && <HomeL2 />}
             </Route>
             {

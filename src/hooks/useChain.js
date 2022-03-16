@@ -12,8 +12,7 @@ const useChain = () => {
         if (error.code === 4902) {
           try {
             const config = networkConfigs[chain];
-            const { chainId, chainName, currencyName, currencySymbol, rpcUrl, blockExplorerUrl } =
-              config;
+            const { chainId, chainName, currencyName, currencySymbol, rpcUrl, blockExplorerUrl } = config;
             await Moralis.addNetwork(
               chainId,
               chainName,
