@@ -10,10 +10,31 @@ export default function StartNewGame({ gameIdsInProgress, maxConcurrentGames }) 
   const abi = abis.texas_holdem_v1;
   const contractAddress = getTexasHoldemV1Address(chainId);
   const currencySymbol = getCurrencySymbol(chainId)
-  const [started, setStarted] = useState(false);
+  const [open, setOpen] = useState(false);
 
   if (!gameIdsInProgress || !maxConcurrentGames) {
     return <Spin className="spin_loader" />;
+  }
+
+  let gameInfo = {};
+
+  switch (currencySymbol) {
+    case "ETH":
+      gameInfo = {
+        round_time: 10,
+        price1: 0.1,
+        price2: 0.2
+      };
+      break;
+    case "MATIC":
+      gameInfo = {
+        round_time: 5,
+        price1: 100,
+        price2: 200
+      };
+      break;
+    default:
+      break;
   }
 
   async function startNewCustomGame(values) {
@@ -64,7 +85,7 @@ export default function StartNewGame({ gameIdsInProgress, maxConcurrentGames }) 
         description: `📃 Tx Hash: ${tx.hash}`,
         type: "success"
       });
-      setStarted(false);
+      setOpen(false);
     } catch (e) {
       openNotification({
         message: "🔊 Error",
@@ -83,8 +104,9 @@ export default function StartNewGame({ gameIdsInProgress, maxConcurrentGames }) 
 
   return (
     <>
-      <button onClick={() => { setStarted(started => !started) }} style={{ display: started ? "none" : "block" }} className="start_btn btn-shadow">Start New Game</button>
-      <div style={{ display: started ? "block" : "none", width: "340px", margin: "0 auto" }} className="game_start_card">
+      <button onClick={() => { setOpen(open => !open) }} style={{ display: open ? "none" : "block" }} className="start_btn btn-shadow">Start New Game</button>
+      <div style={{ display: open ? "block" : "none", width: "340px", margin: "0 auto" }} className="game_start_card">
+        <span className="modal-close" onClick={() => setOpen(open => !open)}>&times;</span>
         <p className="title">Start New Game</p>
         <Form
           name="basic"
@@ -95,7 +117,7 @@ export default function StartNewGame({ gameIdsInProgress, maxConcurrentGames }) 
           autoComplete="off"
         >
           <Form.Item
-            initialValue={"60"}
+            initialValue={`${gameInfo.round_time}`}
             label="Round Time"
             name="round_timer"
             rules={[{ required: true, message: 'Please input round time' }]}
@@ -104,7 +126,7 @@ export default function StartNewGame({ gameIdsInProgress, maxConcurrentGames }) 
           </Form.Item>
 
           <Form.Item
-            initialValue={"0.1"}
+            initialValue={`${gameInfo.price1}`}
             label="Flop bet"
             name="round_1_price"
             rules={[{ required: true, message: 'Please input flop bet' }]}
@@ -113,7 +135,7 @@ export default function StartNewGame({ gameIdsInProgress, maxConcurrentGames }) 
           </Form.Item>
 
           <Form.Item
-            initialValue={"0.2"}
+            initialValue={`${gameInfo.price2}`}
             label="Turn bet"
             name="round_2_price"
             rules={[{ required: true, message: 'Please input turn bet' }]}

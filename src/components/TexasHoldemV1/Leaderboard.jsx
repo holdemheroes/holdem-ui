@@ -119,8 +119,6 @@ export const Leaderboard = ({ gameId, showWinnings = false }) => {
         lb.push(fh);
       }
 
-      console.log(lb)
-
       setLeaderboard(sortLeaderboard(lb));
     }
 
