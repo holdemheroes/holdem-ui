@@ -35,6 +35,24 @@
         padding      : 20px;
         background   : #FFFFFF;
         border-radius: 8px;
+        position     : relative;
+
+        .modal-close {
+            cursor     : pointer;
+            color      : #2C2C2C;
+            font-size  : 35px;
+            font-weight: bold;
+            line-height: 20px;
+            padding    : 5px;
+            position   : absolute;
+            top        : 0;
+            right      : 0;
+            z-index    : 100;
+
+            &:hover {
+                color: #0000008f;
+            }
+        }
 
         &>.title {
             padding-bottom: 14px;

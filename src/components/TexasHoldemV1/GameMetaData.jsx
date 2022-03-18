@@ -128,10 +128,11 @@ export const GameMetaData = ({ gameId, gameData, feesPaid, playersPerRound, numF
   return (
     <>
       <div className="bet_price-info">
+        <p style={{ color: "white" }}>{`Round Time: ${gameData.gameRoundTimeSeconds / 60} Minutes`}</p>
         <p style={{ color: "white" }}>{`Flop Bet Per NFT: ${Moralis.Units.FromWei(gameData.round1Price, 18)}`}</p>
         <p style={{ color: "white" }}>{`Turn Bet Per NFT: ${Moralis.Units.FromWei(gameData.round2Price, 18)}`}</p>
       </div>
-      
+
       <div className="game_info-table--wrapper">
         <table className="game_info-table">
           <thead>

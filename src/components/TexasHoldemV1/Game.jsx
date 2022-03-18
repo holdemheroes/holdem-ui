@@ -10,7 +10,6 @@ import abis from "../../helpers/contracts";
 import { openNotification } from "../../helpers/notifications";
 import { getBakendObjPrefix, getTexasHoldemV1Address } from "../../helpers/networks"
 import { getRoundStatusText } from "../../helpers/formatters";
-import { useEffect } from "react/cjs/react.production.min";
 
 export default function Game({ gameId }) {
 
@@ -275,7 +274,6 @@ export default function Game({ gameId }) {
                                   key={`final_hand_token_${nft.token_id}`}
                                   value={nft.token_id}
                                   onClick={() => handleFinalTokenChange([nft.card1, nft.card2])}
-                                  checked={index === 0}
                                 >
                                 </Radio.Button>
                               </Hand>
