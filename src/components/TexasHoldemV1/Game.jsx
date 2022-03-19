@@ -48,6 +48,8 @@ export default function Game({ gameId }) {
   const [checkedNum, setCheckedNum] = useState(0);
   const [checkStatus, setCheckStatus] = useState([0, 0, 0, 0, 0]);
 
+  const [checkId, setCheckId] = useState(0);
+
   const handleOnClick = (e, idx) => {
     if (e.target.checked) { setCheckedNum(checkedNum + 1); } else { setCheckedNum(checkedNum - 1); }
 
@@ -94,6 +96,7 @@ export default function Game({ gameId }) {
   };
 
   const handlePlayFinalHand = async (values) => {
+    console.log(values)
 
     if (!values.river_cards) {
       openNotification({
@@ -251,37 +254,41 @@ export default function Game({ gameId }) {
             }
 
             {
-              gameData.status === 6 && !gameHasEnded && finalHand.card1 < 0 && <>
+              gameData.status === 6 && !gameHasEnded && finalHand.card1 < 0 &&
+              <>
                 <div className="river_stage-header">
                   <p className="title">Select your final hand</p>
                   <p className="desc">Select one of your available hands plus three cards from the river.</p>
                 </div>
 
                 {
-                  lastRoundPlayed !== 6 &&
-                  <>
+                  lastRoundPlayed !== 6 && <>
                     <p className="river_stage-sub_title">Available Hands</p>
+                    {
+                      playableHands.length && <Form.Item
+                        name={"final_token"}
+                        initialValue={playableHands[0]?.token_id}
+                      >
+                        <Radio.Group>
+                          <div className="available_hands-wrapper">
+                            {
+                              playableHands.map((nft, index) => (
+                                <Hand nft={nft} key={`hand_${nft.token_id}_${gameId}`}>
+                                  <Radio.Button
+                                    key={`final_hand_token_${nft.token_id}`}
+                                    value={nft.token_id}
+                                    onClick={() => { setCheckId(index); handleFinalTokenChange([nft.card1, nft.card2]) }}
+                                    checked={index === checkId}
+                                  >
+                                  </Radio.Button>
+                                </Hand>
+                              ))
+                            }
+                          </div>
+                        </Radio.Group>
+                      </Form.Item>
+                    }
 
-                    <Form.Item
-                      name={"final_token"}
-                    >
-                      <Radio.Group>
-                        <div className="available_hands-wrapper">
-                          {
-                            playableHands.map((nft, index) => (
-                              <Hand nft={nft} key={`hand_${nft.token_id}_${gameId}`}>
-                                <Radio.Button
-                                  key={`final_hand_token_${nft.token_id}`}
-                                  value={nft.token_id}
-                                  onClick={() => handleFinalTokenChange([nft.card1, nft.card2])}
-                                >
-                                </Radio.Button>
-                              </Hand>
-                            ))
-                          }
-                        </div>
-                      </Radio.Group>
-                    </Form.Item>
                   </>
                 }
 
