@@ -4,7 +4,7 @@ import { getTexasHoldemV1Address } from "../helpers/networks"
 import { useEffect, useState } from "react";
 import { openNotification } from "../helpers/notifications";
 import { getDealRequestedText, sortFinalHand } from "../helpers/formatters";
-import BN from "bn.js";
+import { BigNumber } from "@ethersproject/bignumber";
 import { useMyNFTHands } from "./useMyNFTHands";
 
 export const useGameData = (gameId, backendPrefix) => {
@@ -208,12 +208,12 @@ export const useGameData = (gameId, backendPrefix) => {
 
   function handleFeePaidEvent(data) {
     const round = parseInt(data.attributes.round, 10);
-    const amount = new BN(data.attributes.amount);
+    const amount = BigNumber.from(data.attributes.amount);
     const player = data.attributes.player;
 
     // total
     if (gameData?.totalPaidIn) {
-      const newTotal = new BN(gameData.totalPaidIn).add(amount);
+      const newTotal = BigNumber.from(gameData.totalPaidIn).add(amount);
       setGameData({ ...gameData, totalPaidIn: newTotal.toString() });
     }
 
@@ -222,14 +222,14 @@ export const useGameData = (gameId, backendPrefix) => {
     const newNumHands = { ...numHands };
 
     if (player === account) {
-      const newAmnt = new BN(feesPaid[round].me).add(amount);
+      const newAmnt = BigNumber.from(feesPaid[round].me).add(amount);
       newFeesPaid[round].me = newAmnt.toString();
       if (round > lastRoundPlayed) {
         setLastRoundPlayed(round);
       }
     }
 
-    const newRoundTotal = new BN(feesPaid[round].total).add(amount);
+    const newRoundTotal = BigNumber.from(feesPaid[round].total).add(amount);
     newFeesPaid[round].total = newRoundTotal.toString();
 
     if (!newPlayersPerRound[round].includes(player)) {
@@ -334,13 +334,13 @@ export const useGameData = (gameId, backendPrefix) => {
       const res = results[i];
       const player = res.get("player");
       const round = parseInt(res.get("round"), 10);
-      const amount = new BN(res.get("amount"));
+      const amount = BigNumber.from(res.get("amount"));
       if (player === account) {
-        const newMeAmnt = new BN(newFeesPaid[round].me).add(amount);
+        const newMeAmnt = BigNumber.from(newFeesPaid[round].me).add(amount);
         newFeesPaid[round].me = newMeAmnt.toString();
       }
 
-      const newTotalAmnt = new BN(newFeesPaid[round].total).add(amount);
+      const newTotalAmnt = BigNumber.from(newFeesPaid[round].total).add(amount);
       newFeesPaid[round].total = newTotalAmnt.toString();
 
       if (!newPlayersPerRound[round].includes(player)) {

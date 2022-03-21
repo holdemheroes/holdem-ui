@@ -1,7 +1,7 @@
 import { useMoralis } from "react-moralis";
 import React, { useEffect, useState } from "react";
 import { Spin, Table } from "antd";
-import BN from "bn.js";
+import { BigNumber } from "@ethersproject/bignumber";
 import { getBakendObjPrefix, getExplorer } from "../../../helpers/networks"
 import { getEllipsisTxt } from "../../../helpers/formatters";
 import Moment from "react-moment";
@@ -52,7 +52,7 @@ export const GameHistoryProcessedRefunds = ({ gameId }) => {
         .ascending(["block_timestamp", "transaction_index"]);
       const results = await query.find();
 
-      let total = new BN("0");
+      let total = BigNumber.from("0");
 
       const data = [];
 
@@ -63,7 +63,7 @@ export const GameHistoryProcessedRefunds = ({ gameId }) => {
         const date = res.get("block_timestamp");
         const amount = res.get("amount");
 
-        total = total.add(new BN(amount));
+        total = total.add(BigNumber.from(amount));
 
         const d = {
           key: `refunds_${gameId}_${i}`,

@@ -3,8 +3,7 @@ import { useMoralis } from "react-moralis";
 import abis from "../../helpers/contracts";
 import { getHoldemHeroesAddress } from "../../helpers/networks";
 import { openNotification } from "../../helpers/notifications";
-
-const BN = require('bn.js');
+import { BigNumber } from "@ethersproject/bignumber";
 
 export default function PreRevealSale({ pricePerToken, mintedTokens, maxCanOwn, balance, totalSupply, saleHeader }) {
   const { Moralis, chainId } = useMoralis();
@@ -18,7 +17,7 @@ export default function PreRevealSale({ pricePerToken, mintedTokens, maxCanOwn, 
     const formData = new FormData(event.target),
       formDataObj = Object.fromEntries(formData.entries());
     const numToMint = parseInt(formDataObj.mint_amount, 10);
-    const cost = new BN(pricePerToken).mul(new BN(numToMint));
+    const cost = BigNumber.from(pricePerToken).mul(BigNumber.from(numToMint));
 
     const options = {
       contractAddress,
