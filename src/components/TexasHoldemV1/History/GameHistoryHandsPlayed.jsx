@@ -3,7 +3,7 @@ import React, { useEffect, useState } from "react";
 import { getDealRequestedText, getEllipsisTxt } from "../../../helpers/formatters";
 import { Spin, Table } from "antd";
 import { PlayingCard } from "../../PlayingCards/PlayingCard";
-import BN from "bn.js";
+import { BigNumber } from "@ethersproject/bignumber";
 import Moment from "react-moment";
 import { getBakendObjPrefix, getCurrencySymbol, getExplorer } from "../../../helpers/networks"
 
@@ -73,14 +73,14 @@ export const GameHistoryHandsPlayed = ({ gameId, round1Price, round2Price, finis
     const resultsTHHandAdded = await fetchHandsPlayedInRound(round);
     const roundPrice = round === "2" ? round1Price : round2Price;
 
-    let roundTotal = new BN("0");
+    let roundTotal = BigNumber.from("0");
 
     const hands = [];
     for (let i = 0; i < resultsTHHandAdded.length; i += 1) {
       if (parseInt(round, 10) > highestRoundPlayed) {
         setHighestRoundPlayed(parseInt(round, 10));
       }
-      roundTotal = roundTotal.add(new BN(roundPrice));
+      roundTotal = roundTotal.add(BigNumber.from(roundPrice));
       const res = resultsTHHandAdded[i];
       const player = res.get("player");
       const txHash = res.get("transaction_hash");
@@ -153,9 +153,9 @@ export const GameHistoryHandsPlayed = ({ gameId, round1Price, round2Price, finis
         .equalTo("gameId", String(gameId));
       const results = await query.find();
 
-      let total = new BN("0");
+      let total = BigNumber.from("0");
       for (let i = 0; i < results.length; i += 1) {
-        total = total.add(new BN(results[i].get("amount")));
+        total = total.add(BigNumber.from(results[i].get("amount")));
       }
       setTotalWinnings(total.toString());
 
@@ -170,7 +170,7 @@ export const GameHistoryHandsPlayed = ({ gameId, round1Price, round2Price, finis
       getTotalWinnings();
     }
 
-    const totalFees = new BN(totalFeesPaidFlop).add(new BN(totalFeesPaidTurn));
+    const totalFees = BigNumber.from(totalFeesPaidFlop).add(BigNumber.from(totalFeesPaidTurn));
     setTotalFeesPaid(totalFees.toString());
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [totalWinningsInitialised, totalFeesPaidFlop, totalFeesPaidTurn]);

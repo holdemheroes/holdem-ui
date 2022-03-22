@@ -10,8 +10,7 @@ import abis from "../../helpers/contracts";
 import { getHoldemHeroesAddress } from "../../helpers/networks";
 import { openNotification } from "../../helpers/notifications";
 import { Roadmap } from "../../roadmap";
-
-const BN = require('bn.js');
+import { BigNumber } from "@ethersproject/bignumber";
 
 export default function Home() {
   const {
@@ -41,7 +40,7 @@ export default function Home() {
     const formData = new FormData(event.target),
       formDataObj = Object.fromEntries(formData.entries());
     const numToMint = parseInt(formDataObj.mint_amount, 10);
-    const cost = new BN(pricePerToken).mul(new BN(numToMint));
+    const cost = BigNumber.from(pricePerToken).mul(BigNumber.from(numToMint));
 
     const options = {
       contractAddress,
