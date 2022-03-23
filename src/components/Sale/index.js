@@ -26,7 +26,7 @@ export default function Sale() {
 
   const [minted, setMinted] = useState([]);
   const [ saleStartBlockDiff, setSaleStartBlockDiff] = useState(null);
-  const [ revealTimeDiff, setRevealTimeDiff ] = useState(0);
+  const [ revealTimeDiff, setRevealTimeDiff ] = useState(null);
   const [ saleStartTime, setSaleStartTime ] = useState(0);
   const [ saleTimeInitialised, setSaleTimeInitialised ] = useState(false);
 
@@ -87,7 +87,7 @@ export default function Sale() {
     };
   });
 
-  if (!nftSaleDataInitialised && nftBalanceIsLoading && !saleTimeInitialised) {
+  if (!nftSaleDataInitialised || nftBalanceIsLoading || !saleTimeInitialised || revealTimeDiff === null) {
     return <Spin className="spin_loader" />;
   }
 
