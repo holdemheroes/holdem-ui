@@ -25,7 +25,7 @@ export default function PreRevealSale({ pricePerToken, mintedTokens, maxCanOwn, 
       abi,
       msgValue: cost.toString(),
       params: {
-        numberOfNfts: numToMint
+        _numberOfNfts: numToMint
       },
     };
 
