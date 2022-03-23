@@ -112,7 +112,7 @@ export default function Game({ gameId }) {
       });
     } catch (e) {
       openNotification({
-        message: "🔊 Error",
+        message: "🔊",
         description: "The round has already ended",
         // description: `📃 ${e.message}`,
         type: "error",
