@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import { NavLink } from "react-router-dom";
 import "./style.scss";
 import AnimateButton from "../../components/AnimateButton";
@@ -21,8 +21,11 @@ export default function Home() {
     // maxPerTxOrOwner,
     pricePerToken,
     totalSupply,
-    // dataInitialised
+    dataInitialised,
+    refresh: refreshNftData
   } = useNFTSaleInfo();
+
+
 
   const now = Math.floor(Date.now() / 1000);
 
@@ -52,7 +55,7 @@ export default function Home() {
       abi,
       msgValue: cost.toString(),
       params: {
-        numberOfNfts: numToMint,
+        _numberOfNfts: numToMint,
       },
     };
 
@@ -74,29 +77,18 @@ export default function Home() {
       });
       console.log(error);
     }
-    // tx.on("transactionHash", (hash) => {
-    //   openNotification({
-    //     message: "🔊 New Transaction",
-    //     description: `📃 Tx Hash: ${hash}`,
-    //     type: "success"
-    //   });
-    // })
-    //   .on("receipt", (receipt) => {
-    //     openNotification({
-    //       message: "🔊 New Receipt",
-    //       description: `📃 Receipt: ${receipt.transactionHash}`,
-    //       type: "success"
-    //     });
-    //   })
-    //   .on("error", (error) => {
-    //     openNotification({
-    //       message: "🔊 Error",
-    //       description: `📃 Receipt: ${error.toString()}`,
-    //       type: "error"
-    //     });
-    //     console.log(error);
-    //   });
   }
+  useEffect(() => {
+    const timeout = setTimeout(() => {
+      if(dataInitialised) {
+        refreshNftData();
+      }
+    }, 5000);
+
+    return () => {
+      clearTimeout(timeout);
+    };
+  });
 
   const renderer = ({ days, hours, minutes, seconds, completed }) => {
     if (completed) {
