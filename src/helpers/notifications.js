@@ -32,7 +32,7 @@ export const openNotification = ({ message, description, type }) => {
 export const extractErrorMessage = (e) => {
   const eStr = e.toString()
   const matches = eStr.match(/"execution reverted: (.*?)"/);
-  const extracted = matches ? matches[1] : eStr
+  const extracted = matches ? matches[1] : e.message
   switch(extracted) {
     case "eth too low":
       return "Purchase price too low. Try a higher price"
