@@ -2,7 +2,7 @@ import React from "react";
 import { useMoralis } from "react-moralis";
 import abis from "../../helpers/contracts";
 import { getHoldemHeroesAddress } from "../../helpers/networks";
-import { openNotification } from "../../helpers/notifications";
+import { extractErrorMessage, openNotification } from "../../helpers/notifications"
 import { BigNumber } from "@ethersproject/bignumber";
 
 export default function PreRevealSale({ pricePerToken, mintedTokens, maxCanOwn, balance, totalSupply, saleHeader }) {
@@ -39,12 +39,11 @@ export default function PreRevealSale({ pricePerToken, mintedTokens, maxCanOwn, 
     } catch(e) {
       openNotification({
         message: "🔊 Error",
-        description: `📃 ${e.message}`,
+        description: `📃 ${extractErrorMessage(e)}`,
         type: "error"
       });
-      console.log(e);
+      console.log(e)
     }
-
   }
 
   const canMint = Math.min((maxCanOwn - balance, MAX_TOTAL_SUPPLY - totalSupply), 7);

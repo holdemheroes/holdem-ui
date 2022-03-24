@@ -28,3 +28,15 @@ export const openNotification = ({ message, description, type }) => {
       break;
   }
 };
+
+export const extractErrorMessage = (e) => {
+  const eStr = e.toString()
+  const matches = eStr.match(/"execution reverted: (.*?)"/);
+  const extracted = matches ? matches[1] : eStr
+  switch(extracted) {
+    case "eth too low":
+      return "Purchase price too low. Try a higher price"
+    default:
+      return extracted
+  }
+}
