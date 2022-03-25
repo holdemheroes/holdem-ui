@@ -171,17 +171,16 @@ export default function Home() {
               </div>
             </div>
             <div>
-              {/* <img src="../assets/images/cards2.png" alt="" /> */}
-              <div className="video-responsive">
-                <iframe
-                  width="650"
-                  height="450"
-                  src={`https://www.youtube.com/embed/IRiglLJ_1Ak`}
-                  frameBorder="0"
-                  allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture"
-                  allowFullScreen
-                  title="Embedded youtube"
-                />
+              <div className="video-container--16x9">
+                <div className="inner-wrapper">
+                  <iframe
+                    src="https://www.youtube.com/embed/IRiglLJ_1Ak"
+                    frameBorder="0"
+                    allow="autoplay; encrypted-media"
+                    allowFullScreen
+                    title="video"
+                  />
+                </div>
               </div>
               {revealTimeDiff > 0 ? (
                 <>

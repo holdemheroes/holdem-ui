@@ -113,21 +113,21 @@ const App = () => {
               {(!chainType || chainType === "l1") && <Home />}
               {chainType === "l2" && <HomeL2 />}
             </Route>
+            <Route path="/Marketplace">
+              {/* {gameIsLive && <Sale />}
+                  {!gameIsLive && <GameComingSoon />} */}
+              <GameComingSoon />
+            </Route>
+            <Route path="/Rules">
+              <GamePlay />
+            </Route>
+            <Route path="/NFTwallet">
+              {/* {gameIsLive && <Sale />}
+                  {!gameIsLive && <GameComingSoon />} */}
+              <GameComingSoon />
+            </Route>
             {isAuthenticated && (
               <>
-                <Route path="/Marketplace">
-                  {/* {gameIsLive && <Sale />}
-                  {!gameIsLive && <GameComingSoon />} */}
-                  <GameComingSoon />
-                </Route>
-                <Route path="/Rules">
-                  <GamePlay />
-                </Route>
-                <Route path="/NFTwallet">
-                  {/* {gameIsLive && <Sale />}
-                  {!gameIsLive && <GameComingSoon />} */}
-                  <GameComingSoon />
-                </Route>
                 <Route path="/Play">
                   {gameIsLive && <GamesV1 />}
                   {!gameIsLive && <GameComingSoon />}
