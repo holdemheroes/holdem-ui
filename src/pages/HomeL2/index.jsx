@@ -1,11 +1,128 @@
-import React from "react";
+import React, { useState } from "react";
 import { NavLink } from "react-router-dom";
 import "./style.scss";
 import AnimateButton from "../../components/AnimateButton";
 import Timeline from "../../components/Timeline";
+import { useNFTSaleInfo } from "../../hooks/useNFTSaleInfo";
+import Countdown from "react-countdown";
+import { useMoralis } from "react-moralis";
+import abis from "../../helpers/contracts";
+import { getHoldemHeroesAddress } from "../../helpers/networks";
+import { openNotification } from "../../helpers/notifications";
 import { Roadmap } from "../../roadmap";
+import { BigNumber } from "@ethersproject/bignumber";
+import { getGameIsLive } from "../../helpers/networks";
 
 export default function HomeL2() {
+  const {
+    // startTime,
+    revealTime,
+    // startingIndex,
+    // maxPerTxOrOwner,
+    pricePerToken,
+    totalSupply,
+    // dataInitialised
+  } = useNFTSaleInfo();
+
+  const now = Math.floor(Date.now() / 1000);
+
+  // const saleStartDiff = startTime - now;
+  const revealTimeDiff = revealTime - now;
+  // const startIdx = parseInt(startingIndex, 10);
+
+  const { Moralis, chainId } = useMoralis();
+  const gameIsLive = getGameIsLive(chainId);
+
+  const abi = abis.heh_nft;
+  const contractAddress = getHoldemHeroesAddress(chainId);
+  const [maxNumToMint, setMaxNumToMint] = useState(6);
+
+  // const MAX_TOTAL_SUPPLY = 1326;
+
+  async function preRevealMint(event) {
+    event.preventDefault();
+    const formData = new FormData(event.target),
+      formDataObj = Object.fromEntries(formData.entries());
+    const numToMint = parseInt(formDataObj.mint_amount, 10);
+    const cost = BigNumber.from(pricePerToken).mul(BigNumber.from(numToMint));
+
+    const options = {
+      contractAddress,
+      functionName: "mintNFTPreReveal",
+      abi,
+      msgValue: cost.toString(),
+      params: {
+        numberOfNfts: numToMint,
+      },
+    };
+
+    try {
+      const tx = await Moralis.executeFunction({
+        awaitReceipt: false,
+        ...options,
+      });
+      openNotification({
+        message: "🔊 New Transaction",
+        description: `📃 Tx Hash: ${tx.hash}`,
+        type: "success",
+      });
+    } catch (error) {
+      openNotification({
+        message: "🔊 Error",
+        description: `📃 Receipt: ${error.message}`,
+        type: "error",
+      });
+      console.log(error);
+    }
+    // tx.on("transactionHash", (hash) => {
+    //   openNotification({
+    //     message: "🔊 New Transaction",
+    //     description: `📃 Tx Hash: ${hash}`,
+    //     type: "success"
+    //   });
+    // })
+    //   .on("receipt", (receipt) => {
+    //     openNotification({
+    //       message: "🔊 New Receipt",
+    //       description: `📃 Receipt: ${receipt.transactionHash}`,
+    //       type: "success"
+    //     });
+    //   })
+    //   .on("error", (error) => {
+    //     openNotification({
+    //       message: "🔊 Error",
+    //       description: `📃 Receipt: ${error.toString()}`,
+    //       type: "error"
+    //     });
+    //     console.log(error);
+    //   });
+  }
+
+  const renderer = ({ days, hours, minutes, seconds, completed }) => {
+    if (completed) {
+      // Render a completed state
+      return null;
+    } else {
+      // Render a countdown
+      return (
+        <div className="time_card-wrapper">
+          <div className="time_card">
+            <p>{days < 10 ? "0" + days : days}</p>
+            <p>days</p>
+          </div>
+          <div className="time_card">
+            <p>{hours < 10 ? "0" + hours : hours}</p>
+            <p>hours</p>
+          </div>
+          <div className="time_card">
+            <p>{minutes < 10 ? "0" + minutes : minutes}</p>
+            <p>minutes</p>
+          </div>
+        </div>
+      );
+    }
+  };
+
   return (
     <>
       <div className="header-background"></div>
@@ -21,6 +138,41 @@ export default function HomeL2() {
                 <br />
                 Then play Texas Hold&#x27;em with them!
               </p>
+              <div className="mint_poker_hands-wrapper">
+                <div className="mint_poker_hands">
+                  <form onSubmit={(e) => preRevealMint(e)} name="mint-form">
+                    <p>Mint Poker Hands</p>
+                    <div>
+                      <select id="mint_num" name={"mint_amount"}>
+                        {Array.from(
+                          { length: maxNumToMint },
+                          (_, i) => i + 1
+                        ).map((item, i) => (
+                          <option value="1" key={i}>
+                            {item}
+                          </option>
+                        ))}
+                      </select>
+                      <p>
+                        Ξ{" "}
+                        {Moralis.Units.FromWei(
+                          pricePerToken !== null ? pricePerToken : "0"
+                        )}
+                      </p>
+                    </div>
+                    <p>* Max {maxNumToMint} NFTs per address</p>
+                    <input
+                      className="btn-shadow btn-hover-pointer"
+                      type="submit"
+                      value={gameIsLive ? "Mint" : "Coming Soon"}
+                      disabled={!gameIsLive}
+                    />
+                  </form>
+                </div>
+                <p>{`Total NFTs minted: ${
+                  totalSupply !== null ? totalSupply : "0"
+                }/1326`}</p>
+              </div>
             </div>
             <div>
               <div className="video-container--16x9">
@@ -149,7 +301,7 @@ export default function HomeL2() {
                   Deploying games to EVM chains by community vote (AVAX, BSC,
                   Fantom...)
                 </p>
-                <p className="sub_title">MORE DECKS</p>+
+                <p className="sub_title">MORE DECKS</p>
                 <p className="desc">
                   Whitelisting card decks for custom-branded poker games
                 </p>
