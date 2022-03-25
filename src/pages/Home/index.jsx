@@ -11,7 +11,7 @@ import { getHoldemHeroesAddress } from "../../helpers/networks";
 import { openNotification } from "../../helpers/notifications";
 import { Roadmap } from "../../roadmap";
 import { BigNumber } from "@ethersproject/bignumber";
-import { getGameIsLive } from "../../helpers/networks";
+import { getGameIsLive, getHehIsLive } from "../../helpers/networks";
 
 export default function Home() {
   const {
@@ -35,6 +35,7 @@ export default function Home() {
 
   const { Moralis, chainId } = useMoralis();
   const gameIsLive = getGameIsLive(chainId);
+  const hehIsLive = getHehIsLive(chainId);
 
   const abi = abis.heh_nft;
   const contractAddress = getHoldemHeroesAddress(chainId);
@@ -167,9 +168,9 @@ export default function Home() {
                       className="btn-shadow btn-hover-pointer"
                       type="submit"
                       value={
-                        gameIsLive && chainId !== null ? "Mint" : "Coming Soon"
+                        hehIsLive && chainId !== null ? "Mint" : "Coming Soon"
                       }
-                      disabled={!gameIsLive || chainId === null}
+                      disabled={!hehIsLive || chainId === null}
                     />
                   </form>
                 </div>

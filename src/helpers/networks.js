@@ -86,3 +86,5 @@ export const getChainType = (chain) => networkConfigs[chain]?.chainType;
 export const getBakendObjPrefix = (chain) => networkConfigs[chain]?.prefix;
 
 export const getGameIsLive = (chain) => (networkConfigs[chain]?.texasHoldemV1Address !== "");
+
+export const getHehIsLive = (chain) => (networkConfigs[chain]?.holdemHeroesAddress !== "");
