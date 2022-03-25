@@ -11,14 +11,13 @@
 }
 
 .main-wrapper {
-
     .section--nft_poker-wrapper {
         padding-top        : 30px;
         background-image   : url("../../assets/images/herocircle.png");
         background-repeat  : no-repeat;
         background-position: 50% 100%;
         background-size    : cover;
-        min-height         : 140vh;
+        min-height         : 120vh;
 
         .section--nft_poker {
             max-width      : 90%;
@@ -28,7 +27,6 @@
             align-items    : center;
 
             &>div:first-child {
-
                 &>p:first-child {
                     margin        : 0 0 10px 0;
                     font-family   : "Josefin Sans", sans-serif;
@@ -134,9 +132,7 @@
                                     background-image: linear-gradient(117deg, #2a59ff, #462bf5);
                                 }
                             }
-
                         }
-
                     }
 
                     &>p:last-child {
@@ -157,12 +153,6 @@
                 flex-direction : column;
                 justify-content: center;
                 align-items    : center;
-
-                &>img {
-                    display: block;
-                    width  : 70%;
-                    margin : 0 auto;
-                }
 
                 &>p {
                     margin        : 20px 0 10px 0;
@@ -213,137 +203,131 @@
         }
     }
 
-    .section--game_play {
-        width              : 100%;
+    .section--open_source {
         display            : flex;
         justify-content    : space-between;
-        align-items        : flex-start;
+        align-items        : center;
+        width              : 100%;
         overflow           : hidden;
         height             : auto;
-        padding-bottom     : 63px;
+        padding            : 0 5% 63px 5%;
         background-image   : url(../../assets/images/section2bg_1.png);
         background-position: 100% 50%;
         background-size    : cover;
         background-repeat  : no-repeat;
 
-        &>div:last-child {
-            max-width  : 40%;
-            margin-left: 0;
-            padding    : 228px 40px 0 20px;
+        &>div {
+            width    : 45%;
+            max-width: 45%;
 
-            &>p:first-child {
-                margin-bottom : 30px;
-                font-family   : "Josefin Sans", sans-serif;
-                font-size     : 70px;
-                font-weight   : 600;
-                color         : #fff;
-                line-height   : 75px;
-                letter-spacing: 3px;
-                text-align    : left;
-            }
+            &:first-child {
+                &>p {
+                    margin-bottom : 30 px;
+                    font-family   : "Josefin Sans", sans-serif;
+                    font-size     : 70px;
+                    font-weight   : 600;
+                    color         : #fff;
+                    line-height   : 75px;
+                    letter-spacing: 3px;
+                    text-align    : left;
+                }
 
-            &>div:nth-child(2)>p {
-                max-width  : 80%;
-                font-family: Karla, sans-serif;
-                color      : hsla(0, 0%, 100%, 0.81);
-                font-size  : 17px;
-                line-height: 27px;
-            }
+                &>div {
+                    &>p {
+                        max-width  : 80%;
+                        font-family: Karla, sans-serif;
+                        font-size  : 17px;
+                        color      : hsla(0, 0%, 100%, 0.81);
+                        line-height: 27px;
+                    }
 
-            &>div:last-child {
-                display        : flex;
-                justify-content: flex-start;
-                align-items    : center;
-                margin-top     : 20px;
-
-                &>* {
-                    display        : flex;
-                    justify-content: center;
-                    align-items    : center;
-                    min-width      : 130px;
-                    margin-top     : 40px;
-                    padding        : 14px 26px;
-                    font-family    : Karla, sans-serif;
-                    color          : #fff;
-                    font-size      : 18px;
-                    font-weight    : 400;
-                    letter-spacing : 0px;
-                    transition     : all 0.1s ease-out;
-
-                    &.btn-play {
-                        background-color: #133cce;
-                        border-radius   : 6px;
+                    a {
+                        color     : #c2aeff;
+                        transition: all 200ms ease;
 
                         &:hover {
-                            box-shadow: 1px 1px 20px 0 #174aff;
+                            color: #9c7bff;
                         }
                     }
+                }
+            }
+
+            &:last-child {
+                &>img {
+                    display  : block;
+                    max-width: 100%;
+                    margin   : 0 auto;
                 }
             }
         }
     }
 
-    .section--open_source-wrapper {
+    .section--rest-wrapper {
         background-image: url("../../assets/images/section3bg.png");
         background-size : cover;
 
-        &>.section--open_source {
-            width    : 90%;
-            max-width: 90%;
-            margin   : 0 auto;
+        &>.section--rest {
+            margin: 0 auto;
 
             &>div {
-
-                &:first-child {
+                &.game_play {
+                    width          : 100%;
                     display        : flex;
                     justify-content: space-between;
-                    align-items    : center;
-                    width          : 100%;
+                    align-items    : flex-start;
 
-                    &>div {
-                        width    : 45%;
-                        max-width: 45%;
+                    &>div:last-child {
+                        max-width  : 40%;
+                        margin-left: 0;
+                        padding    : 228px 40px 0 20px;
 
-                        &:first-child {
-
-                            &>p {
-                                margin-bottom : 30 px;
-                                font-family   : "Josefin Sans", sans-serif;
-                                font-size     : 70px;
-                                font-weight   : 600;
-                                color         : #fff;
-                                line-height   : 75px;
-                                letter-spacing: 3px;
-                                text-align    : left;
-                            }
-
-                            &>div {
-
-                                &>p {
-                                    max-width  : 80%;
-                                    font-family: Karla, sans-serif;
-                                    font-size  : 17px;
-                                    color      : hsla(0, 0%, 100%, 0.81);
-                                    line-height: 27px;
-                                }
-
-                                a {
-                                    color     : #c2aeff;
-                                    transition: all 200ms ease;
-
-                                    &:hover {
-                                        color: #9c7bff;
-                                    }
-                                }
-                            }
+                        &>p:first-child {
+                            margin-bottom : 30px;
+                            font-family   : "Josefin Sans", sans-serif;
+                            font-size     : 70px;
+                            font-weight   : 600;
+                            color         : #fff;
+                            line-height   : 75px;
+                            letter-spacing: 3px;
+                            text-align    : left;
                         }
 
-                        &:last-child {
+                        &>div:nth-child(2)>p {
+                            max-width  : 80%;
+                            font-family: Karla, sans-serif;
+                            color      : hsla(0, 0%, 100%, 0.81);
+                            font-size  : 17px;
+                            line-height: 27px;
+                        }
 
-                            &>img {
-                                display  : block;
-                                max-width: 100%;
-                                margin   : 0 auto;
+                        &>div:last-child {
+                            display        : flex;
+                            justify-content: flex-start;
+                            align-items    : center;
+                            margin-top     : 20px;
+
+                            &>* {
+                                display        : flex;
+                                justify-content: center;
+                                align-items    : center;
+                                min-width      : 130px;
+                                margin-top     : 40px;
+                                padding        : 14px 26px;
+                                font-family    : Karla, sans-serif;
+                                color          : #fff;
+                                font-size      : 18px;
+                                font-weight    : 400;
+                                letter-spacing : 0px;
+                                transition     : all 0.1s ease-out;
+
+                                &.btn-play {
+                                    background-color: #133cce;
+                                    border-radius   : 6px;
+
+                                    &:hover {
+                                        box-shadow: 1px 1px 20px 0 #174aff;
+                                    }
+                                }
                             }
                         }
                     }
@@ -354,6 +338,10 @@
                     align-items    : center;
                     justify-content: space-between;
                     margin-top     : 150px;
+                    width          : 90%;
+                    max-width      : 90%;
+                    margin-left    : auto;
+                    margin-right   : auto;
 
                     .roadmap-text {
                         * {
@@ -372,16 +360,18 @@
                         }
 
                         .sub_title {
-                            font-family: Karla, sans-serif;
-                            font-size  : 25px;
-                            line-height: 29px;
+                            font-family  : Karla, sans-serif;
+                            font-size    : 25px;
+                            line-height  : 29px;
+                            margin-bottom: 10px;
                         }
 
                         .desc {
-                            font-family: Karla, sans-serif;
-                            font-size  : 17px;
-                            color      : rgba(255, 255, 255, 0.81);
-                            line-height: 27px;
+                            font-family  : Karla, sans-serif;
+                            font-size    : 17px;
+                            color        : rgba(255, 255, 255, 0.81);
+                            line-height  : 27px;
+                            margin-bottom: 30px;
                         }
                     }
                 }
@@ -389,10 +379,24 @@
                 &:last-child {
                     max-width     : 28%;
                     margin        : 0 auto;
-                    margin-top    : 160px;
+                    margin-top    : 100px;
                     padding-bottom: 100px;
                 }
             }
         }
     }
+}
+
+.video-responsive {
+    overflow      : hidden;
+    position      : relative;
+    height        : 0;
+}
+
+.video-responsive iframe {
+    left    : 0;
+    top     : 0;
+    width   : 100%;
+    height  : 100%;
+    position: absolute;
 }
