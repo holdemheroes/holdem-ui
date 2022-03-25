@@ -40,11 +40,11 @@ export const extractErrorMessage = (e) => {
       return "Sale has not started yet"
     case "sold out":
       return "Sold out!"
-    case "sale ended":
+    case "ended":
       return "Sale has ended"
     case "> max per tx":
       return "Cannot mint more than maximum"
-    case "mint limit reached":
+    case "> mint limit":
       return "Blind mint limit reached for this wallet"
     case "exceeds supply":
       return "Cannot mint more than supply!"
@@ -52,7 +52,7 @@ export const extractErrorMessage = (e) => {
       return "Hands have not been revealed yet"
     case "not distributed":
       return "Hands have not been distributed yet"
-    case "invalid tokenId":
+    case "invalid id":
       return "Invalid Token ID"
     default:
       return extracted
