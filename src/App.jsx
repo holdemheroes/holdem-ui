@@ -1,5 +1,10 @@
 import { useEffect } from "react";
-import { BrowserRouter as Router, Switch, Route, NavLink } from "react-router-dom";
+import {
+  BrowserRouter as Router,
+  Switch,
+  Route,
+  NavLink,
+} from "react-router-dom";
 import { useMoralis } from "react-moralis";
 import "antd/dist/antd.css";
 import Account from "./components/Account";
@@ -20,11 +25,18 @@ import "./App.scss";
 import { getEllipsisTxt } from "./helpers/formatters";
 import Logout from "./components/Logout";
 import { logo } from "./logo";
-import { getChainType, getGameIsLive } from "./helpers/networks"
+import { getChainType, getGameIsLive } from "./helpers/networks";
 import ScrollToTop from "./ScrollToTop";
 
 const App = () => {
-  const { isWeb3Enabled, enableWeb3, isAuthenticated, isWeb3EnableLoading, chainId, account } = useMoralis();
+  const {
+    isWeb3Enabled,
+    enableWeb3,
+    isAuthenticated,
+    isWeb3EnableLoading,
+    chainId,
+    account,
+  } = useMoralis();
 
   useEffect(() => {
     if (isAuthenticated && !isWeb3Enabled && !isWeb3EnableLoading) enableWeb3();
@@ -46,27 +58,51 @@ const App = () => {
               <NavLink to="/Rules">Rules</NavLink>
               <Community />
             </div>
-            {
-              isAuthenticated && <>
-                <NavLink to="/Play" className="btn-play" style={{ marginRight: "35px" }}>Play</NavLink>
-                <div className="dropdown-wrapper account" style={{ marginRight: "15px" }}>
+            {isAuthenticated && (
+              <>
+                <NavLink
+                  to="/Play"
+                  className="btn-play"
+                  style={{ marginRight: "35px" }}
+                >
+                  Play
+                </NavLink>
+                <div
+                  className="dropdown-wrapper account"
+                  style={{ marginRight: "15px" }}
+                >
                   <button className="dropdown-btn address_btn">
-                    <Blockie className="circle" currentWallet size={5} scale={5} />
+                    <Blockie
+                      className="circle"
+                      currentWallet
+                      size={5}
+                      scale={5}
+                    />
                     {getEllipsisTxt(account, 6)}
                   </button>
                   <ul className="dropdown-body">
-                    <li className="dropdown-item"><Withdrawable /></li>
-                    <li className="dropdown-item"><NavLink to="/History">Game History</NavLink></li>
-                    <li className="dropdown-item"><NavLink to="/Refunds">Refunds</NavLink></li>
-                    <li className="dropdown-item"><Logout /></li>
+                    {gameIsLive && (
+                      <>
+                        <li className="dropdown-item">
+                          <Withdrawable />
+                        </li>
+                        <li className="dropdown-item">
+                          <NavLink to="/History">Game History</NavLink>
+                        </li>
+                        <li className="dropdown-item">
+                          <NavLink to="/Refunds">Refunds</NavLink>
+                        </li>
+                      </>
+                    )}
+                    <li className="dropdown-item">
+                      <Logout />
+                    </li>
                   </ul>
                 </div>
                 <Chains />
               </>
-            }
-            {
-              !isAuthenticated && <Account />
-            }
+            )}
+            {!isAuthenticated && <Account />}
           </div>
         </div>
       </div>
@@ -77,16 +113,20 @@ const App = () => {
               {(!chainType || chainType === "l1") && <Home />}
               {chainType === "l2" && <HomeL2 />}
             </Route>
-            {
-              isAuthenticated && <>
+            {isAuthenticated && (
+              <>
                 <Route path="/Marketplace">
-                  <Sale />
+                  {/* {gameIsLive && <Sale />}
+                  {!gameIsLive && <GameComingSoon />} */}
+                  <GameComingSoon />
                 </Route>
                 <Route path="/Rules">
                   <GamePlay />
                 </Route>
                 <Route path="/NFTwallet">
-                  <NFTBalance />
+                  {/* {gameIsLive && <Sale />}
+                  {!gameIsLive && <GameComingSoon />} */}
+                  <GameComingSoon />
                 </Route>
                 <Route path="/Play">
                   {gameIsLive && <GamesV1 />}
@@ -101,7 +141,7 @@ const App = () => {
                   {!gameIsLive && <GameComingSoon />}
                 </Route>
               </>
-            }
+            )}
           </Switch>
         </ScrollToTop>
       </>
@@ -109,8 +149,6 @@ const App = () => {
   );
 };
 
-export const Logo = () => (
-  <NavLink to="/">{logo()}</NavLink>
-);
+export const Logo = () => <NavLink to="/">{logo()}</NavLink>;
 
 export default App;
