@@ -17,7 +17,7 @@
         background-repeat  : no-repeat;
         background-position: 50% 100%;
         background-size    : cover;
-        min-height         : 120vh;
+        padding-bottom     : 100px;
 
         .section--nft_poker {
             max-width      : 90%;
@@ -143,6 +143,22 @@
                         color      : white;
                         line-height: 26px;
                         text-align : center;
+                    }
+
+                    .coming_soon-title {
+                        font-family: "Josefin Sans", sans-serif;
+                        font-size  : 45px;
+                        color      : #fff;
+                        line-height: 30px;
+                        text-align : center;
+                        width      : 100%;
+                    }
+
+                    .coming_soon-img {
+                        display: block;
+                        width  : 70%;
+                        height : auto;
+                        margin : 0 auto;
                     }
                 }
             }

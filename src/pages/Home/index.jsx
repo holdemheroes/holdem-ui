@@ -11,6 +11,7 @@ import { getHoldemHeroesAddress } from "../../helpers/networks";
 import { openNotification } from "../../helpers/notifications";
 import { Roadmap } from "../../roadmap";
 import { BigNumber } from "@ethersproject/bignumber";
+import { getGameIsLive } from "../../helpers/networks";
 
 export default function Home() {
   const {
@@ -30,6 +31,8 @@ export default function Home() {
   // const startIdx = parseInt(startingIndex, 10);
 
   const { Moralis, chainId } = useMoralis();
+  const gameIsLive = getGameIsLive(chainId);
+
   const abi = abis.heh_nft;
   const contractAddress = getHoldemHeroesAddress(chainId);
   const [maxNumToMint, setMaxNumToMint] = useState(6);
@@ -161,7 +164,8 @@ export default function Home() {
                     <input
                       className="btn-shadow btn-hover-pointer"
                       type="submit"
-                      value="Mint"
+                      value={gameIsLive ? "Mint" : "Coming Soon"}
+                      disabled={!gameIsLive}
                     />
                   </form>
                 </div>
@@ -303,7 +307,7 @@ export default function Home() {
                   Deploying games to EVM chains by community vote (AVAX, BSC,
                   Fantom...)
                 </p>
-                <p className="sub_title">MORE DECKS</p>+
+                <p className="sub_title">MORE DECKS</p>
                 <p className="desc">
                   Whitelisting card decks for custom-branded poker games
                 </p>
