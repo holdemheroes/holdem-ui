@@ -1,13 +1,18 @@
 import React from "react";
-import { useMoralisDapp } from "../../providers/MoralisDappProvider/MoralisDappProvider";
 import { useMyNFTHands } from "../../hooks/useMyNFTHands";
 import NFTCard from "../NFTCard";
 import "./style.scss";
+import { Spin } from "antd";
 import { NavLink } from "react-router-dom";
+import { useMoralis } from "react-moralis"
 
 export default function NFTBalance() {
-  const { NFTHands } = useMyNFTHands();
-  const { chainId } = useMoralisDapp();
+  const { NFTHands, isLoading } = useMyNFTHands();
+  const { chainId } = useMoralis();
+
+  if (isLoading) {
+    return <Spin className="spin_loader" />;
+  }
 
   if (!NFTHands.length || !NFTHands) {
     return (

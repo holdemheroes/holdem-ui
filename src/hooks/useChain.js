@@ -7,12 +7,12 @@ const useChain = () => {
     if (isWeb3Enabled) {
       try {
         await Moralis.switchNetwork(chain);
+        window.location.reload()
       } catch (error) {
         if (error.code === 4902) {
           try {
             const config = networkConfigs[chain];
-            const { chainId, chainName, currencyName, currencySymbol, rpcUrl, blockExplorerUrl } =
-              config;
+            const { chainId, chainName, currencyName, currencySymbol, rpcUrl, blockExplorerUrl } = config;
             await Moralis.addNetwork(
               chainId,
               chainName,

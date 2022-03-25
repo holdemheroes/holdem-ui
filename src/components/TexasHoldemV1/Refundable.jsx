@@ -1,16 +1,21 @@
-import React from "react";
-import { useMoralisDapp } from "../../providers/MoralisDappProvider/MoralisDappProvider";
+import React, { useState } from "react"
 import abis from "../../helpers/contracts";
-import { getTexasHoldemV1Address } from "../../helpers/networks";
+import { getCurrencySymbol, getTexasHoldemV1Address } from "../../helpers/networks"
 import { useMoralis } from "react-moralis";
 import { openNotification } from "../../helpers/notifications";
 
 export default function Refundable({ gameId, amount }) {
-  const { chainId } = useMoralisDapp();
-  const { Moralis } = useMoralis();
+  const { Moralis, chainId } = useMoralis();
+
+  const [isDisabled, setDisabled] = useState(false);
 
   const abi = abis.texas_holdem_v1;
   const contractAddress = getTexasHoldemV1Address(chainId);
+  const currencySymbol = getCurrencySymbol(chainId)
+
+  const [buttonText, setButtonText] = useState(
+    `Claim ${Moralis.Units.FromWei(amount, 18)} ${currencySymbol}`
+  );
 
   const options = {
     contractAddress, abi,
@@ -25,24 +30,35 @@ export default function Refundable({ gameId, amount }) {
       },
     };
 
-    const tx = await Moralis.executeFunction({ awaitReceipt: false, ...opts });
-    tx.on("transactionHash", (hash) => {
+    try {
+      const tx = await Moralis.executeFunction({ awaitReceipt: false, ...opts });
       openNotification({
-        message: "🔊 Claim refund requested!",
-        description: `📃 Tx Hash: ${hash}`,
+        message: "🔊 New Transaction",
+        description: `📃 Tx Hash: ${tx.hash}`,
         type: "success"
       });
-    })
-      .on("error", (error) => {
-        console.log(error);
+      setDisabled(true);
+      setButtonText("Claim Sent");
+    } catch(e) {
+      openNotification({
+        message: "🔊 Error",
+        description: `📃 Receipt: ${e.message}`,
+        type: "error"
       });
+      console.log(e);
+    }
   }
 
   return (
     <div className="refundable_game_card">
       <p className="title">Game #{gameId}</p>
-      <button className="claim_btn btn-shadow btn-hover-pointer" onClick={() => handleClaimRefund()}>
-        Claim {Moralis.Units.FromWei(amount, 18)} ETH
+      <button
+        className="claim_btn btn-shadow btn-hover-pointer"
+        disabled={isDisabled}
+        onClick={() => handleClaimRefund()}>
+        <span>
+          {buttonText}
+        </span>
       </button>
     </div>
   );

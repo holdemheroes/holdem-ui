@@ -1,13 +1,11 @@
 import React, { useEffect, useState } from "react";
-import { useMoralisDapp } from "../../providers/MoralisDappProvider/MoralisDappProvider";
 import { useMoralis } from "react-moralis";
 import abis from "../../helpers/contracts";
 import { getTexasHoldemV1Address } from "../../helpers/networks";
 
 export const RankName = ({ rank }) => {
 
-  const { chainId } = useMoralisDapp();
-  const { Moralis } = useMoralis();
+  const { Moralis, chainId } = useMoralis();
 
   const abi = abis.texas_holdem_v1;
   const contractAddress = getTexasHoldemV1Address(chainId);

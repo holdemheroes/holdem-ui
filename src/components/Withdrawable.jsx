@@ -2,19 +2,18 @@ import { useMoralis } from "react-moralis";
 import { useGetUserWithdrawable } from "../hooks/useGetUserWithdrawable";
 import { n4 } from "../helpers/formatters";
 import { openNotification } from "../helpers/notifications";
-import { useMoralisDapp } from "../providers/MoralisDappProvider/MoralisDappProvider";
 import abis from "../helpers/contracts";
-import { getTexasHoldemV1Address } from "../helpers/networks";
+import { getCurrencySymbol, getTexasHoldemV1Address } from "../helpers/networks"
 
 function Withdrawable() {
 
-  const { chainId } = useMoralisDapp();
-  const { Moralis } = useMoralis();
+  const { Moralis, chainId } = useMoralis();
 
   const { balance } = useGetUserWithdrawable();
 
   const abi = abis.texas_holdem_v1;
   const contractAddress = getTexasHoldemV1Address(chainId);
+  const currencySymbol = getCurrencySymbol(chainId)
 
   const options = {
     contractAddress, abi,
@@ -26,17 +25,21 @@ function Withdrawable() {
       functionName: "withdrawWinnings",
     };
 
-    const tx = await Moralis.executeFunction({ awaitReceipt: false, ...opts });
-    tx.on("transactionHash", (hash) => {
+    try {
+      const tx = await Moralis.executeFunction({ awaitReceipt: false, ...opts });
       openNotification({
-        message: "🔊 Withdraw requested!",
-        description: `📃 Tx Hash: ${hash}`,
+        message: "🔊 New Transaction",
+        description: `📃 Tx Hash: ${tx.hash}`,
         type: "success"
       });
-    })
-      .on("error", (error) => {
-        console.log(error);
+    } catch (e) {
+      openNotification({
+        message: "🔊 Error",
+        description: `📃 Receipt: ${e.message}`,
+        type: "error"
       });
+      console.log(e);
+    }
   }
 
   return (
@@ -44,8 +47,8 @@ function Withdrawable() {
       <button onClick={() => handleWithdraw()}
         className="btn-withdrawable btn-shadow btn-hover-pointer">
         Withdraw {`${n4.format(
-          Moralis.Units.FromWei(balance, 18)
-        )} ETH`}</button>
+          Moralis.Units.FromWei(balance === null ? "0" : balance, 18)
+        )} ${currencySymbol}`}</button>
     </>
   );
 }

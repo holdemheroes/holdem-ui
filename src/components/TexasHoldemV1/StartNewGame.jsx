@@ -1,20 +1,40 @@
 import React, { useState } from "react";
 import { useMoralis } from "react-moralis";
 import { Form, Input, Button, Spin } from 'antd';
-import { useMoralisDapp } from "../../providers/MoralisDappProvider/MoralisDappProvider";
 import { openNotification } from "../../helpers/notifications";
 import abis from "../../helpers/contracts";
-import { getTexasHoldemV1Address } from "../../helpers/networks";
+import { getCurrencySymbol, getTexasHoldemV1Address } from "../../helpers/networks"
 
 export default function StartNewGame({ gameIdsInProgress, maxConcurrentGames }) {
-  const { Moralis } = useMoralis();
-  const { chainId } = useMoralisDapp();
+  const { Moralis, chainId } = useMoralis();
   const abi = abis.texas_holdem_v1;
   const contractAddress = getTexasHoldemV1Address(chainId);
-  const [started, setStarted] = useState(false);
+  const currencySymbol = getCurrencySymbol(chainId)
+  const [open, setOpen] = useState(false);
 
   if (!gameIdsInProgress || !maxConcurrentGames) {
     return <Spin className="spin_loader" />;
+  }
+
+  let gameInfo = {};
+
+  switch (currencySymbol) {
+    case "ETH":
+      gameInfo = {
+        round_time: 10,
+        price1: 0.1,
+        price2: 0.2
+      };
+      break;
+    case "MATIC":
+      gameInfo = {
+        round_time: 5,
+        price1: 100,
+        price2: 200
+      };
+      break;
+    default:
+      break;
   }
 
   async function startNewCustomGame(values) {
@@ -58,31 +78,22 @@ export default function StartNewGame({ gameIdsInProgress, maxConcurrentGames }) 
       }
     };
 
-    const tx = await Moralis.executeFunction({ awaitReceipt: false, ...options });
-    tx.on("transactionHash", (hash) => {
+    try {
+      const tx = await Moralis.executeFunction({ awaitReceipt: false, ...options });
       openNotification({
         message: "🔊 New Transaction",
-        description: `📃 Tx Hash: ${hash}`,
+        description: `📃 Tx Hash: ${tx.hash}`,
         type: "success"
       });
-      setStarted(false);
-    })
-      .on("receipt", (receipt) => {
-        openNotification({
-          message: "🔊 New Receipt",
-          description: `📃 Receipt: ${receipt.transactionHash}`,
-          type: "success"
-        });
-        setStarted(false);
-      })
-      .on("error", (error) => {
-        openNotification({
-          message: "🔊 Error",
-          description: `📃 Receipt: ${error.message}`,
-          type: "error"
-        });
-        console.log(error);
+      setOpen(false);
+    } catch (e) {
+      openNotification({
+        message: "🔊 Error",
+        description: `📃 Receipt: ${e.message}`,
+        type: "error"
       });
+      console.log(e);
+    }
   }
 
   if (gameIdsInProgress.length === maxConcurrentGames) {
@@ -93,8 +104,9 @@ export default function StartNewGame({ gameIdsInProgress, maxConcurrentGames }) 
 
   return (
     <>
-      <button onClick={() => { setStarted(started => !started) }} style={{ display: started ? "none" : "block" }} className="start_btn btn-shadow">Start New Game</button>
-      <div style={{ display: started ? "block" : "none", width: "340px", margin: "0 auto" }} className="game_start_card">
+      <button onClick={() => { setOpen(open => !open) }} style={{ display: open ? "none" : "block" }} className="start_btn btn-shadow">Start New Game</button>
+      <div style={{ display: open ? "block" : "none", width: "340px", margin: "0 auto" }} className="game_start_card">
+        <span className="modal-close" onClick={() => setOpen(open => !open)}>&times;</span>
         <p className="title">Start New Game</p>
         <Form
           name="basic"
@@ -105,7 +117,7 @@ export default function StartNewGame({ gameIdsInProgress, maxConcurrentGames }) 
           autoComplete="off"
         >
           <Form.Item
-            initialValue={"60"}
+            initialValue={`${gameInfo.round_time}`}
             label="Round Time"
             name="round_timer"
             rules={[{ required: true, message: 'Please input round time' }]}
@@ -114,21 +126,21 @@ export default function StartNewGame({ gameIdsInProgress, maxConcurrentGames }) 
           </Form.Item>
 
           <Form.Item
-            initialValue={"0.1"}
+            initialValue={`${gameInfo.price1}`}
             label="Flop bet"
             name="round_1_price"
             rules={[{ required: true, message: 'Please input flop bet' }]}
           >
-            <Input addonAfter={"ETH Per NFT"} />
+            <Input addonAfter={`${currencySymbol} Per NFT`} />
           </Form.Item>
 
           <Form.Item
-            initialValue={"0.2"}
+            initialValue={`${gameInfo.price2}`}
             label="Turn bet"
             name="round_2_price"
             rules={[{ required: true, message: 'Please input turn bet' }]}
           >
-            <Input addonAfter={"ETH Per NFT"} />
+            <Input addonAfter={`${currencySymbol} Per NFT`} />
           </Form.Item>
 
           <Form.Item className="start_btn-wrapper">

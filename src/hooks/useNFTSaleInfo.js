@@ -1,13 +1,13 @@
 import { useEffect, useState } from "react";
 import { useMoralis, useWeb3ExecuteFunction } from "react-moralis";
-import { useMoralisDapp } from "../providers/MoralisDappProvider/MoralisDappProvider";
 import abis from "../helpers/contracts";
 import { getHoldemHeroesAddress } from "../helpers/networks";
 
 export const useNFTSaleInfo = () => {
-  const { isInitialized } = useMoralis();
-  const { chainId } = useMoralisDapp();
-  const abi = abis.heh_nft;
+  const { isInitialized, chainId } = useMoralis();
+
+  const getPriceFunc = (parseInt(process.env.REACT_APP_HEH_VERSION, 10) === 1) ? "NFT_MINT_PRICE" : "getNftPrice"
+  const abi = (parseInt(process.env.REACT_APP_HEH_VERSION, 10) === 1) ? abis.heh_old : abis.heh_nft;
   const contractAddress = getHoldemHeroesAddress(chainId);
 
   const [fetched, setFetched] = useState(false);
@@ -54,7 +54,7 @@ export const useNFTSaleInfo = () => {
     fetch: pricePerTokenFetch,
   } = useWeb3ExecuteFunction({
     ...options,
-    functionName: "getNftPrice",
+    functionName: getPriceFunc,
   });
 
   const {

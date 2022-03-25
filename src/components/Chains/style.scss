@@ -15,6 +15,11 @@
             border-top  : 9px solid white;
             margin-left : 5px;
         }
+
+        &>svg {
+            width : 40px;
+            height: 40px;
+        }
     }
 
     .dropdown-body {

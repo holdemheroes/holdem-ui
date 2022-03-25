@@ -13,7 +13,7 @@ import { Roadmap } from "../../roadmap";
 import { BigNumber } from "@ethersproject/bignumber";
 import { getGameIsLive } from "../../helpers/networks";
 
-export default function Home() {
+export default function HomeL2() {
   const {
     // startTime,
     revealTime,
@@ -188,12 +188,6 @@ export default function Home() {
                   />
                 </div>
               </div>
-              {revealTimeDiff > 0 ? (
-                <>
-                  <p>NFT Distribution and Reveal in</p>
-                  <Countdown date={revealTime * 1000} renderer={renderer} />
-                </>
-              ) : null}
             </div>
           </div>
 

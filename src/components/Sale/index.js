@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from "react";
-import { useMoralisQuery } from "react-moralis";
+import { useMoralis, useMoralisQuery } from "react-moralis"
 import { Spin } from "antd";
 import SaleInfo from "./SaleInfo";
 import PreRevealSale from "./PreRevealSale";
@@ -7,6 +7,7 @@ import PostRevealSale from "./PostRevealSale";
 import { useNFTSaleInfo } from "../../hooks/useNFTSaleInfo";
 import { useMyNFTHands } from "../../hooks/useMyNFTHands";
 import "./style.scss";
+import { getBakendObjPrefix } from "../../helpers/networks"
 
 export default function Sale() {
   const {
@@ -23,12 +24,16 @@ export default function Sale() {
 
   const { NFTHands, isLoading: nftBalanceIsLoading } = useMyNFTHands();
 
+  const { chainId } = useMoralis();
+  const backendPrefix = getBakendObjPrefix(chainId);
+
   const { data: mintedRes } = useMoralisQuery(
-    "HEHTransfer",
+    `${backendPrefix}HEHTransfer`,
     query =>
       query
         .equalTo("from", "0x0000000000000000000000000000000000000000")
-        .equalTo("confirmed", true),
+        .equalTo("confirmed", true)
+        .limit(1326),
     [],
     {
       live: true,
@@ -37,11 +42,7 @@ export default function Sale() {
 
   useEffect(() => {
     if (mintedRes) {
-      const m = [];
-      for (let i = 0; i < mintedRes.length; i += 1) {
-        const t = mintedRes[i].get("tokenId");
-        m.push(parseInt(t, 10));
-      }
+      let m = mintedRes.map((item, i) => parseInt(item.get("tokenId"), 10));
       setMinted(m);
     }
   }, [mintedRes]);

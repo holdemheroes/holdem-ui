@@ -29,6 +29,7 @@ export default function PostRevealSale({ pricePerToken, canMint, mintedTokens })
     query.containedIn("shape", shape)
       .greaterThanOrEqualTo("rank", parseInt(ranksRange[0]))
       .lessThanOrEqualTo("rank", parseInt(ranksRange[1]))
+      .limit(1326)
       .find()
       .then((result) => {
         for (let i = 0; i < result.length; i++) {

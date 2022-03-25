@@ -7,6 +7,7 @@ export const openNotification = ({ message, description, type }) => {
         placement: "bottomRight",
         message,
         description,
+        className: "notification success"
       });
       break;
     case "error":
@@ -14,6 +15,7 @@ export const openNotification = ({ message, description, type }) => {
         placement: "bottomRight",
         message,
         description,
+        className: "notification error"
       });
       break;
     default:
@@ -21,6 +23,7 @@ export const openNotification = ({ message, description, type }) => {
         placement: "bottomRight",
         message,
         description,
+        className: "notification"
       });
       break;
   }

@@ -1,15 +1,12 @@
 import React from "react";
-import { useMoralisDapp } from "../../providers/MoralisDappProvider/MoralisDappProvider";
 import { useMoralis } from "react-moralis";
 import abis from "../../helpers/contracts";
 import { getHoldemHeroesAddress } from "../../helpers/networks";
 import { openNotification } from "../../helpers/notifications";
-
-const BN = require('bn.js');
+import { BigNumber } from "@ethersproject/bignumber";
 
 export default function PreRevealSale({ pricePerToken, mintedTokens, maxCanOwn, balance, totalSupply, saleHeader }) {
-  const { chainId } = useMoralisDapp();
-  const { Moralis } = useMoralis();
+  const { Moralis, chainId } = useMoralis();
   const abi = abis.heh_nft;
   const contractAddress = getHoldemHeroesAddress(chainId);
 
@@ -20,7 +17,7 @@ export default function PreRevealSale({ pricePerToken, mintedTokens, maxCanOwn, 
     const formData = new FormData(event.target),
       formDataObj = Object.fromEntries(formData.entries());
     const numToMint = parseInt(formDataObj.mint_amount, 10);
-    const cost = new BN(pricePerToken).mul(new BN(numToMint));
+    const cost = BigNumber.from(pricePerToken).mul(BigNumber.from(numToMint));
 
     const options = {
       contractAddress,
@@ -32,29 +29,22 @@ export default function PreRevealSale({ pricePerToken, mintedTokens, maxCanOwn, 
       },
     };
 
-    const tx = await Moralis.executeFunction({ awaitReceipt: false, ...options });
-    tx.on("transactionHash", (hash) => {
+    try {
+      const tx = await Moralis.executeFunction({ awaitReceipt: false, ...options });
       openNotification({
         message: "🔊 New Transaction",
-        description: `📃 Tx Hash: ${hash}`,
+        description: `📃 Tx Hash: ${tx.hash}`,
         type: "success"
       });
-    })
-      .on("receipt", (receipt) => {
-        openNotification({
-          message: "🔊 New Receipt",
-          description: `📃 Receipt: ${receipt.transactionHash}`,
-          type: "success"
-        });
-      })
-      .on("error", (error) => {
-        openNotification({
-          message: "🔊 Error",
-          description: `📃 Receipt: ${error.toString()}`,
-          type: "error"
-        });
-        console.log(error);
+    } catch(e) {
+      openNotification({
+        message: "🔊 Error",
+        description: `📃 ${e.message}`,
+        type: "error"
       });
+      console.log(e);
+    }
+
   }
 
   const canMint = Math.min((maxCanOwn - balance, MAX_TOTAL_SUPPLY - totalSupply), 7);

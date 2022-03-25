@@ -1,13 +1,12 @@
 import { useEffect, useState } from "react";
 import { useMoralis, useMoralisSubscription } from "react-moralis";
-import { useMoralisDapp } from "../providers/MoralisDappProvider/MoralisDappProvider";
-import { getTexasHoldemV1Address } from "../helpers/networks";
+import { getBakendObjPrefix, getTexasHoldemV1Address } from "../helpers/networks"
 import abis from "../helpers/contracts";
 import { openNotification } from "../helpers/notifications";
 
 export const useGetUserWithdrawable = () => {
-  const { Moralis, isWeb3Enabled } = useMoralis();
-  const { chainId, walletAddress } = useMoralisDapp();
+  const { Moralis, isWeb3Enabled, chainId, account } = useMoralis();
+  const backendPrefix = getBakendObjPrefix(chainId);
 
   const [balance, setBalance] = useState(null);
   const [balanceLoading, setBalanceLoading] = useState(false);
@@ -31,7 +30,7 @@ export const useGetUserWithdrawable = () => {
     Moralis.executeFunction({
       functionName: "userWithdrawables",
       params: {
-        "": walletAddress,
+        "": account,
       },
       ...options
     })
@@ -45,7 +44,7 @@ export const useGetUserWithdrawable = () => {
       fetchOnChainWithdrawable();
     }
     // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [balance, balanceFetched, balanceLoading, walletAddress, isWeb3Enabled]);
+  }, [balance, balanceFetched, balanceLoading, account, isWeb3Enabled]);
 
   // check refetch
   useEffect(() => {
@@ -75,11 +74,11 @@ export const useGetUserWithdrawable = () => {
     };
   });
 
-  useMoralisSubscription("THRefunded",
-    q => q.equalTo("player", walletAddress),
-    [walletAddress],
+  useMoralisSubscription(`${backendPrefix}THRefunded`,
+    q => q.equalTo("player", account),
+    [account],
     {
-      onCreate: data => {
+      onEnter: data => {
         openNotification({
           message: "🔊 Refunded!",
           description: `📃 Refund successful`,
@@ -89,20 +88,20 @@ export const useGetUserWithdrawable = () => {
       },
     });
 
-  useMoralisSubscription("THWinningsCalculated",
+  useMoralisSubscription(`${backendPrefix}THWinningsCalculated`,
     q => q,
     [],
     {
-      onCreate: data => {
+      onEnter: data => {
         setRefetch(true)
       },
     });
 
-  useMoralisSubscription("THWithdrawal",
-    q => q.equalTo("player", walletAddress),
-    [walletAddress],
+  useMoralisSubscription(`${backendPrefix}THWithdrawal`,
+    q => q.equalTo("player", account),
+    [account],
     {
-      onCreate: data => {
+      onEnter: data => {
         openNotification({
           message: "🔊 Success!",
           description: `📃 Withdraw successful`,

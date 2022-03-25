@@ -1,16 +1,10 @@
 import { useEffect, useState } from "react";
 import useChain from "../../hooks/useChain";
-import { useMoralisDapp } from "../../providers/MoralisDappProvider/MoralisDappProvider";
 import { ETHLogo, PolygonLogo } from "./Logos";
 import "./style.scss";
+import { useMoralis } from "react-moralis"
 
 const menuItems = [
-  {
-    key: "0x1",
-    value: "Ethereum",
-    icon: <ETHLogo size="S" />,
-    iconL: <ETHLogo size="L" />,
-  },
   {
     key: "0x4",
     value: "Rinkeby",
@@ -18,8 +12,8 @@ const menuItems = [
     iconL: <ETHLogo size="L" />,
   },
   {
-    key: "0x###",
-    value: "Polygon",
+    key: "0x13881",
+    value: "Polygon Mumbai",
     icon: <PolygonLogo />,
     iconL: <PolygonLogo />,
   },
@@ -27,7 +21,7 @@ const menuItems = [
 
 function Chains() {
   const { switchNetwork } = useChain();
-  const { chainId } = useMoralisDapp();
+  const { chainId } = useMoralis();
   const [selected, setSelected] = useState({});
 
   useEffect(() => {

@@ -25,7 +25,7 @@ const GamePlay = () => {
         {
             img: 'assets/images/spadeicon.png',
             title: 'WINNING HANDS',
-            desc: ['After the River is dealt, players must submit their final hand within the round time.<br />The hand must consist of 1 NFT (2 cards) that bet in the Turn and River, plus 3 of the 5 cards in the River.',
+            desc: ['After the River is dealt, players must submit their final hand within the round time.<br />The hand must consist of 1 NFT (2 cards) that bet in the Flop and Turn, plus 3 of the 5 cards in the River.',
                 'After the round time elapses, anyone can call the End Game function. This calculates the winners and makes the winnings Claimable.',
                 '<b>Note:</b> Winners can Claim immediately after a game, or let their winnings accumulate to be Claimed at any later time.',
                 'Again, any Hole Card NFT that includes an identical card in the River will be disqualified from that game.',

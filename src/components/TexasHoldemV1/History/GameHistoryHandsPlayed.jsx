@@ -3,15 +3,15 @@ import React, { useEffect, useState } from "react";
 import { getDealRequestedText, getEllipsisTxt } from "../../../helpers/formatters";
 import { Spin, Table } from "antd";
 import { PlayingCard } from "../../PlayingCards/PlayingCard";
-import BN from "bn.js";
+import { BigNumber } from "@ethersproject/bignumber";
 import Moment from "react-moment";
-import { getExplorer } from "../../../helpers/networks";
-import { useMoralisDapp } from "../../../providers/MoralisDappProvider/MoralisDappProvider";
+import { getBakendObjPrefix, getCurrencySymbol, getExplorer } from "../../../helpers/networks"
 
 export const GameHistoryHandsPlayed = ({ gameId, round1Price, round2Price, finished = false }) => {
 
-  const { Moralis } = useMoralis();
-  const { chainId } = useMoralisDapp();
+  const { Moralis, chainId } = useMoralis();
+  const backendPrefix = getBakendObjPrefix(chainId);
+  const currencySymbol = getCurrencySymbol(chainId)
 
   const [totalFeesPaidFlop, setTotalFeesPaidFlop] = useState("0");
   const [totalFeesPaidTurn, setTotalFeesPaidTurn] = useState("0");
@@ -59,11 +59,12 @@ export const GameHistoryHandsPlayed = ({ gameId, round1Price, round2Price, finis
   ];
 
   const fetchHandsPlayedInRound = async (round) => {
-    const THHandAdded = Moralis.Object.extend("THHandAdded");
+    const THHandAdded = Moralis.Object.extend(`${backendPrefix}THHandAdded`);
     const queryTHHandAdded = new Moralis.Query(THHandAdded);
     queryTHHandAdded
       .equalTo("gameId", String(gameId))
       .equalTo("round", round)
+      .equalTo("confirmed", true)
       .ascending(["block_timestamp", "transaction_index"]);
     return queryTHHandAdded.find();
   };
@@ -72,14 +73,14 @@ export const GameHistoryHandsPlayed = ({ gameId, round1Price, round2Price, finis
     const resultsTHHandAdded = await fetchHandsPlayedInRound(round);
     const roundPrice = round === "2" ? round1Price : round2Price;
 
-    let roundTotal = new BN("0");
+    let roundTotal = BigNumber.from("0");
 
     const hands = [];
     for (let i = 0; i < resultsTHHandAdded.length; i += 1) {
       if (parseInt(round, 10) > highestRoundPlayed) {
         setHighestRoundPlayed(parseInt(round, 10));
       }
-      roundTotal = roundTotal.add(new BN(roundPrice));
+      roundTotal = roundTotal.add(BigNumber.from(roundPrice));
       const res = resultsTHHandAdded[i];
       const player = res.get("player");
       const txHash = res.get("transaction_hash");
@@ -146,15 +147,15 @@ export const GameHistoryHandsPlayed = ({ gameId, round1Price, round2Price, finis
   useEffect(() => {
 
     async function getTotalWinnings() {
-      const THWinningsCalculated = Moralis.Object.extend("THWinningsCalculated");
+      const THWinningsCalculated = Moralis.Object.extend(`${backendPrefix}THWinningsCalculated`);
       const query = new Moralis.Query(THWinningsCalculated);
       query
         .equalTo("gameId", String(gameId));
       const results = await query.find();
 
-      let total = new BN("0");
+      let total = BigNumber.from("0");
       for (let i = 0; i < results.length; i += 1) {
-        total = total.add(new BN(results[i].get("amount")));
+        total = total.add(BigNumber.from(results[i].get("amount")));
       }
       setTotalWinnings(total.toString());
 
@@ -169,7 +170,7 @@ export const GameHistoryHandsPlayed = ({ gameId, round1Price, round2Price, finis
       getTotalWinnings();
     }
 
-    const totalFees = new BN(totalFeesPaidFlop).add(new BN(totalFeesPaidTurn));
+    const totalFees = BigNumber.from(totalFeesPaidFlop).add(BigNumber.from(totalFeesPaidTurn));
     setTotalFeesPaid(totalFees.toString());
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [totalWinningsInitialised, totalFeesPaidFlop, totalFeesPaidTurn]);
@@ -182,14 +183,14 @@ export const GameHistoryHandsPlayed = ({ gameId, round1Price, round2Price, finis
     <div>
       <p className="subtitle">Bets, Winnings and House summary</p>
 
-      <p className="desc">Total Flop Bets: {Moralis.Units.FromWei(totalFeesPaidFlop, 18)} ETH</p>
-      <p className="desc">Total Turn Bets: {Moralis.Units.FromWei(totalFeesPaidTurn, 18)} ETH</p>
-      <p className="desc">Total Bets: {Moralis.Units.FromWei(totalFeesPaid, 18)} ETH</p>
+      <p className="desc">Total Flop Bets: {Moralis.Units.FromWei(totalFeesPaidFlop, 18)} {currencySymbol}</p>
+      <p className="desc">Total Turn Bets: {Moralis.Units.FromWei(totalFeesPaidTurn, 18)} {currencySymbol}</p>
+      <p className="desc">Total Bets: {Moralis.Units.FromWei(totalFeesPaid, 18)} {currencySymbol}</p>
 
       {
         finished && <>
-          <p className="desc">Total Winnings: {Moralis.Units.FromWei(totalWinnings, 18)} ETH</p>
-          <p className="desc">House Cut: {Moralis.Units.FromWei(houseCut, 18)} ETH</p>
+          <p className="desc">Total Winnings: {Moralis.Units.FromWei(totalWinnings, 18)} {currencySymbol}</p>
+          <p className="desc">House Cut: {Moralis.Units.FromWei(houseCut, 18)} {currencySymbol}</p>
         </>
       }
 

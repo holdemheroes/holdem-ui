@@ -1,16 +1,15 @@
 import { useMoralis } from "react-moralis";
 import React, { useEffect, useState } from "react";
 import { Spin, Table } from "antd";
-import BN from "bn.js";
-import { getExplorer } from "../../../helpers/networks";
+import { BigNumber } from "@ethersproject/bignumber";
+import { getBakendObjPrefix, getExplorer } from "../../../helpers/networks"
 import { getEllipsisTxt } from "../../../helpers/formatters";
 import Moment from "react-moment";
-import { useMoralisDapp } from "../../../providers/MoralisDappProvider/MoralisDappProvider";
 
 export const GameHistoryProcessedRefunds = ({ gameId }) => {
 
-  const { Moralis } = useMoralis();
-  const { chainId } = useMoralisDapp();
+  const { Moralis, chainId } = useMoralis();
+  const backendPrefix = getBakendObjPrefix(chainId);
 
   const [gameRefundsData, setGameRefundsData] = useState(null);
   const [gameRefundsDataInitialised, setGameRefundsDataInitialised] = useState(false);
@@ -46,14 +45,14 @@ export const GameHistoryProcessedRefunds = ({ gameId }) => {
   useEffect(() => {
 
     async function getRefundData() {
-      const THRefunded = Moralis.Object.extend("THRefunded");
+      const THRefunded = Moralis.Object.extend(`${backendPrefix}THRefunded`);
       const query = new Moralis.Query(THRefunded);
       query
         .equalTo("gameId", String(gameId))
         .ascending(["block_timestamp", "transaction_index"]);
       const results = await query.find();
 
-      let total = new BN("0");
+      let total = BigNumber.from("0");
 
       const data = [];
 
@@ -64,7 +63,7 @@ export const GameHistoryProcessedRefunds = ({ gameId }) => {
         const date = res.get("block_timestamp");
         const amount = res.get("amount");
 
-        total = total.add(new BN(amount));
+        total = total.add(BigNumber.from(amount));
 
         const d = {
           key: `refunds_${gameId}_${i}`,
