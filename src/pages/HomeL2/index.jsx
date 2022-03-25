@@ -169,9 +169,11 @@ export default function HomeL2() {
                     />
                   </form>
                 </div>
-                <p>{`Total NFTs minted: ${
-                  totalSupply !== null ? totalSupply : "0"
-                }/1326`}</p>
+                {gameIsLive && (
+                  <p>{`Total NFTs minted: ${
+                    totalSupply !== null ? totalSupply : "0"
+                  }/1326`}</p>
+                )}
               </div>
             </div>
             <div>

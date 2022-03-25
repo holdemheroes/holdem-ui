@@ -80,7 +80,11 @@ const App = () => {
                     />
                     {getEllipsisTxt(account, 6)}
                   </button>
-                  <ul className={`dropdown-body ${gameIsLive ? "" : "coming_soon"}`}>
+                  <ul
+                    className={`dropdown-body ${
+                      gameIsLive ? "" : "coming_soon"
+                    }`}
+                  >
                     {gameIsLive && (
                       <>
                         <li className="dropdown-item">
@@ -114,15 +118,15 @@ const App = () => {
               {chainType === "l2" && <HomeL2 />}
             </Route>
             <Route path="/Marketplace">
-              {gameIsLive && <Sale />}
-              {!gameIsLive && <GameComingSoon />}
+              {gameIsLive && chainType && <Sale />}
+              {(!gameIsLive || !chainType) && <GameComingSoon />}
             </Route>
             <Route path="/Rules">
               <GamePlay />
             </Route>
             <Route path="/NFTwallet">
-              {gameIsLive && <Sale />}
-              {!gameIsLive && <GameComingSoon />}
+              {gameIsLive && chainType && <Sale />}
+              {(!gameIsLive || !chainType) && <GameComingSoon />}
             </Route>
             {isAuthenticated && (
               <>
