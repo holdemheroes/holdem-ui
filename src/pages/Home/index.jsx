@@ -164,16 +164,14 @@ export default function Home() {
                     <input
                       className="btn-shadow btn-hover-pointer"
                       type="submit"
-                      value={gameIsLive ? "Mint" : "Coming Soon"}
-                      disabled={!gameIsLive}
+                      value={gameIsLive && chainId !== null ? "Mint" : "Coming Soon"}
+                      disabled={!gameIsLive || chainId === null}
                     />
                   </form>
                 </div>
-                {gameIsLive && (
-                  <p>{`Total NFTs minted: ${
-                    totalSupply !== null ? totalSupply : "0"
-                  }/1326`}</p>
-                )}
+                <p>{`Total NFTs minted: ${
+                  totalSupply !== null ? totalSupply : "0"
+                }/1326`}</p>
               </div>
             </div>
             <div>
