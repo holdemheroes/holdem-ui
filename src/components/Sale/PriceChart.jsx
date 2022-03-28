@@ -7,15 +7,24 @@ ChartJS.register(...registerables);
 export default function PriceChart() {
 
   const [ chartData, setChartData ] = useState(null);
+  const [ lastBlock, setLastBlock ] = useState(0);
+  const [ data, setData ] = useState([]);
+  const [ labels, setLabels ] = useState([]);
 
   const processChartData = async () => {
-    const cd = await Moralis.Cloud.run("getPricePerBlockData");
-    const data = []
-    const labels = []
+    const params = { lastBlock: lastBlock }
+    const cd = await Moralis.Cloud.run("getPricePerBlockData", params);
+    const tmpData = data
+    const tmpLabels = labels
     for(let i = 0; i < cd.length; i += 1) {
-      labels.push(cd[i].block)
-      data.push(cd[i].price)
+      tmpLabels.push(cd[i].block)
+      tmpData.push(cd[i].price)
+      if(parseInt(cd[i].block, 10) > lastBlock) {
+        setLastBlock(cd[i].block)
+      }
     }
+    setLabels(tmpLabels)
+    setData(tmpData)
     const d = {
       labels: labels,
       datasets: [
