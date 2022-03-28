@@ -16,7 +16,7 @@ export const networkConfigs = {
     currencySymbol: "ETH",
     blockExplorerUrl: "https://rinkeby.etherscan.io",
     openSeaUrl: "https://testnets.opensea.io",
-    holdemHeroesAddress: "0x382Faef860A63c6c135f6A254F238751187E812A",
+    holdemHeroesAddress: "0x3269214Ce254Fbd31A70427A859B54C8ef901B14",
     texasHoldemV1Address: "",
     chainType: "l1",
     prefix: "Eth",
