@@ -4,6 +4,7 @@ import abis from "../../helpers/contracts";
 import { getHoldemHeroesAddress } from "../../helpers/networks";
 import { extractErrorMessage, openNotification } from "../../helpers/notifications"
 import { BigNumber } from "@ethersproject/bignumber";
+import PriceChart from "./PriceChart"
 
 export default function PreRevealSale({ pricePerToken, mintedTokens, maxCanOwn, balance, totalSupply, saleHeader }) {
   const { Moralis, chainId } = useMoralis();
@@ -69,6 +70,7 @@ export default function PreRevealSale({ pricePerToken, mintedTokens, maxCanOwn, 
       <p className="title">Blind Minting Phase: {1326 - totalSupply} Available</p>
       {block}
       {saleHeader}
+      <PriceChart />
     </>
   );
 }
