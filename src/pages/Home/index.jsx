@@ -137,6 +137,16 @@ export default function Home() {
                 Mint the 1326 Hole Card combinations as NFTs.
                 <br />
                 Then play Texas Hold&#x27;em with them!
+                <br />
+                Mint price is dynamic with{" "}
+                <a
+                  href="http://dynamicdrops.xyz"
+                  target="_blank"
+                  rel="noreferrer"
+                >
+                  Dynamic Drops
+                </a>
+                .
               </p>
               <div className="mint_poker_hands-wrapper">
                 <div className="mint_poker_hands">
@@ -164,7 +174,9 @@ export default function Home() {
                     <input
                       className="btn-shadow btn-hover-pointer"
                       type="submit"
-                      value={gameIsLive && chainId !== null ? "Mint" : "Coming Soon"}
+                      value={
+                        gameIsLive && chainId !== null ? "Mint" : "Coming Soon"
+                      }
                       disabled={!gameIsLive || chainId === null}
                     />
                   </form>

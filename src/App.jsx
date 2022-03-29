@@ -27,6 +27,7 @@ import Logout from "./components/Logout";
 import { logo } from "./logo";
 import { getChainType, getGameIsLive } from "./helpers/networks";
 import ScrollToTop from "./ScrollToTop";
+import { ethers } from "ethers";
 
 const App = () => {
   const {
@@ -125,7 +126,7 @@ const App = () => {
               <GamePlay />
             </Route>
             <Route path="/NFTwallet">
-              {gameIsLive && chainType && <Sale />}
+              {gameIsLive && chainType && <NFTBalance />}
               {(!gameIsLive || !chainType) && <GameComingSoon />}
             </Route>
             {isAuthenticated && (
