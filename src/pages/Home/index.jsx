@@ -8,10 +8,11 @@ import Countdown from "react-countdown";
 import { useMoralis } from "react-moralis";
 import abis from "../../helpers/contracts";
 import { getHoldemHeroesAddress } from "../../helpers/networks";
-import { openNotification } from "../../helpers/notifications";
+import { extractErrorMessage, openNotification } from "../../helpers/notifications"
 import { Roadmap } from "../../roadmap";
 import { BigNumber } from "@ethersproject/bignumber";
 import { getGameIsLive, getHehIsLive } from "../../helpers/networks";
+import { Spin } from "antd"
 
 export default function Home() {
   const {
@@ -25,21 +26,45 @@ export default function Home() {
     refresh: refreshNftData
   } = useNFTSaleInfo();
 
-
-
   const now = Math.floor(Date.now() / 1000);
 
   // const saleStartDiff = startTime - now;
   const revealTimeDiff = revealTime - now;
   // const startIdx = parseInt(startingIndex, 10);
 
-  const { Moralis, chainId } = useMoralis();
-  const gameIsLive = getGameIsLive(chainId);
+  const { Moralis, chainId, account, isAuthenticated, isWeb3Enabled } = useMoralis();
   const hehIsLive = getHehIsLive(chainId);
 
   const abi = abis.heh_nft;
-  const contractAddress = getHoldemHeroesAddress(chainId);
+
   const [maxNumToMint, setMaxNumToMint] = useState(6);
+  const [ hehContractAddress, setHehContractAddress ] = useState(null);
+  const [ hehContract, setHehContract ] = useState(null);
+
+  useEffect(() => {
+    const timeout = setTimeout(() => {
+      refreshNftData();
+    }, 5000);
+
+    return () => {
+      clearTimeout(timeout);
+    };
+  });
+
+  useEffect(async () => {
+    if(chainId && !hehContract && !hehContractAddress && isAuthenticated && isWeb3Enabled) {
+      try {
+        const hehAddr = getHoldemHeroesAddress( chainId );
+        setHehContractAddress( hehAddr );
+        const ethers = Moralis.web3Library;
+        const web3Provider = await Moralis.enableWeb3();
+        const contract = new ethers.Contract( hehAddr, abi, web3Provider.getSigner() );
+        setHehContract( contract );
+      } catch ( e ) {
+        console.log(e)
+      }
+    }
+  }, [chainId, hehContract, hehContractAddress, isAuthenticated, isWeb3Enabled]);
 
   // const MAX_TOTAL_SUPPLY = 1326;
 
@@ -50,46 +75,40 @@ export default function Home() {
     const numToMint = parseInt(formDataObj.mint_amount, 10);
     const cost = BigNumber.from(pricePerToken).mul(BigNumber.from(numToMint));
 
-    const options = {
-      contractAddress,
-      functionName: "mintNFTPreReveal",
-      abi,
-      msgValue: cost.toString(),
-      params: {
-        _numberOfNfts: numToMint,
-      },
-    };
+    hehContract.estimateGas.mintNFTPreReveal(numToMint, {value: cost, from: account})
+      .then(function(estimate){
+        return estimate
+      })
+      .then(function(estimate){
+        // increase gas limit to compensate for NFT price fluctuations
+        const gasLimit = estimate.add(BigNumber.from("10000"))
+        hehContract.mintNFTPreReveal(numToMint, {value: cost, from: account, gasLimit})
+          .then(function(tx) {
+            openNotification({
+              message: "🔊 New Transaction",
+              description: `📃 Tx Hash: ${tx.hash}`,
+              type: "success"
+            });
+          })
+          .catch(function(e){
+            openNotification({
+              message: "🔊 Error",
+              description: `📃 ${extractErrorMessage(e)}`,
+              type: "error"
+            });
+            console.log(e)
+          })
+      })
+      .catch(function(e){
+        openNotification({
+          message: "🔊 Error",
+          description: `📃 ${extractErrorMessage(e)}`,
+          type: "error"
+        });
+        console.log(e)
+      })
 
-    try {
-      const tx = await Moralis.executeFunction({
-        awaitReceipt: false,
-        ...options,
-      });
-      openNotification({
-        message: "🔊 New Transaction",
-        description: `📃 Tx Hash: ${tx.hash}`,
-        type: "success",
-      });
-    } catch (error) {
-      openNotification({
-        message: "🔊 Error",
-        description: `📃 Receipt: ${error.message}`,
-        type: "error",
-      });
-      console.log(error);
-    }
   }
-  useEffect(() => {
-    const timeout = setTimeout(() => {
-      if(dataInitialised) {
-        refreshNftData();
-      }
-    }, 5000);
-
-    return () => {
-      clearTimeout(timeout);
-    };
-  });
 
   const renderer = ({ days, hours, minutes, seconds, completed }) => {
     if (completed) {
@@ -143,18 +162,18 @@ export default function Home() {
               </p>
               <div className="mint_poker_hands-wrapper">
                 <div className="mint_poker_hands">
-                  <form onSubmit={(e) => preRevealMint(e)} name="mint-form">
+                  {dataInitialised ? (<form onSubmit={( e ) => preRevealMint( e )} name="mint-form">
                     <p>Mint Poker Hands</p>
                     <div>
                       <select id="mint_num" name={"mint_amount"}>
                         {Array.from(
                           { length: maxNumToMint },
-                          (_, i) => i + 1
-                        ).map((item, i) => (
-                          <option value="1" key={i}>
+                          ( _, i ) => i + 1
+                        ).map( ( item, i ) => (
+                          <option value={item} key={i}>
                             {item}
                           </option>
-                        ))}
+                        ) )}
                       </select>
                       <p>
                         Ξ{" "}
@@ -172,7 +191,7 @@ export default function Home() {
                       }
                       disabled={!hehIsLive || chainId === null}
                     />
-                  </form>
+                  </form>) : <Spin />}
                 </div>
                 <p>{`Total NFTs minted: ${
                   totalSupply !== null ? totalSupply : "0"
