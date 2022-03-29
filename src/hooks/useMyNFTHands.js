@@ -1,7 +1,7 @@
 import { useEffect, useState } from "react";
 import { useMoralis, useMoralisWeb3Api, useMoralisWeb3ApiCall } from "react-moralis";
 import { useIPFS } from "./useIPFS";
-import { getHoldemHeroesAddress, getTexasHoldemV1Address } from "../helpers/networks"
+import { getGameIsLive, getHoldemHeroesAddress, getTexasHoldemV1Address } from "../helpers/networks"
 import abis from "../helpers/contracts";
 
 export const useMyNFTHands = (options) => {
@@ -14,6 +14,7 @@ export const useMyNFTHands = (options) => {
   const [NFTHands, setNFTHands] = useState([]);
   const [hehContractAddress, setHehContractAddress] = useState(getHoldemHeroesAddress(chainId));
   const [texasHoldemAddress, setTexasHoldemAddress] = useState(getTexasHoldemV1Address(chainId));
+  const [gameIsLive, setGameIsLive] = useState(false);
 
   const {
     fetch: getMyNFTHands,
@@ -28,6 +29,7 @@ export const useMyNFTHands = (options) => {
   useEffect(() => {
     setHehContractAddress(getHoldemHeroesAddress(chainId))
     setTexasHoldemAddress(getTexasHoldemV1Address(chainId))
+    setGameIsLive(getGameIsLive(chainId))
     getMyNFTHands()
   }, [chainId, getMyNFTHands])
 
@@ -40,7 +42,7 @@ export const useMyNFTHands = (options) => {
           NFT.image = resolveLink(NFT.metadata?.image);
         }
 
-        if (NFT?.token_id) {
+        if (NFT?.token_id && gameIsLive) {
           fetchHandData(NFT.token_id)
             .then((d) => {
               if (d?.card1.toString() && d?.card2.toString() && d?.handId.toString()) {
@@ -55,7 +57,7 @@ export const useMyNFTHands = (options) => {
       setNFTHands(NFTs);
     }
     // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [data, texasHoldemAddress]);
+  }, [data, gameIsLive, texasHoldemAddress]);
 
   const fetchHandData = async (tokenId) => {
     return await Moralis.executeFunction({
