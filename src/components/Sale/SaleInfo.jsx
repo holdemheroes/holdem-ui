@@ -3,11 +3,9 @@ import Countdown from 'react-countdown';
 
 
 export default function SaleInfo(
-  { startTime, revealTime, startingIndex }
+  { startBlockNum, revealTime, startingIndex, currentBlock, saleStartTime, saleStartBlockDiff }
 ) {
   const now = Math.floor(Date.now() / 1000);
-
-  const saleStartDiff = startTime - now;
   const revealTimeDiff = revealTime - now;
 
   let saleInfo = null;
@@ -41,14 +39,15 @@ export default function SaleInfo(
     }
   };
 
-  if (saleStartDiff > 0) {
+  if (saleStartBlockDiff > 0) {
     saleInfo = <>
-      <div>Pre-reveal Sale starts in: <Countdown date={startTime * 1000} renderer={renderer} /></div>
+      <div>Pre-reveal Sale starts at block #{startBlockNum.toNumber()}: <Countdown date={saleStartTime * 1000} renderer={renderer} /></div>
+      <div>Current block: {currentBlock}</div>
       <div>Revealed in: <Countdown date={revealTime * 1000} renderer={renderer} /></div>
     </>;
   }
 
-  if (saleStartDiff <= 0 && revealTimeDiff > 0) {
+  if (saleStartBlockDiff <= 0 && revealTimeDiff > 0) {
     saleInfo = <div>
       Reveal and Airdrop in: <Countdown date={revealTime * 1000} renderer={renderer} />
     </div>;

@@ -5,6 +5,7 @@ export const networkConfigs = {
     currencySymbol: "ETH",
     blockExplorerUrl: "https://etherscan.io",
     openSeaUrl: "https://opensea.io",
+    playingCardsAddress: "",
     holdemHeroesAddress: "",
     texasHoldemV1Address: "",
     chainType: "l1",
@@ -16,8 +17,8 @@ export const networkConfigs = {
     currencySymbol: "ETH",
     blockExplorerUrl: "https://rinkeby.etherscan.io",
     openSeaUrl: "https://testnets.opensea.io",
-    holdemHeroesAddress: "0x0f311974A57181B6e806a8cCF6F8EfEe0Ee7EEac",
-    // texasHoldemV1Address: "0xca25aB8b9da0ab88F86d2838f9CA78281eA01f6E",
+    playingCardsAddress: "0xCeC6aA80F5815A42c497B1Ca46d93256e21ea220",
+    holdemHeroesAddress: "0x3269214Ce254Fbd31A70427A859B54C8ef901B14",
     texasHoldemV1Address: "",
     chainType: "l1",
     prefix: "Eth",
@@ -29,8 +30,8 @@ export const networkConfigs = {
     currencySymbol: "ETH",
     blockExplorerUrl: "http://localhost",
     openSeaUrl: "http://localhost",
-    holdemHeroesAddress: "0xD86C8F0327494034F60e25074420BcCF560D5610",
-    // texasHoldemV1Address: "0xd99748782d7643b00C36a4Bb296C4A099dF98Ff3",
+    playingCardsAddress: "",
+    holdemHeroesAddress: "",
     texasHoldemV1Address: "",
     chainType: "l1",
     prefix: "Eth",
@@ -42,6 +43,7 @@ export const networkConfigs = {
     currencySymbol: "ETH",
     blockExplorerUrl: "http://localhost",
     openSeaUrl: "http://localhost",
+    playingCardsAddress: "",
     holdemHeroesAddress: "",
     texasHoldemV1Address: "",
     chainType: "l1",
@@ -54,6 +56,7 @@ export const networkConfigs = {
     currencySymbol: "MATIC",
     blockExplorerUrl: "https://polygonscan.com",
     openSeaUrl: "https://opensea.io",
+    playingCardsAddress: "",
     holdemHeroesAddress: "",
     texasHoldemV1Address: "",
     chainType: "l2",
@@ -66,8 +69,8 @@ export const networkConfigs = {
     currencySymbol: "MATIC",
     blockExplorerUrl: "https://mumbai.polygonscan.com/",
     openSeaUrl: "https://testnets.opensea.io",
-    holdemHeroesAddress: "0x4990af7cD359D44716CD881B367A0A32A5741Cb9",
-    // texasHoldemV1Address: "0x52456E0CA3D056b4cFAf8B10076B7Ace3CaD2A06",
+    playingCardsAddress: "",
+    holdemHeroesAddress: "",
     texasHoldemV1Address: "",
     chainType: "l2",
     prefix: "Polygon",
@@ -77,6 +80,8 @@ export const networkConfigs = {
 export const getCurrencySymbol = (chain) => networkConfigs[chain]?.currencySymbol || "NATIVE";
 
 export const getExplorer = (chain) => networkConfigs[chain]?.blockExplorerUrl;
+
+export const getPlayingCardsAddress = (chain) => networkConfigs[chain]?.playingCardsAddress;
 
 export const getHoldemHeroesAddress = (chain) => networkConfigs[chain]?.holdemHeroesAddress;
 
@@ -89,3 +94,5 @@ export const getChainType = (chain) => networkConfigs[chain]?.chainType;
 export const getBakendObjPrefix = (chain) => networkConfigs[chain]?.prefix;
 
 export const getGameIsLive = (chain) => (networkConfigs[chain]?.texasHoldemV1Address !== "");
+
+export const getHehIsLive = (chain) => (networkConfigs[chain]?.holdemHeroesAddress !== "");

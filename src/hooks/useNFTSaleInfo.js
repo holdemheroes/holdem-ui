@@ -6,8 +6,7 @@ import { getHoldemHeroesAddress } from "../helpers/networks";
 export const useNFTSaleInfo = () => {
   const { isInitialized, chainId } = useMoralis();
 
-  const getPriceFunc = (parseInt(process.env.REACT_APP_HEH_VERSION, 10) === 1) ? "NFT_MINT_PRICE" : "getNftPrice"
-  const abi = (parseInt(process.env.REACT_APP_HEH_VERSION, 10) === 1) ? abis.heh_old : abis.heh_nft;
+  const abi = abis.heh_nft;
   const contractAddress = getHoldemHeroesAddress(chainId);
 
   const [fetched, setFetched] = useState(false);
@@ -18,11 +17,11 @@ export const useNFTSaleInfo = () => {
   };
 
   const {
-    data: startTime,
-    fetch: startTimeFetch,
+    data: startBlockNum,
+    fetch: startBlockNumFetch,
   } = useWeb3ExecuteFunction({
     ...options,
-    functionName: "SALE_START_TIMESTAMP",
+    functionName: "SALE_START_BLOCK_NUM",
   });
 
   const {
@@ -54,7 +53,7 @@ export const useNFTSaleInfo = () => {
     fetch: pricePerTokenFetch,
   } = useWeb3ExecuteFunction({
     ...options,
-    functionName: getPriceFunc,
+    functionName: "getNftPrice",
   });
 
   const {
@@ -71,7 +70,7 @@ export const useNFTSaleInfo = () => {
       refresh();
     }
 
-    if (startTime !== null &&
+    if (startBlockNum !== null &&
       revealTime !== null &&
       startingIndex !== null &&
       maxPerTxOrOwner !== null &&
@@ -80,10 +79,10 @@ export const useNFTSaleInfo = () => {
       setDataInitialised(true);
     }
     // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [isInitialized, fetched, startTime, revealTime, startingIndex, maxPerTxOrOwner, pricePerToken, totalSupply]);
+  }, [isInitialized, fetched, startBlockNum, revealTime, startingIndex, maxPerTxOrOwner, pricePerToken, totalSupply]);
 
   const refresh = () => {
-    startTimeFetch();
+    startBlockNumFetch();
     revealTimeFetch();
     startingIndexFetch();
     maxPerTxOrOwnerFetch();
@@ -94,7 +93,7 @@ export const useNFTSaleInfo = () => {
   return {
     refresh,
     dataInitialised,
-    startTime,
+    startBlockNum,
     revealTime,
     startingIndex,
     maxPerTxOrOwner,

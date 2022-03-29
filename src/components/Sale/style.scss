@@ -102,6 +102,18 @@
         }
     }
 
+    form[name="refresh-form"] {
+        input[type="submit"] {
+            border       : none;
+            padding      : 12px 20px;
+            background   : #174AFF;
+            border-radius: 5px;
+            font-family  : Karla, sans-serif;
+            font-weight  : bold;
+        }
+    }
+
+
     .sales-header {
         margin-bottom: 48px;
 

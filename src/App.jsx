@@ -25,7 +25,7 @@ import "./App.scss";
 import { getEllipsisTxt } from "./helpers/formatters";
 import Logout from "./components/Logout";
 import { logo } from "./logo";
-import { getChainType, getGameIsLive } from "./helpers/networks";
+import { getChainType, getGameIsLive, getHehIsLive } from "./helpers/networks";
 import ScrollToTop from "./ScrollToTop";
 import { ethers } from "ethers";
 
@@ -46,6 +46,7 @@ const App = () => {
 
   const chainType = getChainType(chainId);
   const gameIsLive = getGameIsLive(chainId);
+  const hehIsLive = getHehIsLive(chainId);
 
   return (
     <Router>
@@ -119,15 +120,15 @@ const App = () => {
               {chainType === "l2" && <HomeL2 />}
             </Route>
             <Route path="/Marketplace">
-              {gameIsLive && chainType && <Sale />}
-              {(!gameIsLive || !chainType) && <GameComingSoon />}
+              {hehIsLive && chainType && <Sale />}
+              {(!hehIsLive || !chainType) && <GameComingSoon />}
             </Route>
             <Route path="/Rules">
               <GamePlay />
             </Route>
             <Route path="/NFTwallet">
-              {gameIsLive && chainType && <NFTBalance />}
-              {(!gameIsLive || !chainType) && <GameComingSoon />}
+              {hehIsLive && chainType && <NFTBalance />}
+              {(!hehIsLive || !chainType) && <GameComingSoon />}
             </Route>
             {isAuthenticated && (
               <>

@@ -2,14 +2,14 @@ import React, { useEffect, useState } from "react";
 import { useMoralis, useWeb3ExecuteFunction } from "react-moralis"
 import { Image, Spin } from 'antd';
 import abis from "../../helpers/contracts";
-import { getHoldemHeroesAddress } from "../../helpers/networks";
+import { getPlayingCardsAddress } from "../../helpers/networks";
 import { svgToImgSrc } from "../../helpers/nft";
 
 export const PlayingCard = ({ cardId, width = 100 }) => {
 
   const { chainId } = useMoralis();
   const abi = abis.heh_nft;
-  const contractAddress = getHoldemHeroesAddress(chainId);
+  const contractAddress = getPlayingCardsAddress(chainId);
 
   const [cardSvg, setCardSvg] = useState(null);
 
