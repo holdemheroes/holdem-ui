@@ -13,7 +13,7 @@ function Withdrawable() {
 
   const abi = abis.texas_holdem_v1;
   const contractAddress = getTexasHoldemV1Address(chainId);
-  const currencySymbol = getCurrencySymbol(chainId)
+  const currencySymbol = getCurrencySymbol(chainId);
 
   const options = {
     contractAddress, abi,

@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import { NavLink } from "react-router-dom";
 import "./style.scss";
 import AnimateButton from "../../components/AnimateButton";
@@ -11,7 +11,7 @@ import { getHoldemHeroesAddress } from "../../helpers/networks";
 import { openNotification } from "../../helpers/notifications";
 import { Roadmap } from "../../roadmap";
 import { BigNumber } from "@ethersproject/bignumber";
-import { getGameIsLive } from "../../helpers/networks";
+import { getGameIsLive, getHehIsLive } from "../../helpers/networks";
 
 export default function Home() {
   const {
@@ -21,8 +21,11 @@ export default function Home() {
     // maxPerTxOrOwner,
     pricePerToken,
     totalSupply,
-    // dataInitialised
+    dataInitialised,
+    refresh: refreshNftData
   } = useNFTSaleInfo();
+
+
 
   const now = Math.floor(Date.now() / 1000);
 
@@ -32,6 +35,7 @@ export default function Home() {
 
   const { Moralis, chainId } = useMoralis();
   const gameIsLive = getGameIsLive(chainId);
+  const hehIsLive = getHehIsLive(chainId);
 
   const abi = abis.heh_nft;
   const contractAddress = getHoldemHeroesAddress(chainId);
@@ -52,7 +56,7 @@ export default function Home() {
       abi,
       msgValue: cost.toString(),
       params: {
-        numberOfNfts: numToMint,
+        _numberOfNfts: numToMint,
       },
     };
 
@@ -74,29 +78,18 @@ export default function Home() {
       });
       console.log(error);
     }
-    // tx.on("transactionHash", (hash) => {
-    //   openNotification({
-    //     message: "🔊 New Transaction",
-    //     description: `📃 Tx Hash: ${hash}`,
-    //     type: "success"
-    //   });
-    // })
-    //   .on("receipt", (receipt) => {
-    //     openNotification({
-    //       message: "🔊 New Receipt",
-    //       description: `📃 Receipt: ${receipt.transactionHash}`,
-    //       type: "success"
-    //     });
-    //   })
-    //   .on("error", (error) => {
-    //     openNotification({
-    //       message: "🔊 Error",
-    //       description: `📃 Receipt: ${error.toString()}`,
-    //       type: "error"
-    //     });
-    //     console.log(error);
-    //   });
   }
+  useEffect(() => {
+    const timeout = setTimeout(() => {
+      if(dataInitialised) {
+        refreshNftData();
+      }
+    }, 5000);
+
+    return () => {
+      clearTimeout(timeout);
+    };
+  });
 
   const renderer = ({ days, hours, minutes, seconds, completed }) => {
     if (completed) {
@@ -175,9 +168,9 @@ export default function Home() {
                       className="btn-shadow btn-hover-pointer"
                       type="submit"
                       value={
-                        gameIsLive && chainId !== null ? "Mint" : "Coming Soon"
+                        hehIsLive && chainId !== null ? "Mint" : "Coming Soon"
                       }
-                      disabled={!gameIsLive || chainId === null}
+                      disabled={!hehIsLive || chainId === null}
                     />
                   </form>
                 </div>
