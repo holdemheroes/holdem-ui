@@ -47,6 +47,10 @@ export default function PriceChart() {
           borderColor: 'rgb(53, 162, 235)',
           backgroundColor: 'rgba(53, 162, 235, 0.5)',
           yAxisID: 'y',
+          fill: false,
+          borderWidth: 2,
+          pointRadius: 0,
+          tension: 0.1,
         },
         {
           id: 2,
@@ -55,6 +59,10 @@ export default function PriceChart() {
           borderColor: 'rgb(162, 53, 235)',
           backgroundColor: 'rgba(162, 53, 235, 0.5)',
           yAxisID: 'y1',
+          fill: false,
+          borderWidth: 2,
+          pointRadius: 0,
+          tension: 0.1,
         },
         {
           id: 3,
@@ -63,6 +71,10 @@ export default function PriceChart() {
           borderColor: 'rgb(162, 235, 53)',
           backgroundColor: 'rgba(162, 235, 53, 0.5)',
           yAxisID: 'y1',
+          fill: false,
+          borderWidth: 2,
+          pointRadius: 0,
+          tension: 0.1,
         }
       ]
     }
