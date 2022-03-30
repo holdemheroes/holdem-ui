@@ -3,6 +3,7 @@ import Moralis from "moralis"
 import { Chart as ChartJS, registerables } from 'chart.js';
 import { Line } from 'react-chartjs-2'
 import { useNFTSaleInfo } from "../../hooks/useNFTSaleInfo"
+import { Spin } from "antd"
 ChartJS.register(...registerables);
 
 export default function PriceChart() {
@@ -84,24 +85,24 @@ export default function PriceChart() {
     }
   }, [chartData, targetEms]);
 
-  async function refreshChartData(event) {
-    event.preventDefault();
-    await processChartData();
-  }
+  useEffect(() => {
+    const timeout = setTimeout(async () => {
+      if(chartData && targetEms) {
+        await processChartData()
+      }
+    }, 15000);
 
-  if (!chartData) {
-    return <>Loading chart</>;
+    return () => {
+      clearTimeout(timeout);
+    };
+  }, [chartData, targetEms])
+
+  if(!chartData) {
+    return <Spin />
   }
 
   return (
     <>
-      <form onSubmit={(e) => refreshChartData(e)} name="refresh-form">
-        <input
-          className="btn-shadow btn-hover-pointer"
-          type="submit"
-          value="Refresh"
-        />
-      </form>
       <Line
         datasetIdKey="id"
         data={chartData}
