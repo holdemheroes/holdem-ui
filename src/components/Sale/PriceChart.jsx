@@ -50,7 +50,6 @@ export default function PriceChart() {
           fill: false,
           borderWidth: 2,
           pointRadius: 0,
-          tension: 0.1,
         },
         {
           id: 2,
@@ -62,7 +61,6 @@ export default function PriceChart() {
           fill: false,
           borderWidth: 2,
           pointRadius: 0,
-          tension: 0.1,
         },
         {
           id: 3,
@@ -74,7 +72,6 @@ export default function PriceChart() {
           fill: false,
           borderWidth: 2,
           pointRadius: 0,
-          tension: 0.1,
         }
       ]
     }
@@ -110,7 +107,9 @@ export default function PriceChart() {
         data={chartData}
         options={
         {
+          spanGaps: true,
           responsive: true,
+          animation: false,
           plugins: {
             title: {
               display: true,
@@ -118,6 +117,16 @@ export default function PriceChart() {
             },
           },
           scales: {
+            x: {
+              ticks: {
+                color: "white"
+              },
+              title: {
+                display: true,
+                text: 'Block #',
+                color: "white"
+              },
+            },
             y: {
               type: 'linear',
               display: true,
@@ -125,6 +134,9 @@ export default function PriceChart() {
               title: {
                 display: true,
                 text: 'ETH Price',
+                color: "white"
+              },
+              ticks: {
                 color: "white"
               }
             },
@@ -140,6 +152,9 @@ export default function PriceChart() {
               title: {
                 display: true,
                 text: 'EMS',
+                color: "white"
+              },
+              ticks: {
                 color: "white"
               }
             },
