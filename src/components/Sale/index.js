@@ -82,7 +82,7 @@ export default function Sale() {
       if (revealTime > 0) {
         setRevealTimeDiff(revealTime - now);
       }
-    }, 5000);
+    }, 10000);
 
     return () => {
       clearTimeout(timeout);
