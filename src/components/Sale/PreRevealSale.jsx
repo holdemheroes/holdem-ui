@@ -20,7 +20,6 @@ export default function PreRevealSale({
 }) {
   const { Moralis, chainId } = useMoralis();
   const abi = abis.heh_nft;
-  const contractAddress = getHoldemHeroesAddress(chainId);
 
   async function preRevealMint(event) {
     event.preventDefault();
