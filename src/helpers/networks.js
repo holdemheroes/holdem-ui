@@ -18,7 +18,7 @@ export const networkConfigs = {
     blockExplorerUrl: "https://rinkeby.etherscan.io",
     openSeaUrl: "https://testnets.opensea.io",
     playingCardsAddress: "0xCeC6aA80F5815A42c497B1Ca46d93256e21ea220",
-    holdemHeroesAddress: "0xF43845c72f4d0b6110d8016F70e0622E1e461b97",
+    holdemHeroesAddress: "0xCcBfc30B8687991C70A1061490394C6516323040",
     texasHoldemV1Address: "",
     chainType: "l1",
     prefix: "Eth",
