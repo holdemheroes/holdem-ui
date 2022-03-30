@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useEffect, useState } from "react"
 import { useMoralis } from "react-moralis";
 import abis from "../../helpers/contracts";
 import { getHoldemHeroesAddress } from "../../helpers/networks";
@@ -76,7 +76,7 @@ export default function PreRevealSale({
   let block = (
     <p className="title">Minted max of {maxCanOwn.toString()} already</p>
   );
-  
+
   if (options.length > 0) {
     block = (
       <form onSubmit={(e) => preRevealMint(e)} name="mint-form">
