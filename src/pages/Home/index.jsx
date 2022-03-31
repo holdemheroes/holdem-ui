@@ -23,8 +23,8 @@ import PriceChart from "../../components/Sale/PriceChart";
 
 export default function Home() {
   const {
-    // startBlockNum,
-    // revealTime,
+    startBlockNum,
+    revealTime,
     startingIndex,
     maxPerTxOrOwner,
     pricePerToken,
@@ -32,9 +32,6 @@ export default function Home() {
     dataInitialised: nftSaleDataInitialised,
     refresh: refreshNftData,
   } = useNFTSaleInfo();
-
-  const startBlockNum = BigNumber.from(10421700);
-  const revealTime = BigNumber.from(1648999999);
 
   const { Moralis, chainId, account, isAuthenticated, isWeb3Enabled } =
     useMoralis();

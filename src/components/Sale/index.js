@@ -14,8 +14,8 @@ import { MAX_TOTAL_SUPPLY } from "../../helpers/constant";
 
 export default function Sale() {
   const {
-    // startBlockNum,
-    // revealTime,
+    startBlockNum,
+    revealTime,
     startingIndex,
     maxPerTxOrOwner,
     pricePerToken,
@@ -23,9 +23,6 @@ export default function Sale() {
     dataInitialised: nftSaleDataInitialised,
     refresh: refreshNftData,
   } = useNFTSaleInfo();
-
-  const startBlockNum = BigNumber.from(10421700);
-  const revealTime = BigNumber.from(1648999999);
 
   const { currentBlock, refresh: refreshCurrentBlock } = useChainData();
 
