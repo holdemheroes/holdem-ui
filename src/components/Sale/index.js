@@ -119,22 +119,13 @@ export default function Sale() {
         </>
       ) : revealTimeDiff > 0 && startIdx === 0 ? (
         totalSupply < MAX_TOTAL_SUPPLY ? (
-          <PreRevealSale
-            pricePerToken={pricePerToken}
-            mintedTokens={minted}
-            maxCanOwn={maxPerTxOrOwner}
-            balance={NFTHands.length}
-            totalSupply={totalSupply}
-            saleHeader={
-              <SaleInfo
-                startBlockNum={startBlockNum}
-                revealTime={revealTime}
-                startingIndex={startingIndex}
-                currentBlock={currentBlock}
-                saleStartBlockDiff={saleStartBlockDiff}
-                saleStartTime={saleStartTime}
-              />
-            }
+          <SaleInfo
+            startBlockNum={startBlockNum}
+            revealTime={revealTime}
+            startingIndex={startingIndex}
+            currentBlock={currentBlock}
+            saleStartBlockDiff={saleStartBlockDiff}
+            saleStartTime={saleStartTime}
           />
         ) : (
           <>
@@ -145,9 +136,7 @@ export default function Sale() {
       ) : startIdx === 0 ? (
         <>
           <p className="title">NFT Sale</p>
-          <p className="desc">
-            pre-reveal sale ended. Waiting for distribution
-          </p>
+          <p className="desc">Waiting for distribution</p>
         </>
       ) : (
         <PostRevealSale
