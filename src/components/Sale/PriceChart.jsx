@@ -79,16 +79,24 @@ export default function PriceChart() {
     setChartData(d)
   }
 
-  useEffect(async () => {
-    if (!chartData && targetEms) {
+  useEffect(() => {
+
+    async function _procData() {
       await processChartData()
+    }
+    if (!chartData && targetEms) {
+      _procData()
     }
   }, [chartData, targetEms]);
 
   useEffect(() => {
-    const timeout = setTimeout(async () => {
+    async function _procData() {
+      await processChartData()
+    }
+
+    const timeout = setTimeout(() => {
       if(chartData && targetEms) {
-        await processChartData()
+        _procData()
       }
     }, 15000);
 
