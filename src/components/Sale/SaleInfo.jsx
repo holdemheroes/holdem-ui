@@ -1,10 +1,14 @@
 import React from "react";
-import Countdown from 'react-countdown';
+import Countdown from "react-countdown";
 
-
-export default function SaleInfo(
-  { startBlockNum, revealTime, startingIndex, currentBlock, saleStartTime, saleStartBlockDiff }
-) {
+export default function SaleInfo({
+  startBlockNum,
+  revealTime,
+  startingIndex,
+  currentBlock,
+  saleStartTime,
+  saleStartBlockDiff,
+}) {
   const now = Math.floor(Date.now() / 1000);
   const revealTimeDiff = revealTime - now;
 
@@ -40,23 +44,34 @@ export default function SaleInfo(
   };
 
   if (saleStartBlockDiff > 0) {
-    saleInfo = <>
-      <div>Pre-reveal Sale starts at block #{startBlockNum.toNumber()}: <Countdown date={saleStartTime * 1000} renderer={renderer} /></div>
-      <div>Current block: {currentBlock}</div>
-      <div>Revealed in: <Countdown date={revealTime * 1000} renderer={renderer} /></div>
-    </>;
+    saleInfo = (
+      <>
+        <div>
+          Pre-reveal Sale starts at block #{startBlockNum.toNumber()}:{" "}
+          <Countdown date={saleStartTime * 1000} renderer={renderer} />
+        </div>
+        <div style={{ marginBottom: "50px" }}>
+          Current block: {currentBlock}
+        </div>
+        <div>
+          Revealed in:{" "}
+          <Countdown date={revealTime * 1000} renderer={renderer} />
+        </div>
+      </>
+    );
   }
 
   if (saleStartBlockDiff <= 0 && revealTimeDiff > 0) {
-    saleInfo = <div>
-      Reveal and Airdrop in: <Countdown date={revealTime * 1000} renderer={renderer} />
-    </div>;
+    saleInfo = (
+      <div>
+        Reveal and Airdrop in:{" "}
+        <Countdown date={revealTime * 1000} renderer={renderer} />
+      </div>
+    );
   }
 
   if (revealTimeDiff <= 0 && startingIndex === 0) {
-    saleInfo = <div>
-      pre-reveal sale ended. Waiting for distribution
-    </div>;
+    saleInfo = <div>pre-reveal sale ended. Waiting for distribution</div>;
   }
 
   return (

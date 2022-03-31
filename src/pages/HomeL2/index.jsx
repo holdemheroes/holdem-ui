@@ -1,43 +1,139 @@
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import { NavLink } from "react-router-dom";
 import "./style.scss";
 import AnimateButton from "../../components/AnimateButton";
 import Timeline from "../../components/Timeline";
 import { useNFTSaleInfo } from "../../hooks/useNFTSaleInfo";
+import { useMyNFTHands } from "../../hooks/useMyNFTHands";
+import { useChainData } from "../../hooks/useChainData";
 import Countdown from "react-countdown";
-import { useMoralis } from "react-moralis";
+import { useFiatBuy, useMoralis } from "react-moralis";
 import abis from "../../helpers/contracts";
 import { getHoldemHeroesAddress } from "../../helpers/networks";
-import { openNotification } from "../../helpers/notifications";
+import {
+  extractErrorMessage,
+  openNotification,
+} from "../../helpers/notifications";
 import { Roadmap } from "../../roadmap";
 import { BigNumber } from "@ethersproject/bignumber";
-import { getGameIsLive } from "../../helpers/networks";
+import { getGameIsLive, getHehIsLive } from "../../helpers/networks";
+import { Spin } from "antd";
+import { MAX_TOTAL_SUPPLY } from "../../helpers/constant";
+import PriceChart from "../../components/Sale/PriceChart";
 
 export default function HomeL2() {
   const {
-    // startTime,
+    startBlockNum,
     revealTime,
-    // startingIndex,
-    // maxPerTxOrOwner,
+    startingIndex,
+    maxPerTxOrOwner,
     pricePerToken,
     totalSupply,
-    // dataInitialised
+    dataInitialised: nftSaleDataInitialised,
+    refresh: refreshNftData,
   } = useNFTSaleInfo();
 
-  const now = Math.floor(Date.now() / 1000);
+  const { Moralis, chainId, account, isAuthenticated, isWeb3Enabled } =
+    useMoralis();
+  const { currentBlock, refresh: refreshCurrentBlock } = useChainData();
+  const { NFTHands, isLoading: nftBalanceIsLoading } = useMyNFTHands();
 
-  // const saleStartDiff = startTime - now;
-  const revealTimeDiff = revealTime - now;
-  // const startIdx = parseInt(startingIndex, 10);
+  const [saleStartBlockDiff, setSaleStartBlockDiff] = useState(null);
+  const [revealTimeDiff, setRevealTimeDiff] = useState(null);
+  const [saleStartTime, setSaleStartTime] = useState(0);
+  const [saleTimeInitialised, setSaleTimeInitialised] = useState(false);
 
-  const { Moralis, chainId } = useMoralis();
-  const gameIsLive = getGameIsLive(chainId);
+  const [maxNumToMint, setMaxNumToMint] = useState(0);
+  const [hehContractAddress, setHehContractAddress] = useState(null);
+  const [hehContract, setHehContract] = useState(null);
 
+  const startIdx = parseInt(startingIndex, 10);
+  const hehIsLive = getHehIsLive(chainId);
   const abi = abis.heh_nft;
-  const contractAddress = getHoldemHeroesAddress(chainId);
-  const [maxNumToMint, setMaxNumToMint] = useState(6);
 
-  // const MAX_TOTAL_SUPPLY = 1326;
+  useEffect(() => {
+    if (currentBlock > 0 && startBlockNum && !saleTimeInitialised) {
+      const now = Math.floor(Date.now() / 1000);
+      const blockDiff = startBlockNum.toNumber() - currentBlock;
+      const start = now + blockDiff * 15;
+      setSaleStartTime(start); // estimate based on 1 block every 15 seconds
+      setSaleStartBlockDiff(blockDiff);
+      setRevealTimeDiff(revealTime - now);
+      setSaleTimeInitialised(true);
+    }
+  }, [currentBlock, startBlockNum, saleTimeInitialised, revealTime]);
+
+  useEffect(() => {
+    const timeout = setTimeout(() => {
+      if (!nftSaleDataInitialised) {
+        refreshNftData();
+      }
+      refreshCurrentBlock();
+      const now = Math.floor(Date.now() / 1000);
+      if (startBlockNum && currentBlock > 0) {
+        setSaleStartBlockDiff(startBlockNum.toNumber() - currentBlock);
+      }
+      if (revealTime > 0) {
+        setRevealTimeDiff(revealTime - now);
+      }
+    }, 5000);
+
+    return () => {
+      clearTimeout(timeout);
+    };
+  });
+
+  useEffect(() => {
+    setMaxNumToMint(
+      Math.min(
+        maxPerTxOrOwner - NFTHands.length,
+        MAX_TOTAL_SUPPLY - totalSupply,
+        6
+      )
+    );
+  }, [maxPerTxOrOwner, NFTHands, totalSupply]);
+
+  useEffect(() => {
+    (async () => {
+      if (
+        chainId &&
+        !hehContract &&
+        !hehContractAddress &&
+        isAuthenticated &&
+        isWeb3Enabled
+      ) {
+        try {
+          const hehAddr = getHoldemHeroesAddress(chainId);
+          setHehContractAddress(hehAddr);
+          const ethers = Moralis.web3Library;
+          const web3Provider = await Moralis.enableWeb3();
+          const contract = new ethers.Contract(
+            hehAddr,
+            abi,
+            web3Provider.getSigner()
+          );
+          setHehContract(contract);
+        } catch (e) {
+          console.log(e);
+        }
+      }
+    })();
+  }, [
+    chainId,
+    hehContract,
+    hehContractAddress,
+    isAuthenticated,
+    isWeb3Enabled,
+  ]);
+
+  // if (
+  //   !nftSaleDataInitialised ||
+  //   nftBalanceIsLoading ||
+  //   !saleTimeInitialised ||
+  //   revealTimeDiff === null
+  // ) {
+  //   return <Spin className="spin_loader" />;
+  // }
 
   async function preRevealMint(event) {
     event.preventDefault();
@@ -46,56 +142,40 @@ export default function HomeL2() {
     const numToMint = parseInt(formDataObj.mint_amount, 10);
     const cost = BigNumber.from(pricePerToken).mul(BigNumber.from(numToMint));
 
-    const options = {
-      contractAddress,
-      functionName: "mintNFTPreReveal",
-      abi,
-      msgValue: cost.toString(),
-      params: {
-        numberOfNfts: numToMint,
-      },
-    };
-
-    try {
-      const tx = await Moralis.executeFunction({
-        awaitReceipt: false,
-        ...options,
+    hehContract.estimateGas
+      .mintNFTPreReveal(numToMint, { value: cost, from: account })
+      .then(function (estimate) {
+        return estimate;
+      })
+      .then(function (estimate) {
+        // increase gas limit to compensate for NFT price fluctuations
+        const gasLimit = estimate.add(BigNumber.from("10000"));
+        hehContract
+          .mintNFTPreReveal(numToMint, { value: cost, from: account, gasLimit })
+          .then(function (tx) {
+            openNotification({
+              message: "🔊 New Transaction",
+              description: `📃 Tx Hash: ${tx.hash}`,
+              type: "success",
+            });
+          })
+          .catch(function (e) {
+            openNotification({
+              message: "🔊 Error",
+              description: `📃 ${extractErrorMessage(e)}`,
+              type: "error",
+            });
+            console.log(e);
+          });
+      })
+      .catch(function (e) {
+        openNotification({
+          message: "🔊 Error",
+          description: `📃 ${extractErrorMessage(e)}`,
+          type: "error",
+        });
+        console.log(e);
       });
-      openNotification({
-        message: "🔊 New Transaction",
-        description: `📃 Tx Hash: ${tx.hash}`,
-        type: "success",
-      });
-    } catch (error) {
-      openNotification({
-        message: "🔊 Error",
-        description: `📃 Receipt: ${error.message}`,
-        type: "error",
-      });
-      console.log(error);
-    }
-    // tx.on("transactionHash", (hash) => {
-    //   openNotification({
-    //     message: "🔊 New Transaction",
-    //     description: `📃 Tx Hash: ${hash}`,
-    //     type: "success"
-    //   });
-    // })
-    //   .on("receipt", (receipt) => {
-    //     openNotification({
-    //       message: "🔊 New Receipt",
-    //       description: `📃 Receipt: ${receipt.transactionHash}`,
-    //       type: "success"
-    //     });
-    //   })
-    //   .on("error", (error) => {
-    //     openNotification({
-    //       message: "🔊 Error",
-    //       description: `📃 Receipt: ${error.toString()}`,
-    //       type: "error"
-    //     });
-    //     console.log(error);
-    //   });
   }
 
   const renderer = ({ days, hours, minutes, seconds, completed }) => {
@@ -134,7 +214,7 @@ export default function HomeL2() {
               <p>
                 Holdem Heroes is the on-chain NFT Poker game.
                 <br />
-                Mint the 1326 Hole Card combinations as NFTs.
+                Mint the {MAX_TOTAL_SUPPLY} Hole Card combinations as NFTs.
                 <br />
                 Then play Texas Hold&#x27;em with them!
                 <br />
@@ -150,40 +230,54 @@ export default function HomeL2() {
               </p>
               <div className="mint_poker_hands-wrapper">
                 <div className="mint_poker_hands">
-                  <form onSubmit={(e) => preRevealMint(e)} name="mint-form">
-                    <p>Mint Poker Hands</p>
-                    <div>
-                      <select id="mint_num" name={"mint_amount"}>
-                        {Array.from(
-                          { length: maxNumToMint },
-                          (_, i) => i + 1
-                        ).map((item, i) => (
-                          <option value="1" key={i}>
-                            {item}
-                          </option>
-                        ))}
-                      </select>
-                      <p>
-                        Ξ{" "}
-                        {Moralis.Units.FromWei(
-                          pricePerToken !== null ? pricePerToken : "0"
-                        )}
-                      </p>
-                    </div>
-                    <p>* Max {maxNumToMint} NFTs per address</p>
-                    <input
-                      className="btn-shadow btn-hover-pointer"
-                      type="submit"
-                      value={
-                        gameIsLive && chainId !== null ? "Mint" : "Coming Soon"
-                      }
-                      disabled={!gameIsLive || chainId === null}
-                    />
-                  </form>
+                  {nftSaleDataInitialised ? (
+                    <form onSubmit={(e) => preRevealMint(e)} name="mint-form">
+                      <p>Mint Poker Hands</p>
+                      <div>
+                        <select id="mint_num" name={"mint_amount"}>
+                          {Array.from(
+                            { length: maxNumToMint },
+                            (_, i) => i + 1
+                          ).map((item, i) => (
+                            <option value={item} key={i}>
+                              {item}
+                            </option>
+                          ))}
+                        </select>
+                        <p>
+                          Ξ{" "}
+                          {Moralis.Units.FromWei(
+                            pricePerToken !== null ? pricePerToken : "0"
+                          )}
+                        </p>
+                      </div>
+                      <p>* Max {maxNumToMint} NFTs per address</p>
+                      <input
+                        className="btn-shadow btn-hover-pointer"
+                        type="submit"
+                        value={
+                          hehIsLive && chainId !== null ? "Mint" : "Coming Soon"
+                        }
+                        disabled={
+                          !hehIsLive ||
+                          chainId === null ||
+                          !maxNumToMint ||
+                          !(
+                            saleStartBlockDiff <= 0 &&
+                            revealTimeDiff > 0 &&
+                            startIdx === 0 &&
+                            totalSupply < MAX_TOTAL_SUPPLY
+                          )
+                        }
+                      />
+                    </form>
+                  ) : (
+                    <Spin />
+                  )}
                 </div>
                 <p>{`Total NFTs minted: ${
                   totalSupply !== null ? totalSupply : "0"
-                }/1326`}</p>
+                }/${MAX_TOTAL_SUPPLY}`}</p>
               </div>
             </div>
             <div>
@@ -198,7 +292,20 @@ export default function HomeL2() {
                   />
                 </div>
               </div>
+              {revealTimeDiff > 0 ? (
+                <>
+                  <p>NFT Distribution and Reveal in</p>
+                  <Countdown date={revealTime * 1000} renderer={renderer} />
+                </>
+              ) : null}
             </div>
+          </div>
+
+          <div className="price_chart_area">
+            {saleStartBlockDiff <= 0 &&
+              revealTimeDiff > 0 &&
+              startIdx === 0 &&
+              totalSupply < MAX_TOTAL_SUPPLY && <PriceChart />}
           </div>
 
           <div style={{ marginTop: "160px" }}>
@@ -211,8 +318,8 @@ export default function HomeL2() {
             <p>Open Source Poker NFTs</p>
             <div>
               <p>
-                The 52 cards and 1326 card pair NFTs are available for open
-                source use.
+                The 52 cards and {MAX_TOTAL_SUPPLY} card pair NFTs are available
+                for open source use.
               </p>
               <p>
                 They can be used freely in any way.
@@ -281,7 +388,8 @@ export default function HomeL2() {
                   </p>
                   <p>
                     Games take place on both the Ethereum and Polygon
-                    blockchains, can start at any time, and include up to 1326
+                    blockchains, can start at any time, and include up to{" "}
+                    {MAX_TOTAL_SUPPLY}
                     players.
                   </p>
                   <p>

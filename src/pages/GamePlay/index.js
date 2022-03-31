@@ -1,5 +1,6 @@
 import ExplanationCard from '../../components/ExplanationCard';
 import './style.scss';
+import { MAX_TOTAL_SUPPLY } from "../../helpers/constant";
 
 const GamePlay = () => {
     const lists = [
@@ -8,7 +9,7 @@ const GamePlay = () => {
             title: 'FLOP',
             desc: ['Anyone can start a game of Holdem Heroes. They choose the duration of round time, and the size of the Turn and River bets.',
                 'By starting a game, the Flop cards are dealt and the clock is started.',
-                'All 1326 NFTs are included in the game to start.']
+                `All ${MAX_TOTAL_SUPPLY} NFTs are included in the game to start.`]
         },
         {
             img: 'assets/images/clubicon.png',
