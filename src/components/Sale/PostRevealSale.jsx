@@ -2,6 +2,7 @@ import React, { useState, useEffect } from "react";
 import { Pagination, Checkbox, Slider } from 'antd';
 import NFTList from "./NFTList";
 import { useMoralis } from "react-moralis";
+import { MAX_TOTAL_SUPPLY } from "../../helpers/constant";
 
 export default function PostRevealSale({ pricePerToken, canMint, mintedTokens }) {
 
@@ -29,7 +30,7 @@ export default function PostRevealSale({ pricePerToken, canMint, mintedTokens })
     query.containedIn("shape", shape)
       .greaterThanOrEqualTo("rank", parseInt(ranksRange[0]))
       .lessThanOrEqualTo("rank", parseInt(ranksRange[1]))
-      .limit(1326)
+      .limit(MAX_TOTAL_SUPPLY)
       .find()
       .then((result) => {
         for (let i = 0; i < result.length; i++) {

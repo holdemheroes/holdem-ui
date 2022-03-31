@@ -12,6 +12,7 @@ import { openNotification } from "../../helpers/notifications";
 import { Roadmap } from "../../roadmap";
 import { BigNumber } from "@ethersproject/bignumber";
 import { getGameIsLive } from "../../helpers/networks";
+import { MAX_TOTAL_SUPPLY } from "../../helpers/constant";
 
 export default function HomeL2() {
   const {
@@ -36,8 +37,6 @@ export default function HomeL2() {
   const abi = abis.heh_nft;
   const contractAddress = getHoldemHeroesAddress(chainId);
   const [maxNumToMint, setMaxNumToMint] = useState(6);
-
-  // const MAX_TOTAL_SUPPLY = 1326;
 
   async function preRevealMint(event) {
     event.preventDefault();
@@ -134,7 +133,7 @@ export default function HomeL2() {
               <p>
                 Holdem Heroes is the on-chain NFT Poker game.
                 <br />
-                Mint the 1326 Hole Card combinations as NFTs.
+                Mint the {MAX_TOTAL_SUPPLY} Hole Card combinations as NFTs.
                 <br />
                 Then play Texas Hold&#x27;em with them!
                 <br />
@@ -183,7 +182,7 @@ export default function HomeL2() {
                 </div>
                 <p>{`Total NFTs minted: ${
                   totalSupply !== null ? totalSupply : "0"
-                }/1326`}</p>
+                }/${MAX_TOTAL_SUPPLY}`}</p>
               </div>
             </div>
             <div>
@@ -211,7 +210,7 @@ export default function HomeL2() {
             <p>Open Source Poker NFTs</p>
             <div>
               <p>
-                The 52 cards and 1326 card pair NFTs are available for open
+                The 52 cards and {MAX_TOTAL_SUPPLY} card pair NFTs are available for open
                 source use.
               </p>
               <p>
@@ -281,7 +280,7 @@ export default function HomeL2() {
                   </p>
                   <p>
                     Games take place on both the Ethereum and Polygon
-                    blockchains, can start at any time, and include up to 1326
+                    blockchains, can start at any time, and include up to {MAX_TOTAL_SUPPLY}
                     players.
                   </p>
                   <p>
