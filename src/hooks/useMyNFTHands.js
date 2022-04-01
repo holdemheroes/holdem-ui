@@ -27,11 +27,13 @@ export const useMyNFTHands = (options) => {
   );
 
   useEffect(() => {
-    setHehContractAddress(getHoldemHeroesAddress(chainId))
-    setTexasHoldemAddress(getTexasHoldemV1Address(chainId))
-    setGameIsLive(getGameIsLive(chainId))
-    getMyNFTHands()
-  }, [chainId, getMyNFTHands])
+    if(chainId) {
+      setHehContractAddress( getHoldemHeroesAddress( chainId ) )
+      setTexasHoldemAddress( getTexasHoldemV1Address( chainId ) )
+      setGameIsLive( getGameIsLive( chainId ) )
+      getMyNFTHands()
+    }
+  }, [chainId])
 
   useEffect(() => {
     if (data?.result) {

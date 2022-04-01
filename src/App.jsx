@@ -1,4 +1,4 @@
-import { useEffect } from "react";
+import { useEffect, useState } from "react"
 import {
   BrowserRouter as Router,
   Switch,
@@ -25,9 +25,12 @@ import "./App.scss";
 import { getEllipsisTxt } from "./helpers/formatters";
 import Logout from "./components/Logout";
 import { logo } from "./logo";
-import { getChainType, getGameIsLive, getHehIsLive } from "./helpers/networks";
+import {
+  getChainType,
+  getGameIsLive,
+  getHehIsLive
+} from "./helpers/networks"
 import ScrollToTop from "./ScrollToTop";
-import { ethers } from "ethers";
 
 const App = () => {
   const {
@@ -39,14 +42,22 @@ const App = () => {
     account,
   } = useMoralis();
 
+  const [gameIsLive, setGameIsLive] = useState(false);
+  const [hehIsLive, setHehIsLive] = useState(false);
+  const [chainType, setChainType] = useState("l1");
+
   useEffect(() => {
     if (isAuthenticated && !isWeb3Enabled && !isWeb3EnableLoading) enableWeb3();
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [isAuthenticated, isWeb3Enabled]);
 
-  const chainType = getChainType(chainId);
-  const gameIsLive = getGameIsLive(chainId);
-  const hehIsLive = getHehIsLive(chainId);
+  useEffect(() => {
+    if(chainId) {
+      setGameIsLive(getGameIsLive(chainId));
+      setHehIsLive(getHehIsLive(chainId));
+      setChainType(getChainType(chainId));
+    }
+  }, [chainId])
 
   return (
     <Router>

@@ -87,6 +87,7 @@ export default function PriceChart() {
     if (!chartData && targetEms) {
       _procData()
     }
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [chartData, targetEms]);
 
   useEffect(() => {
@@ -103,6 +104,7 @@ export default function PriceChart() {
     return () => {
       clearTimeout(timeout);
     };
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [chartData, targetEms])
 
   if(!chartData) {

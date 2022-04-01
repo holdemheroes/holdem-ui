@@ -1,208 +1,12 @@
-import React, { useEffect, useState } from "react";
+import React from "react";
 import { NavLink } from "react-router-dom";
 import "./style.scss";
 import AnimateButton from "../../components/AnimateButton";
 import Timeline from "../../components/Timeline";
-import { useNFTSaleInfo } from "../../hooks/useNFTSaleInfo";
-import { useMyNFTHands } from "../../hooks/useMyNFTHands";
-import { useChainData } from "../../hooks/useChainData";
-import Countdown from "react-countdown";
-import { useFiatBuy, useMoralis } from "react-moralis";
-import abis from "../../helpers/contracts";
-import { getHoldemHeroesAddress } from "../../helpers/networks";
-import {
-  extractErrorMessage,
-  openNotification,
-} from "../../helpers/notifications";
 import { Roadmap } from "../../roadmap";
-import { BigNumber } from "@ethersproject/bignumber";
-import { getGameIsLive, getHehIsLive } from "../../helpers/networks";
-import { Spin } from "antd";
 import { MAX_TOTAL_SUPPLY } from "../../helpers/constant";
-import PriceChart from "../../components/Sale/PriceChart";
 
 export default function HomeL2() {
-  const {
-    startBlockNum,
-    revealTime,
-    startingIndex,
-    maxPerTxOrOwner,
-    pricePerToken,
-    totalSupply,
-    dataInitialised: nftSaleDataInitialised,
-    refresh: refreshNftData,
-  } = useNFTSaleInfo();
-
-  const { Moralis, chainId, account, isAuthenticated, isWeb3Enabled } =
-    useMoralis();
-  const { currentBlock, refresh: refreshCurrentBlock } = useChainData();
-  const { NFTHands, isLoading: nftBalanceIsLoading } = useMyNFTHands();
-
-  const [saleStartBlockDiff, setSaleStartBlockDiff] = useState(null);
-  const [revealTimeDiff, setRevealTimeDiff] = useState(null);
-  const [saleStartTime, setSaleStartTime] = useState(0);
-  const [saleTimeInitialised, setSaleTimeInitialised] = useState(false);
-
-  const [maxNumToMint, setMaxNumToMint] = useState(0);
-  const [hehContractAddress, setHehContractAddress] = useState(null);
-  const [hehContract, setHehContract] = useState(null);
-
-  const startIdx = parseInt(startingIndex, 10);
-  const hehIsLive = getHehIsLive(chainId);
-  const abi = abis.heh_nft;
-
-  useEffect(() => {
-    if (currentBlock > 0 && startBlockNum && !saleTimeInitialised) {
-      const now = Math.floor(Date.now() / 1000);
-      const blockDiff = startBlockNum.toNumber() - currentBlock;
-      const start = now + blockDiff * 15;
-      setSaleStartTime(start); // estimate based on 1 block every 15 seconds
-      setSaleStartBlockDiff(blockDiff);
-      setRevealTimeDiff(revealTime - now);
-      setSaleTimeInitialised(true);
-    }
-  }, [currentBlock, startBlockNum, saleTimeInitialised, revealTime]);
-
-  useEffect(() => {
-    const timeout = setTimeout(() => {
-      if (!nftSaleDataInitialised) {
-        refreshNftData();
-      }
-      refreshCurrentBlock();
-      const now = Math.floor(Date.now() / 1000);
-      if (startBlockNum && currentBlock > 0) {
-        setSaleStartBlockDiff(startBlockNum.toNumber() - currentBlock);
-      }
-      if (revealTime > 0) {
-        setRevealTimeDiff(revealTime - now);
-      }
-    }, 5000);
-
-    return () => {
-      clearTimeout(timeout);
-    };
-  });
-
-  useEffect(() => {
-    setMaxNumToMint(
-      Math.min(
-        maxPerTxOrOwner - NFTHands.length,
-        MAX_TOTAL_SUPPLY - totalSupply,
-        6
-      )
-    );
-  }, [maxPerTxOrOwner, NFTHands, totalSupply]);
-
-  useEffect(() => {
-    (async () => {
-      if (
-        chainId &&
-        !hehContract &&
-        !hehContractAddress &&
-        isAuthenticated &&
-        isWeb3Enabled
-      ) {
-        try {
-          const hehAddr = getHoldemHeroesAddress(chainId);
-          setHehContractAddress(hehAddr);
-          const ethers = Moralis.web3Library;
-          const web3Provider = await Moralis.enableWeb3();
-          const contract = new ethers.Contract(
-            hehAddr,
-            abi,
-            web3Provider.getSigner()
-          );
-          setHehContract(contract);
-        } catch (e) {
-          console.log(e);
-        }
-      }
-    })();
-  }, [
-    chainId,
-    hehContract,
-    hehContractAddress,
-    isAuthenticated,
-    isWeb3Enabled,
-  ]);
-
-  // if (
-  //   !nftSaleDataInitialised ||
-  //   nftBalanceIsLoading ||
-  //   !saleTimeInitialised ||
-  //   revealTimeDiff === null
-  // ) {
-  //   return <Spin className="spin_loader" />;
-  // }
-
-  async function preRevealMint(event) {
-    event.preventDefault();
-    const formData = new FormData(event.target),
-      formDataObj = Object.fromEntries(formData.entries());
-    const numToMint = parseInt(formDataObj.mint_amount, 10);
-    const cost = BigNumber.from(pricePerToken).mul(BigNumber.from(numToMint));
-
-    hehContract.estimateGas
-      .mintNFTPreReveal(numToMint, { value: cost, from: account })
-      .then(function (estimate) {
-        return estimate;
-      })
-      .then(function (estimate) {
-        // increase gas limit to compensate for NFT price fluctuations
-        const gasLimit = estimate.add(BigNumber.from("10000"));
-        hehContract
-          .mintNFTPreReveal(numToMint, { value: cost, from: account, gasLimit })
-          .then(function (tx) {
-            openNotification({
-              message: "🔊 New Transaction",
-              description: `📃 Tx Hash: ${tx.hash}`,
-              type: "success",
-            });
-          })
-          .catch(function (e) {
-            openNotification({
-              message: "🔊 Error",
-              description: `📃 ${extractErrorMessage(e)}`,
-              type: "error",
-            });
-            console.log(e);
-          });
-      })
-      .catch(function (e) {
-        openNotification({
-          message: "🔊 Error",
-          description: `📃 ${extractErrorMessage(e)}`,
-          type: "error",
-        });
-        console.log(e);
-      });
-  }
-
-  const renderer = ({ days, hours, minutes, seconds, completed }) => {
-    if (completed) {
-      // Render a completed state
-      return null;
-    } else {
-      // Render a countdown
-      return (
-        <div className="time_card-wrapper">
-          <div className="time_card">
-            <p>{days < 10 ? "0" + days : days}</p>
-            <p>days</p>
-          </div>
-          <div className="time_card">
-            <p>{hours < 10 ? "0" + hours : hours}</p>
-            <p>hours</p>
-          </div>
-          <div className="time_card">
-            <p>{minutes < 10 ? "0" + minutes : minutes}</p>
-            <p>minutes</p>
-          </div>
-        </div>
-      );
-    }
-  };
-
   return (
     <>
       <div className="header-background"></div>
@@ -230,54 +34,12 @@ export default function HomeL2() {
               </p>
               <div className="mint_poker_hands-wrapper">
                 <div className="mint_poker_hands">
-                  {nftSaleDataInitialised ? (
-                    <form onSubmit={(e) => preRevealMint(e)} name="mint-form">
-                      <p>Mint Poker Hands</p>
-                      <div>
-                        <select id="mint_num" name={"mint_amount"}>
-                          {Array.from(
-                            { length: maxNumToMint },
-                            (_, i) => i + 1
-                          ).map((item, i) => (
-                            <option value={item} key={i}>
-                              {item}
-                            </option>
-                          ))}
-                        </select>
-                        <p>
-                          Ξ{" "}
-                          {Moralis.Units.FromWei(
-                            pricePerToken !== null ? pricePerToken : "0"
-                          )}
-                        </p>
-                      </div>
-                      <p>* Max {maxNumToMint} NFTs per address</p>
-                      <input
-                        className="btn-shadow btn-hover-pointer"
-                        type="submit"
-                        value={
-                          hehIsLive && chainId !== null ? "Mint" : "Coming Soon"
-                        }
-                        disabled={
-                          !hehIsLive ||
-                          chainId === null ||
-                          !maxNumToMint ||
-                          !(
-                            saleStartBlockDiff <= 0 &&
-                            revealTimeDiff > 0 &&
-                            startIdx === 0 &&
-                            totalSupply < MAX_TOTAL_SUPPLY
-                          )
-                        }
-                      />
-                    </form>
-                  ) : (
-                    <Spin />
-                  )}
+                  <p>
+                    Tokens will be Airdropped on Polygon!
+                    <br />
+                    Switch to Eth chain to Mint!
+                  </p>
                 </div>
-                <p>{`Total NFTs minted: ${
-                  totalSupply !== null ? totalSupply : "0"
-                }/${MAX_TOTAL_SUPPLY}`}</p>
               </div>
             </div>
             <div>
@@ -292,20 +54,7 @@ export default function HomeL2() {
                   />
                 </div>
               </div>
-              {revealTimeDiff > 0 ? (
-                <>
-                  <p>NFT Distribution and Reveal in</p>
-                  <Countdown date={revealTime * 1000} renderer={renderer} />
-                </>
-              ) : null}
             </div>
-          </div>
-
-          <div className="price_chart_area">
-            {saleStartBlockDiff <= 0 &&
-              revealTimeDiff > 0 &&
-              startIdx === 0 &&
-              totalSupply < MAX_TOTAL_SUPPLY && <PriceChart />}
           </div>
 
           <div style={{ marginTop: "160px" }}>

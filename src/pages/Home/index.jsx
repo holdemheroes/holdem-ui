@@ -7,7 +7,7 @@ import { useNFTSaleInfo } from "../../hooks/useNFTSaleInfo";
 import { useMyNFTHands } from "../../hooks/useMyNFTHands";
 import { useChainData } from "../../hooks/useChainData";
 import Countdown from "react-countdown";
-import { useFiatBuy, useMoralis } from "react-moralis";
+import { useMoralis } from "react-moralis";
 import abis from "../../helpers/contracts";
 import { getHoldemHeroesAddress } from "../../helpers/networks";
 import {
@@ -16,7 +16,7 @@ import {
 } from "../../helpers/notifications";
 import { Roadmap } from "../../roadmap";
 import { BigNumber } from "@ethersproject/bignumber";
-import { getGameIsLive, getHehIsLive } from "../../helpers/networks";
+import { getHehIsLive } from "../../helpers/networks";
 import { Spin } from "antd";
 import { MAX_TOTAL_SUPPLY } from "../../helpers/constant";
 import PriceChart from "../../components/Sale/PriceChart";
@@ -63,7 +63,8 @@ export default function Home() {
         setStartIdx(startingIndex.toNumber())
       }
     }
-  }, [chainId, nftSaleDataInitialised])
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [chainId, nftSaleDataInitialised, startingIndex])
 
   useEffect(() => {
     if (currentBlock > 0 && startBlockNum && !saleTimeInitialised) {
@@ -140,6 +141,7 @@ export default function Home() {
         }
       }
     })();
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [
     chainId,
     hehContract,
@@ -264,7 +266,7 @@ export default function Home() {
                       </button>
                     </form>
                   ) : (
-                    <Spin />
+                     chainId !== null ? <Spin /> : "Connect Wallet to Mint!"
                   )}
                 </div>
                 <p>{`Total NFTs minted: ${
