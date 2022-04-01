@@ -73,9 +73,8 @@ export const useNFTSaleInfo = () => {
   });
 
   useEffect(() => {
-    if (isInitialized && !fetched) {
-      setFetched(true);
-      refresh();
+    if (isInitialized && chainId && !fetched) {
+      initData();
     }
 
     if (startBlockNum !== null &&
@@ -88,9 +87,9 @@ export const useNFTSaleInfo = () => {
       setDataInitialised(true);
     }
     // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [isInitialized, fetched, startBlockNum, revealTime, startingIndex, maxPerTxOrOwner, pricePerToken, totalSupply, targetEms]);
+  }, [chainId, isInitialized, fetched, startBlockNum, revealTime, startingIndex, maxPerTxOrOwner, pricePerToken, totalSupply, targetEms]);
 
-  const refresh = () => {
+  const initData = () => {
     startBlockNumFetch();
     revealTimeFetch();
     startingIndexFetch();
@@ -98,10 +97,17 @@ export const useNFTSaleInfo = () => {
     pricePerTokenFetch();
     totalSupplyFetch();
     targetEmsFetch();
+    setFetched(true);
   };
 
   return {
-    refresh,
+    startBlockNumFetch,
+    revealTimeFetch,
+    startingIndexFetch,
+    maxPerTxOrOwnerFetch,
+    pricePerTokenFetch,
+    totalSupplyFetch,
+    targetEmsFetch,
     dataInitialised,
     startBlockNum,
     revealTime,
@@ -110,5 +116,6 @@ export const useNFTSaleInfo = () => {
     pricePerToken,
     totalSupply,
     targetEms,
+    initData,
   };
 };
