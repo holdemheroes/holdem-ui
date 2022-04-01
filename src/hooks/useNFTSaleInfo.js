@@ -17,6 +17,14 @@ export const useNFTSaleInfo = () => {
   };
 
   const {
+    data: targetEms,
+    fetch: targetEmsFetch,
+  } = useWeb3ExecuteFunction({
+    ...options,
+    functionName: "targetEMS",
+  });
+
+  const {
     data: startBlockNum,
     fetch: startBlockNumFetch,
   } = useWeb3ExecuteFunction({
@@ -65,9 +73,8 @@ export const useNFTSaleInfo = () => {
   });
 
   useEffect(() => {
-    if (isInitialized && !fetched) {
-      setFetched(true);
-      refresh();
+    if (isInitialized && chainId && !fetched) {
+      initData();
     }
 
     if (startBlockNum !== null &&
@@ -75,23 +82,32 @@ export const useNFTSaleInfo = () => {
       startingIndex !== null &&
       maxPerTxOrOwner !== null &&
       pricePerToken !== null &&
-      totalSupply !== null) {
+      totalSupply !== null &&
+      targetEms !== null) {
       setDataInitialised(true);
     }
     // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [isInitialized, fetched, startBlockNum, revealTime, startingIndex, maxPerTxOrOwner, pricePerToken, totalSupply]);
+  }, [chainId, isInitialized, fetched, startBlockNum, revealTime, startingIndex, maxPerTxOrOwner, pricePerToken, totalSupply, targetEms]);
 
-  const refresh = () => {
+  const initData = () => {
     startBlockNumFetch();
     revealTimeFetch();
     startingIndexFetch();
     maxPerTxOrOwnerFetch();
     pricePerTokenFetch();
     totalSupplyFetch();
+    targetEmsFetch();
+    setFetched(true);
   };
 
   return {
-    refresh,
+    startBlockNumFetch,
+    revealTimeFetch,
+    startingIndexFetch,
+    maxPerTxOrOwnerFetch,
+    pricePerTokenFetch,
+    totalSupplyFetch,
+    targetEmsFetch,
     dataInitialised,
     startBlockNum,
     revealTime,
@@ -99,5 +115,7 @@ export const useNFTSaleInfo = () => {
     maxPerTxOrOwner,
     pricePerToken,
     totalSupply,
+    targetEms,
+    initData,
   };
 };

@@ -2,14 +2,12 @@ import React, { useState, useEffect } from "react";
 import { useMoralis, useMoralisQuery } from "react-moralis";
 import { Spin } from "antd";
 import SaleInfo from "./SaleInfo";
-import PreRevealSale from "./PreRevealSale";
 import PostRevealSale from "./PostRevealSale";
 import { useNFTSaleInfo } from "../../hooks/useNFTSaleInfo";
 import { useMyNFTHands } from "../../hooks/useMyNFTHands";
 import "./style.scss";
 import { getBakendObjPrefix } from "../../helpers/networks";
 import { useChainData } from "../../hooks/useChainData";
-import { BigNumber } from "@ethersproject/bignumber";
 import { MAX_TOTAL_SUPPLY } from "../../helpers/constant";
 
 export default function Sale() {
@@ -82,7 +80,7 @@ export default function Sale() {
       if (revealTime > 0) {
         setRevealTimeDiff(revealTime - now);
       }
-    }, 5000);
+    }, 10000);
 
     return () => {
       clearTimeout(timeout);

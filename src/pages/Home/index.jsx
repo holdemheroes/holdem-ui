@@ -20,6 +20,7 @@ import { getGameIsLive, getHehIsLive } from "../../helpers/networks";
 import { Spin } from "antd";
 import { MAX_TOTAL_SUPPLY } from "../../helpers/constant";
 import PriceChart from "../../components/Sale/PriceChart";
+import { flipCardRenderer, simpleTextRenderer } from "../../helpers/timers"
 
 export default function Home() {
   const {
@@ -30,7 +31,10 @@ export default function Home() {
     pricePerToken,
     totalSupply,
     dataInitialised: nftSaleDataInitialised,
-    refresh: refreshNftData,
+    startingIndexFetch,
+    pricePerTokenFetch,
+    totalSupplyFetch,
+    initData: initNftSaleData,
   } = useNFTSaleInfo();
 
   const { Moralis, chainId, account, isAuthenticated, isWeb3Enabled } =
@@ -46,10 +50,20 @@ export default function Home() {
   const [maxNumToMint, setMaxNumToMint] = useState(0);
   const [hehContractAddress, setHehContractAddress] = useState(null);
   const [hehContract, setHehContract] = useState(null);
+  const [hehIsLive, setHehIsLive] = useState(false);
+  const [startIdx, setStartIdx] = useState(0);
 
-  const startIdx = parseInt(startingIndex, 10);
-  const hehIsLive = getHehIsLive(chainId);
   const abi = abis.heh_nft;
+
+  useEffect(() => {
+    if(!nftSaleDataInitialised && chainId) {
+      initNftSaleData();
+    } else {
+      if(startingIndex?.toNumber() > 0) {
+        setStartIdx(startingIndex.toNumber())
+      }
+    }
+  }, [chainId, nftSaleDataInitialised])
 
   useEffect(() => {
     if (currentBlock > 0 && startBlockNum && !saleTimeInitialised) {
@@ -65,9 +79,9 @@ export default function Home() {
 
   useEffect(() => {
     const timeout = setTimeout(() => {
-      if (!nftSaleDataInitialised) {
-        refreshNftData();
-      }
+      startingIndexFetch();
+      pricePerTokenFetch();
+      totalSupplyFetch();
       refreshCurrentBlock();
       const now = Math.floor(Date.now() / 1000);
       if (startBlockNum && currentBlock > 0) {
@@ -75,6 +89,9 @@ export default function Home() {
       }
       if (revealTime > 0) {
         setRevealTimeDiff(revealTime - now);
+      }
+      if(startingIndex?.toNumber() > 0) {
+        setStartIdx(startingIndex.toNumber());
       }
     }, 5000);
 
@@ -103,6 +120,11 @@ export default function Home() {
         isWeb3Enabled
       ) {
         try {
+          const isLive = getHehIsLive(chainId);
+          setHehIsLive(isLive);
+          if(!isLive) {
+            return;
+          }
           const hehAddr = getHoldemHeroesAddress(chainId);
           setHehContractAddress(hehAddr);
           const ethers = Moralis.web3Library;
@@ -126,17 +148,11 @@ export default function Home() {
     isWeb3Enabled,
   ]);
 
-  // if (
-  //   !nftSaleDataInitialised ||
-  //   nftBalanceIsLoading ||
-  //   !saleTimeInitialised ||
-  //   revealTimeDiff === null
-  // ) {
-  //   return <Spin className="spin_loader" />;
-  // }
-
   async function preRevealMint(event) {
     event.preventDefault();
+    if(!hehIsLive) {
+      return;
+    }
     const formData = new FormData(event.target),
       formDataObj = Object.fromEntries(formData.entries());
     const numToMint = parseInt(formDataObj.mint_amount, 10);
@@ -178,31 +194,6 @@ export default function Home() {
       });
   }
 
-  const renderer = ({ days, hours, minutes, seconds, completed }) => {
-    if (completed) {
-      // Render a completed state
-      return null;
-    } else {
-      // Render a countdown
-      return (
-        <div className="time_card-wrapper">
-          <div className="time_card">
-            <p>{days < 10 ? "0" + days : days}</p>
-            <p>days</p>
-          </div>
-          <div className="time_card">
-            <p>{hours < 10 ? "0" + hours : hours}</p>
-            <p>hours</p>
-          </div>
-          <div className="time_card">
-            <p>{minutes < 10 ? "0" + minutes : minutes}</p>
-            <p>minutes</p>
-          </div>
-        </div>
-      );
-    }
-  };
-
   return (
     <>
       <div className="header-background"></div>
@@ -231,7 +222,7 @@ export default function Home() {
               <div className="mint_poker_hands-wrapper">
                 <div className="mint_poker_hands">
                   {nftSaleDataInitialised ? (
-                    <form onSubmit={(e) => preRevealMint(e)} name="mint-form">
+                    <form onSubmit={(e) => preRevealMint(e)} id="mint-form" name="mint-form">
                       <p>Mint Poker Hands</p>
                       <div>
                         <select id="mint_num" name={"mint_amount"}>
@@ -252,12 +243,9 @@ export default function Home() {
                         </p>
                       </div>
                       <p>* Max {maxNumToMint} NFTs per address</p>
-                      <input
+                      <button
                         className="btn-shadow btn-hover-pointer"
-                        type="submit"
-                        value={
-                          hehIsLive && chainId !== null ? "Mint" : "Coming Soon"
-                        }
+                        form="mint-form"
                         disabled={
                           !hehIsLive ||
                           chainId === null ||
@@ -269,7 +257,11 @@ export default function Home() {
                             totalSupply < MAX_TOTAL_SUPPLY
                           )
                         }
-                      />
+                      >
+                        {
+                          hehIsLive && chainId !== null ? ( saleStartBlockDiff > 0 ? <Countdown date={saleStartTime * 1000} renderer={simpleTextRenderer} /> : "Mint") : "Coming Soon"
+                        }
+                      </button>
                     </form>
                   ) : (
                     <Spin />
@@ -295,7 +287,7 @@ export default function Home() {
               {revealTimeDiff > 0 ? (
                 <>
                   <p>NFT Distribution and Reveal in</p>
-                  <Countdown date={revealTime * 1000} renderer={renderer} />
+                  <Countdown date={revealTime * 1000} renderer={flipCardRenderer} />
                 </>
               ) : null}
             </div>

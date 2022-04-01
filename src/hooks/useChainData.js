@@ -21,11 +21,11 @@ export const useChainData = () => {
   }
 
   useEffect(() => {
-    if (currentBlock === 0 && isInitialized && !currentBlockFetched && !currentBlockLoading && !isWeb3EnableLoading) {
+    if (chainId && currentBlock === 0 && isInitialized && !currentBlockFetched && !currentBlockLoading && !isWeb3EnableLoading) {
       fetchCurrentBlock();
     }
     // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [currentBlock, isInitialized, currentBlockFetched, currentBlockLoading, isWeb3EnableLoading]);
+  }, [chainId, currentBlock, isInitialized, currentBlockFetched, currentBlockLoading, isWeb3EnableLoading]);
 
   const refresh = () => {
     fetchCurrentBlock();
