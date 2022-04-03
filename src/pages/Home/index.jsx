@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from "react";
+import React, { useEffect, useState, useRef } from "react";
 import { NavLink } from "react-router-dom";
 import "./style.scss";
 import AnimateButton from "../../components/AnimateButton";
@@ -20,7 +20,7 @@ import { getHehIsLive } from "../../helpers/networks";
 import { Spin } from "antd";
 import { MAX_TOTAL_SUPPLY } from "../../helpers/constant";
 import PriceChart from "../../components/Sale/PriceChart";
-import { flipCardRenderer, simpleTextRenderer } from "../../helpers/timers"
+import { flipCardRenderer, simpleTextRenderer } from "../../helpers/timers";
 
 export default function Home() {
   const {
@@ -55,16 +55,18 @@ export default function Home() {
 
   const abi = abis.heh_nft;
 
+  const mintPriceRef = useRef(0);
+
   useEffect(() => {
-    if(!nftSaleDataInitialised && chainId) {
+    if (!nftSaleDataInitialised && chainId) {
       initNftSaleData();
     } else {
-      if(startingIndex?.toNumber() > 0) {
-        setStartIdx(startingIndex.toNumber())
+      if (startingIndex?.toNumber() > 0) {
+        setStartIdx(startingIndex.toNumber());
       }
     }
     // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [chainId, nftSaleDataInitialised, startingIndex])
+  }, [chainId, nftSaleDataInitialised, startingIndex]);
 
   useEffect(() => {
     if (currentBlock > 0 && startBlockNum && !saleTimeInitialised) {
@@ -91,7 +93,7 @@ export default function Home() {
       if (revealTime > 0) {
         setRevealTimeDiff(revealTime - now);
       }
-      if(startingIndex?.toNumber() > 0) {
+      if (startingIndex?.toNumber() > 0) {
         setStartIdx(startingIndex.toNumber());
       }
     }, 5000);
@@ -123,7 +125,7 @@ export default function Home() {
         try {
           const isLive = getHehIsLive(chainId);
           setHehIsLive(isLive);
-          if(!isLive) {
+          if (!isLive) {
             return;
           }
           const hehAddr = getHoldemHeroesAddress(chainId);
@@ -152,13 +154,25 @@ export default function Home() {
 
   async function preRevealMint(event) {
     event.preventDefault();
-    if(!hehIsLive) {
+    if (!hehIsLive) {
       return;
     }
     const formData = new FormData(event.target),
       formDataObj = Object.fromEntries(formData.entries());
     const numToMint = parseInt(formDataObj.mint_amount, 10);
-    const cost = BigNumber.from(pricePerToken).mul(BigNumber.from(numToMint));
+    const mintPrice = parseFloat(formDataObj.mint_price);
+    if (isNaN(mintPrice)) {
+      alert("Please enter mint price!");
+      return;
+    }
+    if (
+      mintPrice >
+      Moralis.Units.FromWei(pricePerToken !== null ? pricePerToken : "0")
+    ) {
+      alert("The mint price should not be higher than current price!");
+      return;
+    }
+    const cost = BigNumber.from(mintPrice).mul(BigNumber.from(numToMint));
 
     hehContract.estimateGas
       .mintNFTPreReveal(numToMint, { value: cost, from: account })
@@ -224,8 +238,27 @@ export default function Home() {
               <div className="mint_poker_hands-wrapper">
                 <div className="mint_poker_hands">
                   {nftSaleDataInitialised ? (
-                    <form onSubmit={(e) => preRevealMint(e)} id="mint-form" name="mint-form">
-                      <p>Mint Poker Hands</p>
+                    <form
+                      onSubmit={(e) => preRevealMint(e)}
+                      id="mint-form"
+                      name="mint-form"
+                    >
+                      <p className="title">Mint Poker Hands</p>
+                      <p className="current_price">
+                        <span
+                          title="Click to set mint price as current token price"
+                          onClick={() => {
+                            mintPriceRef.current.value = Moralis.Units.FromWei(
+                              pricePerToken !== null ? pricePerToken : "0"
+                            );
+                          }}
+                        >
+                          Current Price
+                        </span>{" "}
+                        {Moralis.Units.FromWei(
+                          pricePerToken !== null ? pricePerToken : "0"
+                        )}
+                      </p>
                       <div>
                         <select id="mint_num" name={"mint_amount"}>
                           {Array.from(
@@ -237,16 +270,16 @@ export default function Home() {
                             </option>
                           ))}
                         </select>
-                        <p>
-                          Ξ{" "}
-                          {Moralis.Units.FromWei(
-                            pricePerToken !== null ? pricePerToken : "0"
-                          )}
-                        </p>
+                        <input
+                          type={"text"}
+                          ref={mintPriceRef}
+                          name={"mint_price"}
+                          placeholder="Price per token"
+                        ></input>
                       </div>
                       <p>* Max {maxNumToMint} NFTs per address</p>
                       <button
-                        className="btn-shadow btn-hover-pointer"
+                        className="btn-shadow btn-hover-pointer mint-btn"
                         form="mint-form"
                         disabled={
                           !hehIsLive ||
@@ -260,13 +293,24 @@ export default function Home() {
                           )
                         }
                       >
-                        {
-                          hehIsLive && chainId !== null ? ( saleStartBlockDiff > 0 ? <Countdown date={saleStartTime * 1000} renderer={simpleTextRenderer} /> : "Mint") : "Coming Soon"
-                        }
+                        {hehIsLive && chainId !== null ? (
+                          saleStartBlockDiff > 0 ? (
+                            <Countdown
+                              date={saleStartTime * 1000}
+                              renderer={simpleTextRenderer}
+                            />
+                          ) : (
+                            "Mint"
+                          )
+                        ) : (
+                          "Coming Soon"
+                        )}
                       </button>
                     </form>
+                  ) : chainId !== null ? (
+                    <Spin />
                   ) : (
-                     chainId !== null ? <Spin /> : "Connect Wallet to Mint!"
+                    "Connect Wallet to Mint!"
                   )}
                 </div>
                 <p>{`Total NFTs minted: ${
@@ -289,7 +333,10 @@ export default function Home() {
               {revealTimeDiff > 0 ? (
                 <>
                   <p>NFT Distribution and Reveal in</p>
-                  <Countdown date={revealTime * 1000} renderer={flipCardRenderer} />
+                  <Countdown
+                    date={revealTime * 1000}
+                    renderer={flipCardRenderer}
+                  />
                 </>
               ) : null}
             </div>
