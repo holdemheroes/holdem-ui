@@ -1,6 +1,7 @@
 import React, { useEffect, useState } from "react"
 import Moralis from "moralis"
 import { Chart as ChartJS, registerables } from 'chart.js';
+import 'chartjs-adapter-date-fns';
 import { Line } from 'react-chartjs-2'
 import { useNFTSaleInfo } from "../../hooks/useNFTSaleInfo"
 import { Spin } from "antd"
@@ -26,7 +27,7 @@ export default function PriceChart() {
     const tmpLabels = labels
 
     for(let i = 0; i < cd.length; i += 1) {
-      tmpLabels.push(cd[i].block)
+      tmpLabels.push(Number(cd[i].blockTimestampMillis))
       tmpData.push(cd[i].price)
       tmpEms.push(Number(cd[i].ems))
       tmpTargetEms.push(Number(targetEms.toString()))
@@ -125,16 +126,29 @@ export default function PriceChart() {
             title: {
               display: true,
               text: "Price by Block",
+              color: "white",
+            },
+            legend: {
+              labels: {
+                color: "white",
+              },
             },
           },
           scales: {
             x: {
+              type: 'time',
+              time: {
+                unit: 'second',
+                displayFormats: {
+                  second: 'dd MMM HH:mm'
+                }
+              },
               ticks: {
                 color: "white"
               },
               title: {
                 display: true,
-                text: 'Block #',
+                text: 'Block Time',
                 color: "white"
               },
             },
