@@ -33,6 +33,7 @@ export const useMyNFTHands = (options) => {
       setGameIsLive( getGameIsLive( chainId ) )
       getMyNFTHands()
     }
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [chainId])
 
   useEffect(() => {
