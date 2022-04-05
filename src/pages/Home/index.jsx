@@ -17,10 +17,11 @@ import {
 import { Roadmap } from "../../roadmap";
 import { BigNumber } from "@ethersproject/bignumber";
 import { getHehIsLive } from "../../helpers/networks";
-import { Spin } from "antd";
+import { Spin, Tooltip } from "antd"
 import { MAX_TOTAL_SUPPLY } from "../../helpers/constant";
 import PriceChart from "../../components/Sale/PriceChart";
 import { flipCardRenderer, simpleTextRenderer } from "../../helpers/timers";
+import { weiToEthDp } from "../../helpers/formatters"
 
 export default function Home() {
   const {
@@ -40,7 +41,7 @@ export default function Home() {
   const { Moralis, chainId, account, isAuthenticated, isWeb3Enabled } =
     useMoralis();
   const { currentBlock, refresh: refreshCurrentBlock } = useChainData();
-  const { NFTHands, isLoading: nftBalanceIsLoading } = useMyNFTHands();
+  const { NFTHands } = useMyNFTHands();
 
   const [saleStartBlockDiff, setSaleStartBlockDiff] = useState(null);
   const [revealTimeDiff, setRevealTimeDiff] = useState(null);
@@ -256,16 +257,15 @@ export default function Home() {
                     >
                       <p className="title">Mint Poker Hands</p>
                       <p className="current_price">
-                        <span
-                          title="Click to set mint price as current token price"
-                          onClick={() => {
-                            mintPriceRef.current.value = Moralis.Units.FromWei(
-                              pricePerToken !== null ? pricePerToken : "0"
-                            );
-                          }}
-                        >
-                          Current Price
-                        </span>{" "}
+                        <Tooltip title="Click to set mint price as current token price">
+                          <span
+                            onClick={() => {
+                              mintPriceRef.current.value = weiToEthDp(pricePerToken, 5);
+                            }}
+                          >
+                            Use Current Price:
+                          </span>
+                        </Tooltip>{" Ξ"}
                         {Moralis.Units.FromWei(
                           pricePerToken !== null ? pricePerToken : "0"
                         )}
@@ -281,12 +281,12 @@ export default function Home() {
                             </option>
                           ))}
                         </select>
-                        <input
+                        Ξ<input
                           type={"text"}
                           ref={mintPriceRef}
                           name={"mint_price"}
                           placeholder="Price per token"
-                        ></input>
+                        ></input> Each
                       </div>
                       <p>* Max {maxNumToMint} NFTs per address</p>
                       <button
