@@ -62,24 +62,12 @@ export default function Home() {
   useEffect(() => {
     if (!nftSaleDataInitialised && chainId) {
       initNftSaleData();
-    } else {
-      if (startingIndex?.toNumber() > 0) {
-        setStartIdx(startingIndex.toNumber());
-      }
+    }
+    if (startingIndex?.toNumber() > 0) {
+      setStartIdx(startingIndex.toNumber());
     }
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [chainId, nftSaleDataInitialised, startingIndex]);
-
-  useEffect(() => {
-    if(!nftSaleDataInitialised && chainId) {
-      initNftSaleData();
-    } else {
-      if(startingIndex?.toNumber() > 0) {
-        setStartIdx(startingIndex.toNumber())
-      }
-    }
-    // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [chainId, nftSaleDataInitialised, startingIndex])
 
   useEffect(() => {
     if (currentBlock > 0 && startBlockNum && !saleTimeInitialised) {
