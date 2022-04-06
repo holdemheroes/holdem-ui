@@ -265,9 +265,7 @@ export default function Home() {
                             Use Current Price:
                           </span>
                         </Tooltip>{" Ξ"}
-                        {Moralis.Units.FromWei(
-                          pricePerToken !== null ? pricePerToken : "0"
-                        )}
+                        {weiToEthDp(pricePerToken, 5)}
                       </p>
                       <div>
                         <select id="mint_num" name={"mint_amount"}>
