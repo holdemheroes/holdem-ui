@@ -173,7 +173,7 @@ export default function Home() {
       formDataObj = Object.fromEntries(formData.entries());
     const numToMint = parseInt(formDataObj.mint_amount, 10);
     let mintPrice = parseFloat(formDataObj.mint_price);
-    if (isNaN(mintPrice)) {
+    if (isNaN(mintPrice) || mintPrice === 0.0) {
       openNotification({
         message: "🔊 Error",
         description: 'Mint price cannot be zero!',
