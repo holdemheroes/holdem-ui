@@ -3,6 +3,7 @@ import * as echarts from 'echarts'
 import Moralis from "moralis"
 import { useNFTSaleInfo } from "../../hooks/useNFTSaleInfo"
 import { Spin } from "antd"
+import { hehEchartsTheme } from './echarts_theme'
 
 export default function PriceEChart() {
 
@@ -89,8 +90,9 @@ function Graph({ stats }) {
   const [chartInstance, setChartInstnce] = useState()
 
   useEffect(() => {
+    echarts.registerTheme('heh', hehEchartsTheme)
     const chart = echarts
-      .init(chartRef.current, 'dark')
+      .init(chartRef.current, 'heh')
     setChartInstnce(chart)
   }, [])
 
