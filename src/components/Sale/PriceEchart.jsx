@@ -110,7 +110,9 @@ function Graph({ stats }) {
           xAxis: {
             type: 'category',
             data: stats.labels.map(item => new Date(item).toLocaleString()),
-            name: "Block Time"
+            name: 'Block Time',
+            nameLocation: 'center',
+            nameGap: 24,
           },
           yAxis: [
             {
