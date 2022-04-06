@@ -172,18 +172,17 @@ export default function Home() {
     const formData = new FormData(event.target),
       formDataObj = Object.fromEntries(formData.entries());
     const numToMint = parseInt(formDataObj.mint_amount, 10);
-    const mintPrice = parseFloat(formDataObj.mint_price);
+    let mintPrice = parseFloat(formDataObj.mint_price);
     if (isNaN(mintPrice)) {
-      alert("Please enter mint price!");
+      openNotification({
+        message: "🔊 Error",
+        description: 'Mint price cannot be zero!',
+        type: "error",
+      });
       return;
     }
-    if (
-      mintPrice >
-      Moralis.Units.FromWei(pricePerToken !== null ? pricePerToken : "0")
-    ) {
-      alert("The mint price should not be higher than current price!");
-      return;
-    }
+    mintPrice = Moralis.Units.ETH(formDataObj.mint_price)
+
     const cost = BigNumber.from(mintPrice).mul(BigNumber.from(numToMint));
 
     hehContract.estimateGas
