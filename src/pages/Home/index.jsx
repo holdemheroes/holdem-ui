@@ -22,6 +22,7 @@ import { MAX_TOTAL_SUPPLY } from "../../helpers/constant";
 import PriceChart from "../../components/Sale/PriceChart";
 import { flipCardRenderer, simpleTextRenderer } from "../../helpers/timers";
 import { weiToEthDp } from "../../helpers/formatters"
+import PriceEChart from "../../components/Sale/PriceEchart"
 
 export default function Home() {
   const {
@@ -354,7 +355,7 @@ export default function Home() {
             {saleStartBlockDiff <= 0 &&
               revealTimeDiff > 0 &&
               startIdx === 0 &&
-              totalSupply < MAX_TOTAL_SUPPLY && <PriceChart />}
+              totalSupply < MAX_TOTAL_SUPPLY && <PriceEChart />}
           </div>
 
           <div style={{ marginTop: "160px" }}>
