@@ -52,6 +52,7 @@ export default function PriceChart() {
           fill: false,
           borderWidth: 2,
           pointRadius: 0,
+          tension: 0.3,
         },
         {
           id: 2,
@@ -63,6 +64,7 @@ export default function PriceChart() {
           fill: false,
           borderWidth: 2,
           pointRadius: 0,
+          tension: 0.3,
         },
         {
           id: 3,
@@ -74,6 +76,7 @@ export default function PriceChart() {
           fill: false,
           borderWidth: 2,
           pointRadius: 0,
+          tension: 0.3,
         }
       ]
     }

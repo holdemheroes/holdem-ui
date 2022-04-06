@@ -95,5 +95,5 @@ export const tokenValueTxt = (value, decimals, symbol) => `${n4.format(tokenValu
 export const weiToEthDp = (n, d) => {
   const f = Math.pow(10, d)
   const eth = parseFloat(Moralis.Units.FromWei(n !== null ? n : "0"))
-  return Math.round(eth * f) / f
+  return Math.ceil(eth * f) / f
 }

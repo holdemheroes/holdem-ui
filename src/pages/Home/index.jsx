@@ -22,6 +22,7 @@ import { MAX_TOTAL_SUPPLY } from "../../helpers/constant";
 import PriceChart from "../../components/Sale/PriceChart";
 import { flipCardRenderer, simpleTextRenderer } from "../../helpers/timers";
 import { weiToEthDp } from "../../helpers/formatters"
+import PriceEChart from "../../components/Sale/PriceEchart"
 
 export default function Home() {
   const {
@@ -172,18 +173,17 @@ export default function Home() {
     const formData = new FormData(event.target),
       formDataObj = Object.fromEntries(formData.entries());
     const numToMint = parseInt(formDataObj.mint_amount, 10);
-    const mintPrice = parseFloat(formDataObj.mint_price);
-    if (isNaN(mintPrice)) {
-      alert("Please enter mint price!");
+    let mintPrice = parseFloat(formDataObj.mint_price);
+    if (isNaN(mintPrice) || mintPrice === 0.0) {
+      openNotification({
+        message: "🔊 Error",
+        description: 'Mint price cannot be zero!',
+        type: "error",
+      });
       return;
     }
-    if (
-      mintPrice >
-      Moralis.Units.FromWei(pricePerToken !== null ? pricePerToken : "0")
-    ) {
-      alert("The mint price should not be higher than current price!");
-      return;
-    }
+    mintPrice = Moralis.Units.ETH(formDataObj.mint_price)
+
     const cost = BigNumber.from(mintPrice).mul(BigNumber.from(numToMint));
 
     hehContract.estimateGas
@@ -266,9 +266,7 @@ export default function Home() {
                             Use Current Price:
                           </span>
                         </Tooltip>{" Ξ"}
-                        {Moralis.Units.FromWei(
-                          pricePerToken !== null ? pricePerToken : "0"
-                        )}
+                        {weiToEthDp(pricePerToken, 5)}
                       </p>
                       <div>
                         <select id="mint_num" name={"mint_amount"}>
@@ -357,7 +355,7 @@ export default function Home() {
             {saleStartBlockDiff <= 0 &&
               revealTimeDiff > 0 &&
               startIdx === 0 &&
-              totalSupply < MAX_TOTAL_SUPPLY && <PriceChart />}
+              totalSupply < MAX_TOTAL_SUPPLY && <PriceEChart />}
           </div>
 
           <div style={{ marginTop: "160px" }}>
