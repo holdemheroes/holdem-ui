@@ -11,7 +11,6 @@ import Chains from "./components/Chains";
 import Community from "./components/Community";
 import NFTBalance from "./components/NFTBalance/";
 import Blockie from "./components/Blockie";
-import Sale from "./components/Sale";
 import GamesV1 from "./components/TexasHoldemV1";
 import Withdrawable from "./components/Withdrawable";
 import RefundableGames from "./components/TexasHoldemV1/RefundableGames";
@@ -28,6 +27,7 @@ import { getChainType, getGameIsLive, getHehIsLive } from "./helpers/networks";
 import ScrollToTop from "./ScrollToTop";
 import "antd/dist/antd.css";
 import "./App.scss";
+import Marketplace from "./pages/Marketplace";
 
 const App = () => {
   const {
@@ -129,7 +129,7 @@ const App = () => {
               {chainType === "l2" && <HomeL2 />}
             </Route>
             <Route path="/Marketplace">
-              {hehIsLive && chainType && <Sale />}
+              {hehIsLive && chainType && <Marketplace />}
               {(!hehIsLive || !chainType) && <GameComingSoon />}
             </Route>
             <Route path="/Rules">
