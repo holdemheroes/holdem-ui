@@ -7,7 +7,7 @@ import { MAX_TOTAL_SUPPLY } from "../../helpers/constant";
 export default function PostRevealSale({ pricePerToken, mintedTokens, l1 }) {
 
   const [currentItems, setCurrentItems] = useState(null);
-  const [tokensPerPage, setTokensPerPage] = useState(10);
+  const [tokensPerPage, setTokensPerPage] = useState(12);
   const [pageNumber, setPageNumber] = useState(1);
   const [minted, setMinted] = useState(true);
   const [tokens, setTokens] = useState([]);
