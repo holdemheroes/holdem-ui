@@ -19,7 +19,6 @@ import { BigNumber } from "@ethersproject/bignumber";
 import { getHehIsLive } from "../../helpers/networks";
 import { Spin, Tooltip } from "antd";
 import { MAX_TOTAL_SUPPLY } from "../../helpers/constant";
-import PriceChart from "../../components/Sale/PriceChart";
 import { flipCardRenderer, simpleTextRenderer } from "../../helpers/timers";
 import { weiToEthDp } from "../../helpers/formatters";
 import PriceEChart from "../../components/Sale/PriceEchart";
@@ -247,14 +246,15 @@ export default function Home() {
               <div className="mint-poker-hands--wrapper">
                 <div className="mint-poker-hands">
                   {nftSaleDataInitialised ? (
-                    <form
-                      onSubmit={(e) => preRevealMint(e)}
-                      id="mint-form"
-                      name="mint-form"
-                    >
-                      <p className="title">Mint Poker Hands</p>
-                      <p className="current-price">
-                        <Tooltip title="Click to set mint price as current token price">
+                    revealTimeDiff > 0 ? (
+                      <form
+                        onSubmit={(e) => preRevealMint(e)}
+                        id="mint-form"
+                        name="mint-form"
+                      >
+                        <p className="title">Mint Poker Hands</p>
+                        <p className="current_price">
+                          <Tooltip title="Click to set mint price as current token price">
                           <span
                             onClick={() => {
                               mintPriceRef.current.value = weiToEthDp(
@@ -265,62 +265,58 @@ export default function Home() {
                           >
                             Use Current Price:
                           </span>
-                        </Tooltip>
-                        {" Ξ"}
-                        {weiToEthDp(pricePerToken, 5)}
-                      </p>
-                      <div className="input-area">
-                        <select id="mint_num" name={"mint_amount"}>
-                          {Array.from(
-                            { length: maxNumToMint },
-                            (_, i) => i + 1
-                          ).map((item, i) => (
-                            <option value={item} key={i}>
-                              {item}
-                            </option>
-                          ))}
-                        </select>
-                        Ξ
-                        <input
+                          </Tooltip>{" Ξ"}
+                          {weiToEthDp(pricePerToken, 5)}
+                        </p>
+                        <div className="input-area">
+                          <select id="mint_num" name={"mint_amount"}>
+                            {Array.from(
+                              { length: maxNumToMint },
+                              (_, i) => i + 1
+                            ).map((item, i) => (
+                              <option value={item} key={i}>
+                                {item}
+                              </option>
+                            ))}
+                          </select>
+                          Ξ<input
                           type={"text"}
                           ref={mintPriceRef}
                           name={"mint_price"}
                           placeholder="Price per token"
-                        ></input>{" "}
-                        Each
-                      </div>
-                      <p className="max-per-address">
-                        * Max {maxNumToMint} NFTs per address
-                      </p>
-                      <button
-                        className="btn--shadow btn--hover-pointer btn--mint"
-                        form="mint-form"
-                        disabled={
-                          !hehIsLive ||
-                          chainId === null ||
-                          !maxNumToMint ||
-                          !(
-                            saleStartBlockDiff <= 0 &&
-                            revealTimeDiff > 0 &&
-                            startIdx === 0 &&
-                            totalSupply < MAX_TOTAL_SUPPLY
-                          )
-                        }
-                      >
-                        {hehIsLive && chainId !== null ? (
-                          saleStartBlockDiff > 0 ? (
-                            <Countdown
-                              date={saleStartTime * 1000}
-                              renderer={simpleTextRenderer}
-                            />
+                        /> Each
+                        </div>
+                        <p>* Max {maxNumToMint} NFTs per address</p>
+                        <button
+                          className="btn-shadow btn-hover-pointer mint-btn"
+                          form="mint-form"
+                          disabled={
+                            !hehIsLive ||
+                            chainId === null ||
+                            !maxNumToMint ||
+                            !(
+                              saleStartBlockDiff <= 0 &&
+                              revealTimeDiff > 0 &&
+                              startIdx === 0 &&
+                              totalSupply < MAX_TOTAL_SUPPLY
+                            )
+                          }
+                        >
+                          {hehIsLive && chainId !== null ? (
+                            saleStartBlockDiff > 0 ? (
+                              <Countdown
+                                date={saleStartTime * 1000}
+                                renderer={simpleTextRenderer}
+                              />
+                            ) : (
+                              "Mint"
+                            )
                           ) : (
-                            "Mint"
-                          )
-                        ) : (
-                          "Coming Soon"
-                        )}
-                      </button>
-                    </form>
+                            "Coming Soon"
+                          )}
+                        </button>
+                      </form>
+                    ) : ("Blind Mint Sale Ended")
                   ) : chainId !== null ? (
                     <Spin />
                   ) : (
@@ -366,7 +362,7 @@ export default function Home() {
               startIdx === 0 &&
               totalSupply < MAX_TOTAL_SUPPLY && <PriceEChart />}
           </div>
-          
+
           <Timeline />
         </div>
 
