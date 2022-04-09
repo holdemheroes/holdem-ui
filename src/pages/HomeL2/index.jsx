@@ -1,6 +1,6 @@
 import React from "react";
 import { NavLink } from "react-router-dom";
-import "./style.scss";
+// import "./style.scss";
 import AnimateButton from "../../components/AnimateButton";
 import Timeline from "../../components/Timeline";
 import { Roadmap } from "../../roadmap";
@@ -11,8 +11,8 @@ export default function HomeL2() {
     <>
       <div className="header-background"></div>
       <div className="main-wrapper">
-        <div className="section--nft_poker-wrapper" id="section--nft_poker">
-          <div className="section--nft_poker">
+        <div className="section__nft-poker--wrapper" id="section__nft-poker">
+          <div className="section__nft-poker">
             <div>
               <p>NFT Poker</p>
               <p>
@@ -32,8 +32,8 @@ export default function HomeL2() {
                 </a>
                 .
               </p>
-              <div className="mint_poker_hands-wrapper">
-                <div className="mint_poker_hands">
+              <div className="mint-poker-hands--wrapper">
+                <div className="mint-poker-hands">
                   <p>
                     Tokens will be Airdropped on Polygon!
                     <br />
@@ -62,7 +62,7 @@ export default function HomeL2() {
           </div>
         </div>
 
-        <div className="section--open_source">
+        <div className="section__open-source">
           <div>
             <p>Open Source Poker NFTs</p>
             <div>
@@ -111,9 +111,9 @@ export default function HomeL2() {
           </div>
         </div>
 
-        <div className="section--rest-wrapper">
-          <div className="section--rest">
-            <div className="game_play">
+        <div className="section__rest--wrapper">
+          <div className="section__rest">
+            <div className="game-play">
               <img
                 src="../assets/images/tablehq.png"
                 loading="lazy"
@@ -147,48 +147,48 @@ export default function HomeL2() {
                   </p>
                 </div>
                 <div>
-                  <NavLink to="/Play" className="btn-play">
+                  <NavLink to="/Play" className="btn--play">
                     Play Now
                   </NavLink>
-                  <NavLink to="/Rules" className="btn-learn">
+                  <NavLink to="/Rules" className="btn--learn">
                     Learn More
                   </NavLink>
                 </div>
               </div>
             </div>
 
-            <div className="roadmap-wrapper">
-              <div className="roadmap-text">
+            <div className="roadmap--wrapper">
+              <div className="roadmap__text">
                 <p className="title">Roadmap</p>
-                <p className="sub_title">MORE GAMES</p>
+                <p className="subtitle">MORE GAMES</p>
                 <p className="desc">
                   Further games of poker and other card games with the
                   open-source card contract
                 </p>
-                <p className="sub_title">MORE CHAINS</p>
+                <p className="subtitle">MORE CHAINS</p>
                 <p className="desc">
                   Deploying games to EVM chains by community vote (AVAX, BSC,
                   Fantom...)
                 </p>
-                <p className="sub_title">MORE DECKS</p>
+                <p className="subtitle">MORE DECKS</p>
                 <p className="desc">
                   Whitelisting card decks for custom-branded poker games
                 </p>
-                <p className="sub_title">GOVERNANCE BY DAO</p>
+                <p className="subtitle">GOVERNANCE BY DAO</p>
                 <p className="desc">
                   Decentralizing governance to community ownership by
                   formalizing the DAO structure
                 </p>
               </div>
 
-              <div className="roadmap-img">
+              <div className="roadmap__img">
                 <Roadmap />
               </div>
             </div>
 
             <div>
               <AnimateButton>
-                <a href="#section--nft_poker" rel="noreferrer">
+                <a href="#section__nft-poker" rel="noreferrer">
                   Mint Poker Nfts
                 </a>
               </AnimateButton>
@@ -207,7 +207,7 @@ export default function HomeL2() {
             </div>
           </div>
 
-          <div className="vor-wrapper">
+          <div className="vor--wrapper">
             <p>
               Powered by{" "}
               <a

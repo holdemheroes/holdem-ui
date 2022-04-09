@@ -16,7 +16,7 @@ const Application = () => {
     );
   else
     return (
-      <div className="perfect_center">
+      <div className="perfect-center">
         <p style={{ color: "white", textAlign: "center" }}>Get your free Moralis Account.</p>
         <a href="https://moralis.io/" target="_blank" rel="noreferrer" style={{ color: "white", textAlign: "center", display: "block", textDecoration: "underline" }}>Click here</a>
       </div>

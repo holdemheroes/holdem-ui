@@ -75,7 +75,7 @@ const App = () => {
               <>
                 <NavLink
                   to="/Play"
-                  className="btn-play"
+                  className="btn--play"
                   style={{ marginRight: "35px" }}
                 >
                   Play

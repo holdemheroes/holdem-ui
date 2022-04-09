@@ -104,7 +104,7 @@ export default function StartNewGame({ gameIdsInProgress, maxConcurrentGames }) 
 
   return (
     <>
-      <button onClick={() => { setOpen(open => !open) }} style={{ display: open ? "none" : "block" }} className="start_btn btn-shadow">Start New Game</button>
+      <button onClick={() => { setOpen(open => !open) }} style={{ display: open ? "none" : "block" }} className="start_btn btn--shadow">Start New Game</button>
       <div style={{ display: open ? "block" : "none", width: "340px", margin: "0 auto" }} className="game_start_card">
         <span className="modal-close" onClick={() => setOpen(open => !open)}>&times;</span>
         <p className="title">Start New Game</p>

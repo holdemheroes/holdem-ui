@@ -5,7 +5,7 @@ function Account() {
   const { authenticate } = useMoralis();
 
   return (
-    <button className={`btn-connect-wallet btn-shadow`} onClick={() => authenticate({ signingMessage: "HoldemHeroes!" })}>
+    <button className={`btn-connect-wallet btn--shadow`} onClick={() => authenticate({ signingMessage: "HoldemHeroes!" })}>
       Connect Wallet
     </button>
   );

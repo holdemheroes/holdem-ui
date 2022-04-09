@@ -17,12 +17,12 @@ import {
 import { Roadmap } from "../../roadmap";
 import { BigNumber } from "@ethersproject/bignumber";
 import { getHehIsLive } from "../../helpers/networks";
-import { Spin, Tooltip } from "antd"
+import { Spin, Tooltip } from "antd";
 import { MAX_TOTAL_SUPPLY } from "../../helpers/constant";
 import PriceChart from "../../components/Sale/PriceChart";
 import { flipCardRenderer, simpleTextRenderer } from "../../helpers/timers";
-import { weiToEthDp } from "../../helpers/formatters"
-import PriceEChart from "../../components/Sale/PriceEchart"
+import { weiToEthDp } from "../../helpers/formatters";
+import PriceEChart from "../../components/Sale/PriceEchart";
 
 export default function Home() {
   const {
@@ -165,12 +165,12 @@ export default function Home() {
     if (isNaN(mintPrice) || mintPrice === 0.0) {
       openNotification({
         message: "🔊 Error",
-        description: 'Mint price cannot be zero!',
+        description: "Mint price cannot be zero!",
         type: "error",
       });
       return;
     }
-    mintPrice = Moralis.Units.ETH(formDataObj.mint_price)
+    mintPrice = Moralis.Units.ETH(formDataObj.mint_price);
 
     const cost = BigNumber.from(mintPrice).mul(BigNumber.from(numToMint));
 
@@ -214,11 +214,11 @@ export default function Home() {
     <>
       <div className="header-background"></div>
       <div className="main-wrapper">
-        <div className="section--nft_poker-wrapper" id="section--nft_poker">
-          <div className="section--nft_poker">
-            <div>
-              <p>NFT Poker</p>
-              <p>
+        <div className="section__nft-poker--wrapper" id="section__nft-poker">
+          <div className="section__nft-poker">
+            <div className="section__nft-poker--left">
+              <p className="title">NFT Poker</p>
+              <p className="desc">
                 Holdem Heroes is the on-chain NFT Poker game.
                 <br />
                 Mint the {MAX_TOTAL_SUPPLY} Hole Card combinations as NFTs.
@@ -235,8 +235,8 @@ export default function Home() {
                 </a>
                 .
               </p>
-              <div className="mint_poker_hands-wrapper">
-                <div className="mint_poker_hands">
+              <div className="mint-poker-hands--wrapper">
+                <div className="mint-poker-hands">
                   {nftSaleDataInitialised ? (
                     <form
                       onSubmit={(e) => preRevealMint(e)}
@@ -244,19 +244,23 @@ export default function Home() {
                       name="mint-form"
                     >
                       <p className="title">Mint Poker Hands</p>
-                      <p className="current_price">
+                      <p className="current-price">
                         <Tooltip title="Click to set mint price as current token price">
                           <span
                             onClick={() => {
-                              mintPriceRef.current.value = weiToEthDp(pricePerToken, 5);
+                              mintPriceRef.current.value = weiToEthDp(
+                                pricePerToken,
+                                5
+                              );
                             }}
                           >
                             Use Current Price:
                           </span>
-                        </Tooltip>{" Ξ"}
+                        </Tooltip>
+                        {" Ξ"}
                         {weiToEthDp(pricePerToken, 5)}
                       </p>
-                      <div>
+                      <div className="input-area">
                         <select id="mint_num" name={"mint_amount"}>
                           {Array.from(
                             { length: maxNumToMint },
@@ -267,16 +271,20 @@ export default function Home() {
                             </option>
                           ))}
                         </select>
-                        Ξ<input
+                        Ξ
+                        <input
                           type={"text"}
                           ref={mintPriceRef}
                           name={"mint_price"}
                           placeholder="Price per token"
-                        ></input> Each
+                        ></input>{" "}
+                        Each
                       </div>
-                      <p>* Max {maxNumToMint} NFTs per address</p>
+                      <p className="max-per-address">
+                        * Max {maxNumToMint} NFTs per address
+                      </p>
                       <button
-                        className="btn-shadow btn-hover-pointer mint-btn"
+                        className="btn--shadow btn--hover-pointer btn--mint"
                         form="mint-form"
                         disabled={
                           !hehIsLive ||
@@ -307,15 +315,17 @@ export default function Home() {
                   ) : chainId !== null ? (
                     <Spin />
                   ) : (
-                    "Connect Wallet to Mint!"
+                    <p className="connect-wallet-to-mint">
+                      Connect Wallet to Mint!
+                    </p>
                   )}
                 </div>
-                <p>{`Total NFTs minted: ${
+                <p className="total-nfts-minted">{`Total NFTs minted: ${
                   totalSupply !== null ? totalSupply : "0"
                 }/${MAX_TOTAL_SUPPLY}`}</p>
               </div>
             </div>
-            <div>
+            <div className="section__nft-poker--right">
               <div className="video-container--16x9">
                 <div className="inner-wrapper">
                   <iframe
@@ -329,7 +339,9 @@ export default function Home() {
               </div>
               {revealTimeDiff > 0 ? (
                 <>
-                  <p>NFT Distribution and Reveal in</p>
+                  <p className="countdown__title">
+                    NFT Distribution and Reveal in
+                  </p>
                   <Countdown
                     date={revealTime * 1000}
                     renderer={flipCardRenderer}
@@ -339,7 +351,7 @@ export default function Home() {
             </div>
           </div>
 
-          <div className="price_chart_area">
+          <div className="price-chart-area">
             {saleStartBlockDiff <= 0 &&
               revealTimeDiff > 0 &&
               startIdx === 0 &&
@@ -351,10 +363,10 @@ export default function Home() {
           </div>
         </div>
 
-        <div className="section--open_source">
-          <div>
-            <p>Open Source Poker NFTs</p>
-            <div>
+        <div className="section__open-source">
+          <div className="section__open-source--text">
+            <p className="title">Open Source Poker NFTs</p>
+            <div className="desc">
               <p>
                 The 52 cards and {MAX_TOTAL_SUPPLY} card pair NFTs are available
                 for open source use.
@@ -395,14 +407,14 @@ export default function Home() {
               </p>
             </div>
           </div>
-          <div>
+          <div className="section__open-source--img">
             <img src="../../assets/images/cardshq.png" alt="" />
           </div>
         </div>
 
-        <div className="section--rest-wrapper">
-          <div className="section--rest">
-            <div className="game_play">
+        <div className="section__rest--wrapper">
+          <div className="section__rest">
+            <div className="game-play">
               <img
                 src="../assets/images/tablehq.png"
                 loading="lazy"
@@ -410,9 +422,9 @@ export default function Home() {
                 sizes="(max-width: 479px) 100vw, (max-width: 767px) 90vw, (max-width: 991px) 650px, (max-width: 2765px) 60vw, 1659px"
                 alt=""
               />
-              <div>
-                <p>Gameplay</p>
-                <div>
+              <div className="game-play__text">
+                <p className="title">Gameplay</p>
+                <div className="desc">
                   <p>
                     Poker gameplay starts immediately after the NFT sale
                     concludes. We are proud to be one of few projects with NFT
@@ -435,49 +447,49 @@ export default function Home() {
                     multiple games in parallel.
                   </p>
                 </div>
-                <div>
-                  <NavLink to="/Play" className="btn-play">
+                <div className="game-play__btn-group">
+                  <NavLink to="/Play" className="btn--play">
                     Play Now
                   </NavLink>
-                  <NavLink to="/Rules" className="btn-learn">
+                  <NavLink to="/Rules" className="btn--learn">
                     Learn More
                   </NavLink>
                 </div>
               </div>
             </div>
 
-            <div className="roadmap-wrapper">
-              <div className="roadmap-text">
+            <div className="roadmap--wrapper">
+              <div className="roadmap__text">
                 <p className="title">Roadmap</p>
-                <p className="sub_title">MORE GAMES</p>
+                <p className="subtitle">MORE GAMES</p>
                 <p className="desc">
                   Further games of poker and other card games with the
                   open-source card contract
                 </p>
-                <p className="sub_title">MORE CHAINS</p>
+                <p className="subtitle">MORE CHAINS</p>
                 <p className="desc">
                   Deploying games to EVM chains by community vote (AVAX, BSC,
                   Fantom...)
                 </p>
-                <p className="sub_title">MORE DECKS</p>
+                <p className="subtitle">MORE DECKS</p>
                 <p className="desc">
                   Whitelisting card decks for custom-branded poker games
                 </p>
-                <p className="sub_title">GOVERNANCE BY DAO</p>
+                <p className="subtitle">GOVERNANCE BY DAO</p>
                 <p className="desc">
                   Decentralizing governance to community ownership by
                   formalizing the DAO structure
                 </p>
               </div>
 
-              <div className="roadmap-img">
+              <div className="roadmap__img">
                 <Roadmap />
               </div>
             </div>
 
-            <div>
+            <div className="animation-btn-group">
               <AnimateButton>
-                <a href="#section--nft_poker" rel="noreferrer">
+                <a href="#section__nft-poker" rel="noreferrer">
                   Mint Poker Nfts
                 </a>
               </AnimateButton>
@@ -496,7 +508,7 @@ export default function Home() {
             </div>
           </div>
 
-          <div className="vor-wrapper">
+          <div className="vor--wrapper">
             <p>
               Powered by{" "}
               <a
