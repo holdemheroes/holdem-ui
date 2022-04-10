@@ -27,12 +27,12 @@
     padding      : 12px 10px;
 }
 
-.btn-shadow {
+.btn--shadow {
     &:hover {
         box-shadow: 1px 1px 20px 0 #174aff;
     }
 }
 
-.btn-hover-pointer:hover {
+.btn--hover-pointer:hover {
     cursor: pointer;
 }

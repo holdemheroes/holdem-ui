@@ -54,7 +54,7 @@ const GamePlay = () => {
                 {
                     lists.map((list, i) => <ExplanationCard key={i} attr={list} />)
                 }
-                <div className="vor-wrapper">
+                <div className="vor--wrapper">
                     <p>Powered by <a href="https://vor.unification.io" target="_blank" rel="noreferrer">VOR (xFUND)</a></p>
                 </div>
             </div>

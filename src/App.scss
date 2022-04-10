@@ -84,7 +84,7 @@ button {
   }
 }
 
-.vor-wrapper {
+.vor--wrapper {
   width          : 100%;
   display        : flex;
   margin-top     : 0px;
@@ -194,7 +194,7 @@ button {
         margin-right: 18px;
       }
 
-      .btn-play {
+      .btn--play {
         padding       : 5px 27px;
         background    : linear-gradient(101.75deg, #3D56EF 6.43%, #AB43CA 108.38%);
         border-radius : 6px;
@@ -358,13 +358,13 @@ button {
   }
 }
 
-.btn-shadow {
+.btn--shadow {
   &:hover {
     box-shadow: 1px 1px 20px 0 #174aff;
   }
 }
 
-.btn-hover-pointer:hover {
+.btn--hover-pointer:hover {
   cursor: pointer;
 }
 

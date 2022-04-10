@@ -7,16 +7,16 @@ export const flipCardRenderer = ({ days, hours, minutes, seconds, completed }) =
   } else {
     // Render a countdown
     return (
-      <div className="time_card-wrapper">
-        <div className="time_card">
+      <div className="time-card--wrapper">
+        <div className="time-card">
           <p>{days < 10 ? "0" + days : days}</p>
           <p>days</p>
         </div>
-        <div className="time_card">
+        <div className="time-card">
           <p>{hours < 10 ? "0" + hours : hours}</p>
           <p>hours</p>
         </div>
-        <div className="time_card">
+        <div className="time-card">
           <p>{minutes < 10 ? "0" + minutes : minutes}</p>
           <p>minutes</p>
         </div>

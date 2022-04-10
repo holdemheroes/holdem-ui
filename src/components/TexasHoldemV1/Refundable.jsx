@@ -53,7 +53,7 @@ export default function Refundable({ gameId, amount }) {
     <div className="refundable_game_card">
       <p className="title">Game #{gameId}</p>
       <button
-        className="claim_btn btn-shadow btn-hover-pointer"
+        className="claim_btn btn--shadow btn--hover-pointer"
         disabled={isDisabled}
         onClick={() => handleClaimRefund()}>
         <span>

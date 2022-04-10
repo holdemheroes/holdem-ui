@@ -11,7 +11,7 @@
 }
 
 .main-wrapper {
-    .section--nft_poker-wrapper {
+    .section__nft-poker--wrapper {
         padding-top        : 30px;
         background-image   : url("../../assets/images/herocircle.png");
         background-repeat  : no-repeat;
@@ -19,7 +19,7 @@
         background-size    : cover;
         padding-bottom     : 100px;
 
-        .section--nft_poker {
+        .section__nft-poker {
             max-width      : 90%;
             margin         : 0 auto;
             display        : flex;
@@ -45,13 +45,13 @@
                     line-height: 28px;
                 }
 
-                &>.mint_poker_hands-wrapper {
+                &>.mint-poker-hands--wrapper {
                     display   : flex;
                     max-width : 80%;
                     margin-top: 40px;
                     flex-wrap : wrap;
 
-                    &>.mint_poker_hands {
+                    &>.mint-poker-hands {
                         width           : 100%;
                         padding         : 20px;
                         border-radius   : 10px;
@@ -149,7 +149,7 @@
                         text-align : center;
                     }
 
-                    .coming_soon-title {
+                    .coming-soon__title {
                         font-family: "Josefin Sans", sans-serif;
                         font-size  : 45px;
                         color      : #fff;
@@ -158,7 +158,7 @@
                         width      : 100%;
                     }
 
-                    .coming_soon-img {
+                    .coming-soon__img {
                         display: block;
                         width  : 70%;
                         height : auto;
@@ -186,12 +186,12 @@
                     letter-spacing: 1px;
                 }
 
-                &>.time_card-wrapper {
+                &>.time-card--wrapper {
                     display        : flex;
                     justify-content: center;
                     align-items    : center;
 
-                    &>.time_card {
+                    &>.time-card {
                         margin          : 0 10px;
                         padding         : 20px 20px;
                         border-radius   : 10px;
@@ -223,13 +223,13 @@
             }
         }
 
-        .price_chart_area {
+        .price-chart-area {
             width : 90%;
             margin: 50px auto 0 auto;
         }
     }
 
-    .section--open_source {
+    .section__open-source {
         display            : flex;
         justify-content    : space-between;
         align-items        : center;
@@ -288,15 +288,15 @@
         }
     }
 
-    .section--rest-wrapper {
+    .section__rest--wrapper {
         background-image: url("../../assets/images/section3bg.png");
         background-size : cover;
 
-        &>.section--rest {
+        &>.section__rest {
             margin: 0 auto;
 
             &>div {
-                &.game_play {
+                &.game-play {
                     width          : 100%;
                     display        : flex;
                     justify-content: space-between;
@@ -346,7 +346,7 @@
                                 letter-spacing : 0px;
                                 transition     : all 0.1s ease-out;
 
-                                &.btn-play {
+                                &.btn--play {
                                     background-color: #133cce;
                                     border-radius   : 6px;
 
@@ -359,7 +359,7 @@
                     }
                 }
 
-                &.roadmap-wrapper {
+                &.roadmap--wrapper {
                     display        : flex;
                     align-items    : center;
                     justify-content: space-between;
@@ -369,7 +369,7 @@
                     margin-left    : auto;
                     margin-right   : auto;
 
-                    .roadmap-text {
+                    .roadmap__text {
                         * {
                             color: white;
                         }
@@ -385,7 +385,7 @@
                             text-align    : left;
                         }
 
-                        .sub_title {
+                        .subtitle {
                             font-family  : Karla, sans-serif;
                             font-size    : 25px;
                             line-height  : 29px;
