@@ -1,4 +1,4 @@
-import { useEffect, useState } from "react"
+import { useEffect, useState } from "react";
 import {
   BrowserRouter as Router,
   Switch,
@@ -6,7 +6,6 @@ import {
   NavLink,
 } from "react-router-dom";
 import { useMoralis } from "react-moralis";
-import "antd/dist/antd.css";
 import Account from "./components/Account";
 import Chains from "./components/Chains";
 import Community from "./components/Community";
@@ -17,20 +16,18 @@ import GamesV1 from "./components/TexasHoldemV1";
 import Withdrawable from "./components/Withdrawable";
 import RefundableGames from "./components/TexasHoldemV1/RefundableGames";
 import { History } from "./components/TexasHoldemV1/History/History";
+import GameComingSoon from "./components/TexasHoldemV1/GameComingSoon";
+import Logout from "./components/Logout";
+import Hamburgermenu from "./components/HamburgerMenu/Hamburgermenu";
 import Home from "./pages/Home";
 import HomeL2 from "./pages/HomeL2";
 import GamePlay from "./pages/GamePlay";
-import GameComingSoon from "./components/TexasHoldemV1/GameComingSoon";
-import "./App.scss";
 import { getEllipsisTxt } from "./helpers/formatters";
-import Logout from "./components/Logout";
 import { logo } from "./logo";
-import {
-  getChainType,
-  getGameIsLive,
-  getHehIsLive
-} from "./helpers/networks"
+import { getChainType, getGameIsLive, getHehIsLive } from "./helpers/networks";
 import ScrollToTop from "./ScrollToTop";
+import "antd/dist/antd.css";
+import "./App.scss";
 
 const App = () => {
   const {
@@ -52,12 +49,12 @@ const App = () => {
   }, [isAuthenticated, isWeb3Enabled]);
 
   useEffect(() => {
-    if(chainId) {
+    if (chainId) {
       setGameIsLive(getGameIsLive(chainId));
       setHehIsLive(getHehIsLive(chainId));
       setChainType(getChainType(chainId));
     }
-  }, [chainId])
+  }, [chainId]);
 
   return (
     <Router>
@@ -69,7 +66,7 @@ const App = () => {
               <NavLink to="/Marketplace">Marketplace</NavLink>
               <NavLink to="/NFTwallet">NFT Wallet</NavLink>
               <NavLink to="/Rules">Rules</NavLink>
-              <Community />
+              <Community isMobile={false} />
             </div>
             {isAuthenticated && (
               <>
@@ -121,6 +118,7 @@ const App = () => {
             )}
             {!isAuthenticated && <Account />}
           </div>
+          <Hamburgermenu isAuthenticated={isAuthenticated} />
         </div>
       </div>
       <>
@@ -164,6 +162,10 @@ const App = () => {
   );
 };
 
-export const Logo = () => <NavLink to="/">{logo()}</NavLink>;
+export const Logo = () => (
+  <NavLink to="/" className="logo">
+    {logo()}
+  </NavLink>
+);
 
 export default App;
