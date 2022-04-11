@@ -219,12 +219,10 @@ export default function Home() {
             <div className="section__nft-poker--left">
               <p className="title">NFT Poker</p>
               <p className="desc">
-                Holdem Heroes is the on-chain NFT Poker game.
+                Holdem Heroes is the on-chain NFT Poker game. <br />
+                Mint the {MAX_TOTAL_SUPPLY} Hole Card combinations as NFTs.{" "}
                 <br />
-                Mint the {MAX_TOTAL_SUPPLY} Hole Card combinations as NFTs.
-                <br />
-                Then play Texas Hold&#x27;em with them!
-                <br />
+                Then play Texas Hold&#x27;em with them! <br />
                 Mint price is dynamic with{" "}
                 <a
                   href="http://dynamicdrops.xyz"
@@ -235,6 +233,17 @@ export default function Home() {
                 </a>
                 .
               </p>
+              <div className="video-container--16x9 mobile">
+                <div className="inner-wrapper">
+                  <iframe
+                    src="https://www.youtube.com/embed/IRiglLJ_1Ak"
+                    frameBorder="0"
+                    allow="autoplay; encrypted-media"
+                    allowFullScreen
+                    title="video"
+                  />
+                </div>
+              </div>
               <div className="mint-poker-hands--wrapper">
                 <div className="mint-poker-hands">
                   {nftSaleDataInitialised ? (
@@ -357,10 +366,8 @@ export default function Home() {
               startIdx === 0 &&
               totalSupply < MAX_TOTAL_SUPPLY && <PriceEChart />}
           </div>
-
-          <div style={{ marginTop: "160px" }}>
-            <Timeline />
-          </div>
+          
+          <Timeline />
         </div>
 
         <div className="section__open-source">

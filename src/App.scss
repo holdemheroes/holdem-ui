@@ -159,15 +159,27 @@ button {
 // new style
 .header-wrapper {
   &>.header {
-    margin         : 0;
-    padding        : 16px 60px;
+    width          : 90%;
+    max-width      : 90%;
+    margin         : 0 auto;
+    padding        : 15px 0;
     display        : flex;
     justify-content: space-between;
     align-items    : center;
 
+    .logo svg {
+      @media (max-width: 425px) {
+        width: 90%;
+      }
+    }
+
     .topnav {
-      display    : flex;
+      display    : none;
       align-items: center;
+
+      @media (min-width: 1280px) {
+        display: flex;
+      }
 
       &>div:first-child {
         display    : flex;
