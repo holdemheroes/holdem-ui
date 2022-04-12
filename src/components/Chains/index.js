@@ -3,20 +3,33 @@ import useChain from "../../hooks/useChain";
 import { ETHLogo, PolygonLogo } from "./Logos";
 import "./style.scss";
 import { useMoralis } from "react-moralis"
+import { extractErrorMessage, openNotification } from "../../helpers/notifications"
 
 const menuItems = [
   {
-    key: "0x4",
-    value: "Rinkeby",
+    key: "0x1",
+    value: "Mainnet",
     icon: <ETHLogo size="S" />,
     iconL: <ETHLogo size="L" />,
   },
-  {
-    key: "0x13881",
-    value: "Polygon Mumbai",
-    icon: <PolygonLogo />,
-    iconL: <PolygonLogo />,
-  },
+  // {
+  //   key: "0x4",
+  //   value: "Rinkeby",
+  //   icon: <ETHLogo size="S" />,
+  //   iconL: <ETHLogo size="L" />,
+  // },
+  // {
+  //   key: "0x89",
+  //   value: "Polygon",
+  //   icon: <PolygonLogo />,
+  //   iconL: <PolygonLogo />,
+  // },
+  // {
+  //   key: "0x13881",
+  //   value: "Polygon Mumbai",
+  //   icon: <PolygonLogo />,
+  //   iconL: <PolygonLogo />,
+  // },
 ];
 
 function Chains() {
@@ -27,6 +40,13 @@ function Chains() {
   useEffect(() => {
     if (!chainId) return null;
     const newSelected = menuItems.find((item) => item.key === chainId);
+    if(newSelected === undefined) {
+      openNotification({
+        message: "Warning",
+        description: "Please connect to a supported network",
+        type: "warn",
+      });
+    }
     setSelected(newSelected);
   }, [chainId]);
 
