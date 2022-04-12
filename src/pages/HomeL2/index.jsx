@@ -1,6 +1,6 @@
 import React from "react";
 import { NavLink } from "react-router-dom";
-// import "./style.scss";
+import "./style.scss";
 import AnimateButton from "../../components/AnimateButton";
 import Timeline from "../../components/Timeline";
 import { Roadmap } from "../../roadmap";
@@ -17,8 +17,6 @@ export default function HomeL2() {
               <p className="title">NFT Poker</p>
               <p className="desc">
                 Holdem Heroes is the on-chain NFT Poker game. <br />
-                Mint the {MAX_TOTAL_SUPPLY} Hole Card combinations as NFTs.{" "}
-                <br />
                 Mint the {MAX_TOTAL_SUPPLY} Hole Card combinations as NFTs.
                 <br />
                 Then play Texas Hold&#x27;em with them!
