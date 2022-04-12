@@ -84,7 +84,7 @@ button {
   }
 }
 
-.vor-wrapper {
+.vor--wrapper {
   width          : 100%;
   display        : flex;
   margin-top     : 0px;
@@ -159,15 +159,27 @@ button {
 // new style
 .header-wrapper {
   &>.header {
-    margin         : 0;
-    padding        : 16px 60px;
+    width          : 90%;
+    max-width      : 90%;
+    margin         : 0 auto;
+    padding        : 15px 0;
     display        : flex;
     justify-content: space-between;
     align-items    : center;
 
+    .logo svg {
+      @media (max-width: 425px) {
+        width: 90%;
+      }
+    }
+
     .topnav {
-      display    : flex;
+      display    : none;
       align-items: center;
+
+      @media (min-width: 1280px) {
+        display: flex;
+      }
 
       &>div:first-child {
         display    : flex;
@@ -194,7 +206,7 @@ button {
         margin-right: 18px;
       }
 
-      .btn-play {
+      .btn--play {
         padding       : 5px 27px;
         background    : linear-gradient(101.75deg, #3D56EF 6.43%, #AB43CA 108.38%);
         border-radius : 6px;
@@ -358,13 +370,13 @@ button {
   }
 }
 
-.btn-shadow {
+.btn--shadow {
   &:hover {
     box-shadow: 1px 1px 20px 0 #174aff;
   }
 }
 
-.btn-hover-pointer:hover {
+.btn--hover-pointer:hover {
   cursor: pointer;
 }
 
@@ -387,5 +399,9 @@ button {
 
   &.error {
     background-color: #d32f2f;
+  }
+
+  &.warning {
+    background-color: #d35b2f;
   }
 }

@@ -1,4 +1,9 @@
 .timeline-wrapper {
+    margin-top: 50px;
+
+    @media (max-width: 1024px) {
+        display: none;
+    }
 
     .timeline {
         width          : 60%;

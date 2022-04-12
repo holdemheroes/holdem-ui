@@ -1,3 +1,5 @@
+import Moralis from "moralis"
+
 export const n6 = new Intl.NumberFormat("en-us", {
   style: "decimal",
   minimumFractionDigits: 0,
@@ -89,3 +91,9 @@ export const tokenValue = (value, decimals) => (decimals ? value / Math.pow(10, 
  * @returns {string}
  */
 export const tokenValueTxt = (value, decimals, symbol) => `${n4.format(tokenValue(value, decimals))} ${symbol}`;
+
+export const weiToEthDp = (n, d) => {
+  const f = Math.pow(10, d)
+  const eth = parseFloat(Moralis.Units.FromWei(n !== null ? n : "0"))
+  return Math.ceil(eth * f) / f
+}

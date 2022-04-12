@@ -16,9 +16,25 @@ code {
     monospace;
 }
 
-.perfect_center {
+.perfect-center {
   position : absolute;
   left     : 50%;
   top      : 50%;
   transform: translate(-50%, -50%);
+}
+
+.arrow-up {
+  width        : 0;
+  height       : 0;
+  border-left  : 7px solid transparent;
+  border-right : 7px solid transparent;
+  border-bottom: 7px solid #262429;
+}
+
+.arrow-down {
+  width       : 0;
+  height      : 0;
+  border-left : 7px solid transparent;
+  border-right: 7px solid transparent;
+  border-top  : 7px solid #262429;
 }

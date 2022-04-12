@@ -1,143 +1,213 @@
-import React, { useState } from "react";
+import React, { useEffect, useState, useRef } from "react";
 import { NavLink } from "react-router-dom";
 import "./style.scss";
 import AnimateButton from "../../components/AnimateButton";
 import Timeline from "../../components/Timeline";
 import { useNFTSaleInfo } from "../../hooks/useNFTSaleInfo";
+import { useChainData } from "../../hooks/useChainData";
 import Countdown from "react-countdown";
 import { useMoralis } from "react-moralis";
 import abis from "../../helpers/contracts";
 import { getHoldemHeroesAddress } from "../../helpers/networks";
-import { openNotification } from "../../helpers/notifications";
+import {
+  extractErrorMessage,
+  openNotification,
+} from "../../helpers/notifications";
 import { Roadmap } from "../../roadmap";
 import { BigNumber } from "@ethersproject/bignumber";
-import { getGameIsLive } from "../../helpers/networks";
+import { getHehIsLive } from "../../helpers/networks";
+import { Spin, Tooltip } from "antd";
+import { MAX_TOTAL_SUPPLY } from "../../helpers/constant";
+import { flipCardRenderer, simpleTextRenderer } from "../../helpers/timers";
+import { weiToEthDp } from "../../helpers/formatters";
+import PriceEChart from "../../components/Sale/PriceEchart";
 
 export default function Home() {
   const {
-    // startTime,
+    startBlockNum,
     revealTime,
-    // startingIndex,
-    // maxPerTxOrOwner,
+    startingIndex,
     pricePerToken,
     totalSupply,
-    // dataInitialised
+    maxPerTxOrOwner,
+    dataInitialised: nftSaleDataInitialised,
+    startingIndexFetch,
+    pricePerTokenFetch,
+    totalSupplyFetch,
+    initData: initNftSaleData,
   } = useNFTSaleInfo();
 
-  const now = Math.floor(Date.now() / 1000);
+  const { Moralis, chainId, account, isAuthenticated, isWeb3Enabled } =
+    useMoralis();
+  const { currentBlock, refresh: refreshCurrentBlock } = useChainData();
 
-  // const saleStartDiff = startTime - now;
-  const revealTimeDiff = revealTime - now;
-  // const startIdx = parseInt(startingIndex, 10);
-
-  const { Moralis, chainId } = useMoralis();
-  const gameIsLive = getGameIsLive(chainId);
+  const [saleStartBlockDiff, setSaleStartBlockDiff] = useState(null);
+  const [revealTimeDiff, setRevealTimeDiff] = useState(null);
+  const [saleStartTime, setSaleStartTime] = useState(0);
+  const [saleTimeInitialised, setSaleTimeInitialised] = useState(false);
+  const [hehContractAddress, setHehContractAddress] = useState(null);
+  const [hehContract, setHehContract] = useState(null);
+  const [hehIsLive, setHehIsLive] = useState(false);
+  const [startIdx, setStartIdx] = useState(0);
 
   const abi = abis.heh_nft;
-  const contractAddress = getHoldemHeroesAddress(chainId);
-  const [maxNumToMint, setMaxNumToMint] = useState(6);
 
-  // const MAX_TOTAL_SUPPLY = 1326;
+  const mintPriceRef = useRef(0);
+
+  useEffect(() => {
+    if (!nftSaleDataInitialised && chainId) {
+      initNftSaleData();
+    }
+    if (startingIndex?.toNumber() > 0) {
+      setStartIdx(startingIndex.toNumber());
+    }
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [chainId, nftSaleDataInitialised, startingIndex]);
+
+  useEffect(() => {
+    if (currentBlock > 0 && startBlockNum && !saleTimeInitialised && revealTime) {
+      const now = Math.floor(Date.now() / 1000);
+      const blockDiff = startBlockNum.toNumber() - currentBlock;
+      const start = now + blockDiff * 15;
+      setSaleStartTime(start); // estimate based on 1 block every 15 seconds
+      setSaleStartBlockDiff(blockDiff);
+      setRevealTimeDiff(revealTime - now);
+      setSaleTimeInitialised(true);
+    }
+  }, [currentBlock, startBlockNum, saleTimeInitialised, revealTime]);
+
+  useEffect(() => {
+    const timeout = setTimeout(() => {
+      startingIndexFetch();
+      pricePerTokenFetch();
+      totalSupplyFetch();
+      refreshCurrentBlock();
+      const now = Math.floor(Date.now() / 1000);
+      if (startBlockNum && currentBlock > 0) {
+        setSaleStartBlockDiff(startBlockNum.toNumber() - currentBlock);
+      }
+      if (revealTime > 0) {
+        setRevealTimeDiff(revealTime - now);
+      }
+      if (startingIndex?.toNumber() > 0) {
+        setStartIdx(startingIndex.toNumber());
+      }
+    }, 5000);
+
+    return () => {
+      clearTimeout(timeout);
+    };
+  });
+
+  useEffect(() => {
+    (async () => {
+      if (
+        chainId &&
+        !hehContract &&
+        !hehContractAddress &&
+        isAuthenticated &&
+        isWeb3Enabled
+      ) {
+        try {
+          const isLive = getHehIsLive(chainId);
+          setHehIsLive(isLive);
+          if (!isLive) {
+            return;
+          }
+          const hehAddr = getHoldemHeroesAddress(chainId);
+          setHehContractAddress(hehAddr);
+          const ethers = Moralis.web3Library;
+          const web3Provider = await Moralis.enableWeb3();
+          const contract = new ethers.Contract(
+            hehAddr,
+            abi,
+            web3Provider.getSigner()
+          );
+          setHehContract(contract);
+        } catch (e) {
+          console.log(e);
+        }
+      }
+    })();
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [
+    chainId,
+    hehContract,
+    hehContractAddress,
+    isAuthenticated,
+    isWeb3Enabled,
+  ]);
 
   async function preRevealMint(event) {
     event.preventDefault();
+    if (!hehIsLive) {
+      return;
+    }
     const formData = new FormData(event.target),
       formDataObj = Object.fromEntries(formData.entries());
     const numToMint = parseInt(formDataObj.mint_amount, 10);
-    const cost = BigNumber.from(pricePerToken).mul(BigNumber.from(numToMint));
-
-    const options = {
-      contractAddress,
-      functionName: "mintNFTPreReveal",
-      abi,
-      msgValue: cost.toString(),
-      params: {
-        numberOfNfts: numToMint,
-      },
-    };
-
-    try {
-      const tx = await Moralis.executeFunction({
-        awaitReceipt: false,
-        ...options,
-      });
-      openNotification({
-        message: "🔊 New Transaction",
-        description: `📃 Tx Hash: ${tx.hash}`,
-        type: "success",
-      });
-    } catch (error) {
+    let mintPrice = parseFloat(formDataObj.mint_price);
+    if (isNaN(mintPrice) || mintPrice === 0.0) {
       openNotification({
         message: "🔊 Error",
-        description: `📃 Receipt: ${error.message}`,
+        description: "Mint price cannot be zero!",
         type: "error",
       });
-      console.log(error);
+      return;
     }
-    // tx.on("transactionHash", (hash) => {
-    //   openNotification({
-    //     message: "🔊 New Transaction",
-    //     description: `📃 Tx Hash: ${hash}`,
-    //     type: "success"
-    //   });
-    // })
-    //   .on("receipt", (receipt) => {
-    //     openNotification({
-    //       message: "🔊 New Receipt",
-    //       description: `📃 Receipt: ${receipt.transactionHash}`,
-    //       type: "success"
-    //     });
-    //   })
-    //   .on("error", (error) => {
-    //     openNotification({
-    //       message: "🔊 Error",
-    //       description: `📃 Receipt: ${error.toString()}`,
-    //       type: "error"
-    //     });
-    //     console.log(error);
-    //   });
-  }
+    mintPrice = Moralis.Units.ETH(formDataObj.mint_price);
 
-  const renderer = ({ days, hours, minutes, seconds, completed }) => {
-    if (completed) {
-      // Render a completed state
-      return null;
-    } else {
-      // Render a countdown
-      return (
-        <div className="time_card-wrapper">
-          <div className="time_card">
-            <p>{days < 10 ? "0" + days : days}</p>
-            <p>days</p>
-          </div>
-          <div className="time_card">
-            <p>{hours < 10 ? "0" + hours : hours}</p>
-            <p>hours</p>
-          </div>
-          <div className="time_card">
-            <p>{minutes < 10 ? "0" + minutes : minutes}</p>
-            <p>minutes</p>
-          </div>
-        </div>
-      );
-    }
-  };
+    const cost = BigNumber.from(mintPrice).mul(BigNumber.from(numToMint));
+
+    hehContract.estimateGas
+      .mintNFTPreReveal(numToMint, { value: cost, from: account })
+      .then(function (estimate) {
+        return estimate;
+      })
+      .then(function (estimate) {
+        // increase gas limit to compensate for NFT price fluctuations
+        const gasLimit = estimate.add(BigNumber.from("10000"));
+        hehContract
+          .mintNFTPreReveal(numToMint, { value: cost, from: account, gasLimit })
+          .then(function (tx) {
+            openNotification({
+              message: "🔊 New Transaction",
+              description: `📃 Tx Hash: ${tx.hash}`,
+              type: "success",
+            });
+          })
+          .catch(function (e) {
+            openNotification({
+              message: "🔊 Error",
+              description: `📃 ${extractErrorMessage(e)}`,
+              type: "error",
+            });
+            console.log(e);
+          });
+      })
+      .catch(function (e) {
+        openNotification({
+          message: "🔊 Error",
+          description: `📃 ${extractErrorMessage(e)}`,
+          type: "error",
+        });
+        console.log(e);
+      });
+  }
 
   return (
     <>
       <div className="header-background"></div>
       <div className="main-wrapper">
-        <div className="section--nft_poker-wrapper" id="section--nft_poker">
-          <div className="section--nft_poker">
-            <div>
-              <p>NFT Poker</p>
-              <p>
-                Holdem Heroes is the on-chain NFT Poker game.
+        <div className="section__nft-poker--wrapper" id="section__nft-poker">
+          <div className="section__nft-poker">
+            <div className="section__nft-poker--left">
+              <p className="title">NFT Poker</p>
+              <p className="desc">
+                Holdem Heroes is the on-chain NFT Poker game. <br />
+                Mint the {MAX_TOTAL_SUPPLY} Hole Card combinations as NFTs.{" "}
                 <br />
-                Mint the 1326 Hole Card combinations as NFTs.
-                <br />
-                Then play Texas Hold&#x27;em with them!
-                <br />
+                Then play Texas Hold&#x27;em with them! <br />
                 Mint price is dynamic with{" "}
                 <a
                   href="http://dynamicdrops.xyz"
@@ -148,45 +218,111 @@ export default function Home() {
                 </a>
                 .
               </p>
-              <div className="mint_poker_hands-wrapper">
-                <div className="mint_poker_hands">
-                  <form onSubmit={(e) => preRevealMint(e)} name="mint-form">
-                    <p>Mint Poker Hands</p>
-                    <div>
-                      <select id="mint_num" name={"mint_amount"}>
-                        {Array.from(
-                          { length: maxNumToMint },
-                          (_, i) => i + 1
-                        ).map((item, i) => (
-                          <option value="1" key={i}>
-                            {item}
-                          </option>
-                        ))}
-                      </select>
-                      <p>
-                        Ξ{" "}
-                        {Moralis.Units.FromWei(
-                          pricePerToken !== null ? pricePerToken : "0"
-                        )}
-                      </p>
-                    </div>
-                    <p>* Max {maxNumToMint} NFTs per address</p>
-                    <input
-                      className="btn-shadow btn-hover-pointer"
-                      type="submit"
-                      value={
-                        gameIsLive && chainId !== null ? "Mint" : "Coming Soon"
-                      }
-                      disabled={!gameIsLive || chainId === null}
-                    />
-                  </form>
+              <div className="video-container--16x9 mobile">
+                <div className="inner-wrapper">
+                  <iframe
+                    src="https://www.youtube.com/embed/IRiglLJ_1Ak"
+                    frameBorder="0"
+                    allow="autoplay; encrypted-media"
+                    allowFullScreen
+                    title="video"
+                  />
                 </div>
-                <p>{`Total NFTs minted: ${
-                  totalSupply !== null ? totalSupply : "0"
-                }/1326`}</p>
+              </div>
+              <div className="mint-poker-hands--wrapper">
+                <div className="mint-poker-hands">
+                  {
+                    chainId === null ? (
+                      <p className="connect-wallet-to-mint">
+                        Connect Wallet to Mint!
+                      </p>
+                    ) : (
+                      hehIsLive ? (
+                        nftSaleDataInitialised && revealTimeDiff !== null ? (
+                          revealTimeDiff > 0 ? (
+                            <form
+                              onSubmit={(e) => preRevealMint(e)}
+                              id="mint-form"
+                              name="mint-form"
+                            >
+                              <p className="title">Mint Poker Hands</p>
+                              <p className="current-price">
+                                <Tooltip title="Click to set mint price as current token price">
+                                  <span
+                                    onClick={() => {
+                                      mintPriceRef.current.value = weiToEthDp(
+                                        pricePerToken,
+                                     5
+                                      );
+                                    }}
+                                  >
+                                    Use Current Price:
+                                  </span>
+                                </Tooltip>{" Ξ"}
+                                {weiToEthDp(pricePerToken, 5)}
+                              </p>
+                              <div className="input-area">
+                                <select id="mint_num" name={"mint_amount"}>
+                                  {Array.from(
+                                    { length: maxPerTxOrOwner.toNumber() },
+                                    (_, i) => i + 1
+                                  ).map((item, i) => (
+                                    <option value={item} key={i}>
+                                      {item}
+                                    </option>
+                                  ))}
+                                </select>
+                                Ξ<input
+                                type={"text"}
+                                ref={mintPriceRef}
+                                name={"mint_price"}
+                                placeholder="Price per token"
+                              /> Each
+                              </div>
+                              <p>* Max {maxPerTxOrOwner.toNumber()} NFTs per address</p>
+                              <button
+                                className="btn-shadow btn-hover-pointer btn--mint"
+                                form="mint-form"
+                                disabled={
+                                  saleStartBlockDiff > 0 ||
+                                  revealTimeDiff <= 0 ||
+                                  totalSupply >= MAX_TOTAL_SUPPLY
+                                }
+                              >
+                                {saleStartBlockDiff > 0 ? (
+                                  <Countdown
+                                    date={saleStartTime * 1000}
+                                    renderer={simpleTextRenderer}
+                                  />
+                                ) : (
+                                  "Mint"
+                                )}
+                              </button>
+                            </form>
+                          ) : (
+                            <p className="connect-wallet-to-mint">
+                              Blind Mint Sale Ended
+                            </p>
+                          )
+                        ) : (
+                          <Spin />
+                        )
+                      ) : (
+                        <p className="connect-wallet-to-mint">
+                          Mint Sale coming soon!
+                        </p>
+                      )
+                    )
+                  }
+                </div>
+                {
+                  hehIsLive && nftSaleDataInitialised && <p className="total-nfts-minted">{`Total NFTs minted: ${
+                    totalSupply !== null ? totalSupply : "0"
+                  }/${MAX_TOTAL_SUPPLY}`}</p>
+                }
               </div>
             </div>
-            <div>
+            <div className="section__nft-poker--right">
               <div className="video-container--16x9">
                 <div className="inner-wrapper">
                   <iframe
@@ -200,25 +336,35 @@ export default function Home() {
               </div>
               {revealTimeDiff > 0 ? (
                 <>
-                  <p>NFT Distribution and Reveal in</p>
-                  <Countdown date={revealTime * 1000} renderer={renderer} />
+                  <p className="countdown__title">
+                    NFT Distribution and Reveal in
+                  </p>
+                  <Countdown
+                    date={revealTime * 1000}
+                    renderer={flipCardRenderer}
+                  />
                 </>
               ) : null}
             </div>
           </div>
 
-          <div style={{ marginTop: "160px" }}>
-            <Timeline />
+          <div className="price-chart-area">
+            {saleStartBlockDiff <= 0 &&
+              revealTimeDiff > 0 &&
+              startIdx === 0 &&
+              totalSupply < MAX_TOTAL_SUPPLY && <PriceEChart />}
           </div>
+
+          <Timeline />
         </div>
 
-        <div className="section--open_source">
-          <div>
-            <p>Open Source Poker NFTs</p>
-            <div>
+        <div className="section__open-source">
+          <div className="section__open-source--text">
+            <p className="title">Open Source Poker NFTs</p>
+            <div className="desc">
               <p>
-                The 52 cards and 1326 card pair NFTs are available for open
-                source use.
+                The 52 cards and {MAX_TOTAL_SUPPLY} card pair NFTs are available
+                for open source use.
               </p>
               <p>
                 They can be used freely in any way.
@@ -256,14 +402,14 @@ export default function Home() {
               </p>
             </div>
           </div>
-          <div>
+          <div className="section__open-source--img">
             <img src="../../assets/images/cardshq.png" alt="" />
           </div>
         </div>
 
-        <div className="section--rest-wrapper">
-          <div className="section--rest">
-            <div className="game_play">
+        <div className="section__rest--wrapper">
+          <div className="section__rest">
+            <div className="game-play">
               <img
                 src="../assets/images/tablehq.png"
                 loading="lazy"
@@ -271,9 +417,9 @@ export default function Home() {
                 sizes="(max-width: 479px) 100vw, (max-width: 767px) 90vw, (max-width: 991px) 650px, (max-width: 2765px) 60vw, 1659px"
                 alt=""
               />
-              <div>
-                <p>Gameplay</p>
-                <div>
+              <div className="game-play__text">
+                <p className="title">Gameplay</p>
+                <div className="desc">
                   <p>
                     Poker gameplay starts immediately after the NFT sale
                     concludes. We are proud to be one of few projects with NFT
@@ -287,7 +433,8 @@ export default function Home() {
                   </p>
                   <p>
                     Games take place on both the Ethereum and Polygon
-                    blockchains, can start at any time, and include up to 1326
+                    blockchains, can start at any time, and include up to{" "}
+                    {MAX_TOTAL_SUPPLY}
                     players.
                   </p>
                   <p>
@@ -295,49 +442,49 @@ export default function Home() {
                     multiple games in parallel.
                   </p>
                 </div>
-                <div>
-                  <NavLink to="/Play" className="btn-play">
+                <div className="game-play__btn-group">
+                  <NavLink to="/Play" className="btn--play">
                     Play Now
                   </NavLink>
-                  <NavLink to="/Rules" className="btn-learn">
+                  <NavLink to="/Rules" className="btn--learn">
                     Learn More
                   </NavLink>
                 </div>
               </div>
             </div>
 
-            <div className="roadmap-wrapper">
-              <div className="roadmap-text">
+            <div className="roadmap--wrapper">
+              <div className="roadmap__text">
                 <p className="title">Roadmap</p>
-                <p className="sub_title">MORE GAMES</p>
+                <p className="subtitle">MORE GAMES</p>
                 <p className="desc">
                   Further games of poker and other card games with the
                   open-source card contract
                 </p>
-                <p className="sub_title">MORE CHAINS</p>
+                <p className="subtitle">MORE CHAINS</p>
                 <p className="desc">
                   Deploying games to EVM chains by community vote (AVAX, BSC,
                   Fantom...)
                 </p>
-                <p className="sub_title">MORE DECKS</p>
+                <p className="subtitle">MORE DECKS</p>
                 <p className="desc">
                   Whitelisting card decks for custom-branded poker games
                 </p>
-                <p className="sub_title">GOVERNANCE BY DAO</p>
+                <p className="subtitle">GOVERNANCE BY DAO</p>
                 <p className="desc">
                   Decentralizing governance to community ownership by
                   formalizing the DAO structure
                 </p>
               </div>
 
-              <div className="roadmap-img">
+              <div className="roadmap__img">
                 <Roadmap />
               </div>
             </div>
 
-            <div>
+            <div className="animation-btn-group">
               <AnimateButton>
-                <a href="#section--nft_poker" rel="noreferrer">
+                <a href="#section__nft-poker" rel="noreferrer">
                   Mint Poker Nfts
                 </a>
               </AnimateButton>
@@ -356,7 +503,7 @@ export default function Home() {
             </div>
           </div>
 
-          <div className="vor-wrapper">
+          <div className="vor--wrapper">
             <p>
               Powered by{" "}
               <a

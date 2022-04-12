@@ -11,7 +11,7 @@
 }
 
 .main-wrapper {
-    .section--nft_poker-wrapper {
+    .section__nft-poker--wrapper {
         padding-top        : 30px;
         background-image   : url("../../assets/images/herocircle.png");
         background-repeat  : no-repeat;
@@ -19,15 +19,38 @@
         background-size    : cover;
         padding-bottom     : 100px;
 
-        .section--nft_poker {
+        @media (max-width: 640px) {
+            padding-bottom: 50px;
+        }
+
+        .section__nft-poker {
             max-width      : 90%;
             margin         : 0 auto;
             display        : flex;
             justify-content: space-between;
             align-items    : center;
 
-            &>div:first-child {
-                &>p:first-child {
+            @media (max-width: 1024px) {
+                flex-wrap: wrap;
+            }
+
+            &>.section__nft-poker--left {
+                @media (max-width: 1024px) {
+                    // order     : 2;
+                    // margin-top: 50px;
+                    width     : 100%;
+                    text-align: center;
+                }
+
+                @media (max-width: 640px) {
+                    text-align: justify;
+
+                    br {
+                        display: none;
+                    }
+                }
+
+                &>p.title {
                     margin        : 0 0 10px 0;
                     font-family   : "Josefin Sans", sans-serif;
                     font-size     : 75px;
@@ -35,9 +58,19 @@
                     color         : #fff;
                     line-height   : 85px;
                     letter-spacing: 3px;
+
+                    @media (max-width: 1024px) {
+                        font-size  : 55px;
+                        line-height: 65px;
+                    }
+
+                    @media (max-width: 640px) {
+                        font-size  : 40px;
+                        line-height: 50px;
+                    }
                 }
 
-                &>p:nth-child(2) {
+                &>p.desc {
                     font-family: Karla, sans-serif;
                     font-size  : 18px;
                     font-weight: 400;
@@ -45,13 +78,22 @@
                     line-height: 28px;
                 }
 
-                &>.mint_poker_hands-wrapper {
+                &>.mint-poker-hands--wrapper {
                     display   : flex;
                     max-width : 80%;
                     margin-top: 40px;
                     flex-wrap : wrap;
 
-                    &>.mint_poker_hands {
+                    @media (max-width: 1024px) {
+                        margin-left : auto;
+                        margin-right: auto;
+                    }
+
+                    @media (max-width: 640px) {
+                        max-width: 100%;
+                    }
+
+                    &>.mint-poker-hands {
                         width           : 100%;
                         padding         : 20px;
                         border-radius   : 10px;
@@ -59,7 +101,7 @@
                         box-shadow      : 0 0 20px 0 hsl(0deg 0% 100% / 35%);
 
                         form {
-                            &>p:first-child {
+                            &>p.title {
                                 text-align    : center;
                                 font-family   : Redtone, sans-serif;
                                 font-size     : 22px;
@@ -68,7 +110,25 @@
                                 border-bottom : 0.4px solid rgba(0, 0, 0, 0.15);
                             }
 
-                            &>div {
+                            &>p.current-price {
+                                text-align : center;
+                                font-family: Karla, sans-serif;
+                                font-size  : 20px;
+                                color      : rgba(18, 21, 31, 0.77);
+
+                                &>span {
+                                    padding         : 5px;
+                                    background-color: #1890ff;
+                                    color           : white;
+                                    border-radius   : 5px;
+
+                                    &:hover {
+                                        cursor: pointer;
+                                    }
+                                }
+                            }
+
+                            &>.input-area {
                                 display        : flex;
                                 justify-content: space-between;
                                 align-items    : center;
@@ -90,7 +150,7 @@
                                     }
                                 }
 
-                                &>p:last-child {
+                                &>input[type="text"] {
                                     display        : flex;
                                     justify-content: center;
                                     align-items    : center;
@@ -103,17 +163,18 @@
                                     font-family    : Karla, sans-serif;
                                     color          : #333333;
                                     font-weight    : bold;
-                                }
-
-                                &+p {
-                                    margin-top : 10px;
-                                    font-family: Karla, sans-serif;
-                                    font-size  : 15px;
-                                    color      : rgba(0, 0, 0, 0.45);
+                                    padding        : 15px 10px;
                                 }
                             }
 
-                            &>input[type="submit"] {
+                            .max-per-address {
+                                margin-top : 10px;
+                                font-family: Karla, sans-serif;
+                                font-size  : 15px;
+                                color      : rgba(0, 0, 0, 0.45);
+                            }
+
+                            &>.btn--mint {
                                 width           : 100%;
                                 margin-top      : 20px;
                                 padding-top     : 16px;
@@ -131,11 +192,25 @@
                                     background-color: transparent;
                                     background-image: linear-gradient(117deg, #2a59ff, #462bf5);
                                 }
+
+                                &:disabled:hover {
+                                    cursor: not-allowed;
+                                }
                             }
+                        }
+
+                        .connect-wallet-to-mint {
+                            font-family: Karla, sans-serif;
+                            font-size  : 20px;
+                            line-height: 25px;
+                            font-weight: bold;
+                            color      : black;
+                            margin     : 0;
+                            text-align : center;
                         }
                     }
 
-                    &>p:last-child {
+                    &>p.total-nfts-minted {
                         width      : 100%;
                         margin-top : 10px;
                         font-family: Karla, sans-serif;
@@ -145,7 +220,7 @@
                         text-align : center;
                     }
 
-                    .coming_soon-title {
+                    .coming-soon__title {
                         font-family: "Josefin Sans", sans-serif;
                         font-size  : 45px;
                         color      : #fff;
@@ -154,7 +229,7 @@
                         width      : 100%;
                     }
 
-                    .coming_soon-img {
+                    .coming-soon__img {
                         display: block;
                         width  : 70%;
                         height : auto;
@@ -163,7 +238,7 @@
                 }
             }
 
-            &>div:last-child {
+            &>.section__nft-poker--right {
                 width          : 50%;
                 max-width      : 50%;
                 display        : flex;
@@ -171,7 +246,24 @@
                 justify-content: center;
                 align-items    : center;
 
-                &>p {
+                @media (max-width: 1280px) and (min-width: 1024px) {
+                    width    : 70%;
+                    max-width: 70%;
+                }
+
+                @media (max-width: 1024px) {
+                    width       : 90%;
+                    max-width   : 90%;
+                    // order    : 1;
+                    margin      : 0 auto;
+                }
+
+                @media (max-width: 640px) {
+                    width    : 100%;
+                    max-width: 100%;
+                }
+
+                &>p.countdown__title {
                     margin        : 20px 0 10px 0;
                     font-family   : "Josefin Sans", sans-serif;
                     font-size     : 22px;
@@ -182,12 +274,12 @@
                     letter-spacing: 1px;
                 }
 
-                &>.time_card-wrapper {
+                &>.time-card--wrapper {
                     display        : flex;
                     justify-content: center;
                     align-items    : center;
 
-                    &>.time_card {
+                    &>.time-card {
                         margin          : 0 10px;
                         padding         : 20px 20px;
                         border-radius   : 10px;
@@ -218,9 +310,15 @@
                 }
             }
         }
+
+        .price-chart-area {
+            width    : 90%;
+            max-width: 90%;
+            margin   : 50px auto 0 auto;
+        }
     }
 
-    .section--open_source {
+    .section__open-source {
         display            : flex;
         justify-content    : space-between;
         align-items        : center;
@@ -233,13 +331,39 @@
         background-size    : cover;
         background-repeat  : no-repeat;
 
+        @media (max-width: 1024px) {
+            flex-wrap: wrap;
+        }
+
         &>div {
             width    : 45%;
             max-width: 45%;
 
-            &:first-child {
-                &>p {
-                    margin-bottom : 30 px;
+            @media (max-width: 1280px) and (min-width: 1024px) {
+                width    : 50%;
+                max-width: 50%;
+            }
+
+            @media (max-width: 1024px) {
+                width       : 90%;
+                max-width   : 90%;
+                margin-left : auto;
+                margin-right: auto;
+            }
+
+            @media (max-width: 640px) {
+                width    : 100%;
+                max-width: 100%;
+            }
+
+            &.section__open-source--text {
+                @media (max-width: 1024px) {
+                    // order     : 2;
+                    // margin-top: 50px;
+                }
+
+                &>p.title {
+                    margin-bottom : 30px;
                     font-family   : "Josefin Sans", sans-serif;
                     font-size     : 70px;
                     font-weight   : 600;
@@ -247,15 +371,36 @@
                     line-height   : 75px;
                     letter-spacing: 3px;
                     text-align    : left;
+
+                    @media (max-width: 1024px) {
+                        text-align : center;
+                        font-size  : 55px;
+                        line-height: 65px;
+                    }
+
+                    @media (max-width: 640px) {
+                        text-align : left;
+                        font-size  : 40px;
+                        line-height: 50px;
+                    }
                 }
 
-                &>div {
+                &>.desc {
                     &>p {
                         max-width  : 80%;
                         font-family: Karla, sans-serif;
                         font-size  : 17px;
                         color      : hsla(0, 0%, 100%, 0.81);
                         line-height: 27px;
+
+                        @media (max-width: 1024px) {
+                            text-align: center;
+                            max-width : 100%;
+                        }
+
+                        @media (max-width: 640px) {
+                            text-align: justify;
+                        }
                     }
 
                     a {
@@ -269,7 +414,11 @@
                 }
             }
 
-            &:last-child {
+            &.section__open-source--img {
+                @media (max-width: 1024px) {
+                    // order: 1;
+                }
+
                 &>img {
                     display  : block;
                     max-width: 100%;
@@ -279,26 +428,48 @@
         }
     }
 
-    .section--rest-wrapper {
+    .section__rest--wrapper {
         background-image: url("../../assets/images/section3bg.png");
         background-size : cover;
 
-        &>.section--rest {
+        &>.section__rest {
             margin: 0 auto;
 
             &>div {
-                &.game_play {
+                &.game-play {
                     width          : 100%;
                     display        : flex;
                     justify-content: space-between;
-                    align-items    : flex-start;
+                    align-items    : center;
 
-                    &>div:last-child {
+                    @media (max-width: 1024px) {
+                        flex-wrap: wrap;
+                    }
+
+                    &>img {
+                        display: block;
+                        margin : auto;
+
+                        @media (max-width: 1024px) {
+                            order: 2;
+                        }
+                    }
+
+                    &>.game-play__text {
                         max-width  : 40%;
                         margin-left: 0;
-                        padding    : 228px 40px 0 20px;
+                        padding    : 0 40px 0 20px;
 
-                        &>p:first-child {
+                        @media (max-width: 1024px) {
+                            max-width   : 90%;
+                            margin-left : auto;
+                            margin-right: auto;
+                            margin-top  : 50px;
+                            padding     : 0;
+                            order       : 1;
+                        }
+
+                        &>p.title {
                             margin-bottom : 30px;
                             font-family   : "Josefin Sans", sans-serif;
                             font-size     : 70px;
@@ -307,21 +478,53 @@
                             line-height   : 75px;
                             letter-spacing: 3px;
                             text-align    : left;
+
+                            @media (max-width: 1024px) {
+                                text-align : center;
+                                font-size  : 55px;
+                                line-height: 65px;
+                            }
+
+                            @media (max-width: 640px) {
+                                text-align : left;
+                                font-size  : 40px;
+                                line-height: 50px;
+                            }
                         }
 
-                        &>div:nth-child(2)>p {
+                        &>.desc>p {
                             max-width  : 80%;
                             font-family: Karla, sans-serif;
                             color      : hsla(0, 0%, 100%, 0.81);
                             font-size  : 17px;
                             line-height: 27px;
+
+                            @media (max-width: 1280px) {
+                                max-width: 100%;
+                            }
+
+                            @media (max-width: 1024px) {
+                                text-align: center;
+                            }
+
+                            @media (max-width: 640px) {
+                                text-align: justify;
+                            }
                         }
 
-                        &>div:last-child {
+                        &>.game-play__btn-group {
                             display        : flex;
                             justify-content: flex-start;
                             align-items    : center;
                             margin-top     : 20px;
+
+                            @media (max-width: 1024px) {
+                                justify-content: center;
+                            }
+
+                            @media (max-width: 640px) {
+                                justify-content: flex-start;
+                            }
 
                             &>* {
                                 display        : flex;
@@ -337,7 +540,7 @@
                                 letter-spacing : 0px;
                                 transition     : all 0.1s ease-out;
 
-                                &.btn-play {
+                                &.btn--play {
                                     background-color: #133cce;
                                     border-radius   : 6px;
 
@@ -350,7 +553,7 @@
                     }
                 }
 
-                &.roadmap-wrapper {
+                &.roadmap--wrapper {
                     display        : flex;
                     align-items    : center;
                     justify-content: space-between;
@@ -360,7 +563,40 @@
                     margin-left    : auto;
                     margin-right   : auto;
 
-                    .roadmap-text {
+                    @media (max-width: 1024px) {
+                        flex-wrap : wrap;
+                        margin-top: 100px;
+                    }
+
+                    @media (max-width: 640px) {
+                        margin-top: 50px;
+                    }
+
+                    .roadmap__text {
+                        margin-right: 50px;
+
+                        @media (max-width: 1024px) {
+                            width          : 90%;
+                            max-width      : 90%;
+                            // order       : 2;
+                            margin-left    : auto;
+                            margin-right   : auto;
+                            // margin-top  : 50px;
+
+                            * {
+                                text-align: center;
+                            }
+                        }
+
+                        @media (max-width: 640px) {
+                            width    : 100%;
+                            max-width: 100%;
+
+                            * {
+                                text-align: left;
+                            }
+                        }
+
                         * {
                             color: white;
                         }
@@ -374,9 +610,21 @@
                             line-height   : 75px;
                             letter-spacing: 3px;
                             text-align    : left;
+
+                            @media (max-width: 1024px) {
+                                text-align : center;
+                                font-size  : 55px;
+                                line-height: 65px;
+                            }
+
+                            @media (max-width: 640px) {
+                                text-align : left;
+                                font-size  : 40px;
+                                line-height: 50px;
+                            }
                         }
 
-                        .sub_title {
+                        .subtitle {
                             font-family  : Karla, sans-serif;
                             font-size    : 25px;
                             line-height  : 29px;
@@ -391,13 +639,45 @@
                             margin-bottom: 30px;
                         }
                     }
+
+                    .roadmap__img {
+                        @media (max-width: 1024px) {
+                            width          : 90%;
+                            max-width      : 90%;
+                            // order       : 1;
+                            margin-left    : auto;
+                            margin-right   : auto;
+
+                            &>svg {
+                                width: 100%;
+                            }
+                        }
+
+                        @media (max-width: 640px) {
+                            width    : 100%;
+                            max-width: 100%;
+
+                            &>svg {
+                                width: 100%;
+                            }
+                        }
+                    }
                 }
 
-                &:last-child {
-                    max-width     : 28%;
+                &.animation-btn-group {
+                    max-width     : 30%;
                     margin        : 0 auto;
                     margin-top    : 100px;
                     padding-bottom: 100px;
+
+                    @media (max-width: 1024px) {
+                        max-width: 50%;
+                    }
+
+                    @media (max-width: 640px) {
+                        max-width     : 90%;
+                        padding-bottom: 0;
+                    }
                 }
             }
         }
@@ -420,6 +700,18 @@
         &>iframe {
             width : 100%;
             height: 100%;
+        }
+    }
+
+    &.mobile {
+        display: none;
+    }
+
+    @media (max-width: 1024px) {
+        display: none;
+
+        &.mobile {
+            display: block;
         }
     }
 }

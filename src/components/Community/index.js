@@ -1,5 +1,12 @@
 import "./style.scss";
-import { DiscordLogo, TwitterLogo, OpenSeaLogo, DocumentationLogo, MediumLogo } from "./Logos.jsx";
+import {
+  DiscordLogo,
+  TwitterLogo,
+  OpenSeaLogo,
+  DocumentationLogo,
+  MediumLogo,
+} from "./Logos.jsx";
+import { useState } from "react";
 
 const menuItems = [
   {
@@ -34,24 +41,42 @@ const menuItems = [
   },
 ];
 
-function Community() {
-  return (
-    <div className="dropdown-wrapper community">
-      <button className="dropdown-btn">Community</button>
-      <ul className="dropdown-body">
-        {
-          menuItems.map((item) => (
-            <li key={item.key} className="dropdown-item">
-              <a href={item.link} target="_blank" rel="noreferrer">
-                {item.icon}
-                <span>{item.value}</span>
-              </a>
-            </li>
-          ))
-        }
-      </ul>
-    </div>
-  );
+function Community({ isMobile }) {
+  const [show, setShow] = useState(false);
+
+  const dropdownBody = menuItems.map((item) => (
+    <li key={item.key} className="dropdown-item">
+      <a href={item.link} target="_blank" rel="noreferrer">
+        {item.icon}
+        <span>{item.value}</span>
+      </a>
+    </li>
+  ));
+
+  if (!isMobile) {
+    return (
+      <div className="dropdown-wrapper community">
+        <button className="dropdown-btn">Community</button>
+        <ul className="dropdown-body">{dropdownBody}</ul>
+      </div>
+    );
+  }
+  if (isMobile) {
+    return (
+      <>
+        <button className="dropdown-btn--mobile" onClick={() => setShow(!show)}>
+          Community
+          <div
+            className={show ? "arrow-up" : "arrow-down"}
+            style={{ marginLeft: "15px" }}
+          />
+        </button>
+        <ul className={`dropdown-body--mobile ${!show ? "hidden" : ""}`}>
+          {dropdownBody}
+        </ul>
+      </>
+    );
+  }
 }
 
 export default Community;

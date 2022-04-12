@@ -1,12 +1,14 @@
 import { useEffect, useState } from "react";
 import { useMoralis, useMoralisSubscription } from "react-moralis";
-import { getBakendObjPrefix, getTexasHoldemV1Address } from "../helpers/networks"
+import { getBakendObjPrefix, getGameIsLive, getTexasHoldemV1Address } from "../helpers/networks"
 import abis from "../helpers/contracts";
 import { openNotification } from "../helpers/notifications";
 
 export const useGetUserWithdrawable = () => {
   const { Moralis, isWeb3Enabled, chainId, account } = useMoralis();
   const backendPrefix = getBakendObjPrefix(chainId);
+
+  const gameIsLive = getGameIsLive(chainId);
 
   const [balance, setBalance] = useState(null);
   const [balanceLoading, setBalanceLoading] = useState(false);
@@ -26,6 +28,9 @@ export const useGetUserWithdrawable = () => {
   }
 
   function fetchOnChainWithdrawable() {
+    if(!gameIsLive) {
+      return
+    }
     setBalanceLoading(true);
     Moralis.executeFunction({
       functionName: "userWithdrawables",
@@ -40,11 +45,11 @@ export const useGetUserWithdrawable = () => {
 
   //get initial balance
   useEffect(() => {
-    if (balance === null && !balanceFetched && !balanceLoading && isWeb3Enabled) {
+    if (balance === null && !balanceFetched && !balanceLoading && isWeb3Enabled && gameIsLive) {
       fetchOnChainWithdrawable();
     }
     // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [balance, balanceFetched, balanceLoading, account, isWeb3Enabled]);
+  }, [balance, balanceFetched, balanceLoading, account, isWeb3Enabled, gameIsLive]);
 
   // check refetch
   useEffect(() => {

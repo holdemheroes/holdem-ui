@@ -1,140 +1,23 @@
-import React, { useState } from "react";
+import React from "react";
 import { NavLink } from "react-router-dom";
 import "./style.scss";
 import AnimateButton from "../../components/AnimateButton";
 import Timeline from "../../components/Timeline";
-import { useNFTSaleInfo } from "../../hooks/useNFTSaleInfo";
-import Countdown from "react-countdown";
-import { useMoralis } from "react-moralis";
-import abis from "../../helpers/contracts";
-import { getHoldemHeroesAddress } from "../../helpers/networks";
-import { openNotification } from "../../helpers/notifications";
 import { Roadmap } from "../../roadmap";
-import { BigNumber } from "@ethersproject/bignumber";
-import { getGameIsLive } from "../../helpers/networks";
+import { MAX_TOTAL_SUPPLY } from "../../helpers/constant";
 
 export default function HomeL2() {
-  const {
-    // startTime,
-    revealTime,
-    // startingIndex,
-    // maxPerTxOrOwner,
-    pricePerToken,
-    totalSupply,
-    // dataInitialised
-  } = useNFTSaleInfo();
-
-  const now = Math.floor(Date.now() / 1000);
-
-  // const saleStartDiff = startTime - now;
-  const revealTimeDiff = revealTime - now;
-  // const startIdx = parseInt(startingIndex, 10);
-
-  const { Moralis, chainId } = useMoralis();
-  const gameIsLive = getGameIsLive(chainId);
-
-  const abi = abis.heh_nft;
-  const contractAddress = getHoldemHeroesAddress(chainId);
-  const [maxNumToMint, setMaxNumToMint] = useState(6);
-
-  // const MAX_TOTAL_SUPPLY = 1326;
-
-  async function preRevealMint(event) {
-    event.preventDefault();
-    const formData = new FormData(event.target),
-      formDataObj = Object.fromEntries(formData.entries());
-    const numToMint = parseInt(formDataObj.mint_amount, 10);
-    const cost = BigNumber.from(pricePerToken).mul(BigNumber.from(numToMint));
-
-    const options = {
-      contractAddress,
-      functionName: "mintNFTPreReveal",
-      abi,
-      msgValue: cost.toString(),
-      params: {
-        numberOfNfts: numToMint,
-      },
-    };
-
-    try {
-      const tx = await Moralis.executeFunction({
-        awaitReceipt: false,
-        ...options,
-      });
-      openNotification({
-        message: "🔊 New Transaction",
-        description: `📃 Tx Hash: ${tx.hash}`,
-        type: "success",
-      });
-    } catch (error) {
-      openNotification({
-        message: "🔊 Error",
-        description: `📃 Receipt: ${error.message}`,
-        type: "error",
-      });
-      console.log(error);
-    }
-    // tx.on("transactionHash", (hash) => {
-    //   openNotification({
-    //     message: "🔊 New Transaction",
-    //     description: `📃 Tx Hash: ${hash}`,
-    //     type: "success"
-    //   });
-    // })
-    //   .on("receipt", (receipt) => {
-    //     openNotification({
-    //       message: "🔊 New Receipt",
-    //       description: `📃 Receipt: ${receipt.transactionHash}`,
-    //       type: "success"
-    //     });
-    //   })
-    //   .on("error", (error) => {
-    //     openNotification({
-    //       message: "🔊 Error",
-    //       description: `📃 Receipt: ${error.toString()}`,
-    //       type: "error"
-    //     });
-    //     console.log(error);
-    //   });
-  }
-
-  const renderer = ({ days, hours, minutes, seconds, completed }) => {
-    if (completed) {
-      // Render a completed state
-      return null;
-    } else {
-      // Render a countdown
-      return (
-        <div className="time_card-wrapper">
-          <div className="time_card">
-            <p>{days < 10 ? "0" + days : days}</p>
-            <p>days</p>
-          </div>
-          <div className="time_card">
-            <p>{hours < 10 ? "0" + hours : hours}</p>
-            <p>hours</p>
-          </div>
-          <div className="time_card">
-            <p>{minutes < 10 ? "0" + minutes : minutes}</p>
-            <p>minutes</p>
-          </div>
-        </div>
-      );
-    }
-  };
-
   return (
     <>
       <div className="header-background"></div>
       <div className="main-wrapper">
-        <div className="section--nft_poker-wrapper" id="section--nft_poker">
-          <div className="section--nft_poker">
-            <div>
-              <p>NFT Poker</p>
-              <p>
-                Holdem Heroes is the on-chain NFT Poker game.
-                <br />
-                Mint the 1326 Hole Card combinations as NFTs.
+        <div className="section__nft-poker--wrapper" id="section__nft-poker">
+          <div className="section__nft-poker">
+            <div className="section__nft-poker--left">
+              <p className="title">NFT Poker</p>
+              <p className="desc">
+                Holdem Heroes is the on-chain NFT Poker game. <br />
+                Mint the {MAX_TOTAL_SUPPLY} Hole Card combinations as NFTs.
                 <br />
                 Then play Texas Hold&#x27;em with them!
                 <br />
@@ -148,45 +31,19 @@ export default function HomeL2() {
                 </a>
                 .
               </p>
-              <div className="mint_poker_hands-wrapper">
-                <div className="mint_poker_hands">
-                  <form onSubmit={(e) => preRevealMint(e)} name="mint-form">
-                    <p>Mint Poker Hands</p>
-                    <div>
-                      <select id="mint_num" name={"mint_amount"}>
-                        {Array.from(
-                          { length: maxNumToMint },
-                          (_, i) => i + 1
-                        ).map((item, i) => (
-                          <option value="1" key={i}>
-                            {item}
-                          </option>
-                        ))}
-                      </select>
-                      <p>
-                        Ξ{" "}
-                        {Moralis.Units.FromWei(
-                          pricePerToken !== null ? pricePerToken : "0"
-                        )}
-                      </p>
-                    </div>
-                    <p>* Max {maxNumToMint} NFTs per address</p>
-                    <input
-                      className="btn-shadow btn-hover-pointer"
-                      type="submit"
-                      value={
-                        gameIsLive && chainId !== null ? "Mint" : "Coming Soon"
-                      }
-                      disabled={!gameIsLive || chainId === null}
-                    />
-                  </form>
+              <div className="video-container--16x9 mobile">
+                <div className="inner-wrapper">
+                  <iframe
+                    src="https://www.youtube.com/embed/IRiglLJ_1Ak"
+                    frameBorder="0"
+                    allow="autoplay; encrypted-media"
+                    allowFullScreen
+                    title="video"
+                  />
                 </div>
-                <p>{`Total NFTs minted: ${
-                  totalSupply !== null ? totalSupply : "0"
-                }/1326`}</p>
               </div>
             </div>
-            <div>
+            <div className="section__nft-poker--right">
               <div className="video-container--16x9">
                 <div className="inner-wrapper">
                   <iframe
@@ -206,13 +63,13 @@ export default function HomeL2() {
           </div>
         </div>
 
-        <div className="section--open_source">
-          <div>
-            <p>Open Source Poker NFTs</p>
-            <div>
+        <div className="section__open-source">
+          <div className="section__open-source--text">
+            <p className="title">Open Source Poker NFTs</p>
+            <div className="desc">
               <p>
-                The 52 cards and 1326 card pair NFTs are available for open
-                source use.
+                The 52 cards and {MAX_TOTAL_SUPPLY} card pair NFTs are available
+                for open source use.
               </p>
               <p>
                 They can be used freely in any way.
@@ -250,14 +107,14 @@ export default function HomeL2() {
               </p>
             </div>
           </div>
-          <div>
+          <div className="section__open-source--img">
             <img src="../../assets/images/cardshq.png" alt="" />
           </div>
         </div>
 
-        <div className="section--rest-wrapper">
-          <div className="section--rest">
-            <div className="game_play">
+        <div className="section__rest--wrapper">
+          <div className="section__rest">
+            <div className="game-play">
               <img
                 src="../assets/images/tablehq.png"
                 loading="lazy"
@@ -265,9 +122,9 @@ export default function HomeL2() {
                 sizes="(max-width: 479px) 100vw, (max-width: 767px) 90vw, (max-width: 991px) 650px, (max-width: 2765px) 60vw, 1659px"
                 alt=""
               />
-              <div>
-                <p>Gameplay</p>
-                <div>
+              <div className="game-play__text">
+                <p className="title">Gameplay</p>
+                <div className="desc">
                   <p>
                     Poker gameplay starts immediately after the NFT sale
                     concludes. We are proud to be one of few projects with NFT
@@ -281,7 +138,8 @@ export default function HomeL2() {
                   </p>
                   <p>
                     Games take place on both the Ethereum and Polygon
-                    blockchains, can start at any time, and include up to 1326
+                    blockchains, can start at any time, and include up to{" "}
+                    {MAX_TOTAL_SUPPLY}
                     players.
                   </p>
                   <p>
@@ -289,49 +147,49 @@ export default function HomeL2() {
                     multiple games in parallel.
                   </p>
                 </div>
-                <div>
-                  <NavLink to="/Play" className="btn-play">
+                <div className="game-play__btn-group">
+                  <NavLink to="/Play" className="btn--play">
                     Play Now
                   </NavLink>
-                  <NavLink to="/Rules" className="btn-learn">
+                  <NavLink to="/Rules" className="btn--learn">
                     Learn More
                   </NavLink>
                 </div>
               </div>
             </div>
 
-            <div className="roadmap-wrapper">
-              <div className="roadmap-text">
+            <div className="roadmap--wrapper">
+              <div className="roadmap__text">
                 <p className="title">Roadmap</p>
-                <p className="sub_title">MORE GAMES</p>
+                <p className="subtitle">MORE GAMES</p>
                 <p className="desc">
                   Further games of poker and other card games with the
                   open-source card contract
                 </p>
-                <p className="sub_title">MORE CHAINS</p>
+                <p className="subtitle">MORE CHAINS</p>
                 <p className="desc">
                   Deploying games to EVM chains by community vote (AVAX, BSC,
                   Fantom...)
                 </p>
-                <p className="sub_title">MORE DECKS</p>
+                <p className="subtitle">MORE DECKS</p>
                 <p className="desc">
                   Whitelisting card decks for custom-branded poker games
                 </p>
-                <p className="sub_title">GOVERNANCE BY DAO</p>
+                <p className="subtitle">GOVERNANCE BY DAO</p>
                 <p className="desc">
                   Decentralizing governance to community ownership by
                   formalizing the DAO structure
                 </p>
               </div>
 
-              <div className="roadmap-img">
+              <div className="roadmap__img">
                 <Roadmap />
               </div>
             </div>
 
-            <div>
+            <div className="animation-btn-group">
               <AnimateButton>
-                <a href="#section--nft_poker" rel="noreferrer">
+                <a href="#section__nft-poker" rel="noreferrer">
                   Mint Poker Nfts
                 </a>
               </AnimateButton>
@@ -350,7 +208,7 @@ export default function HomeL2() {
             </div>
           </div>
 
-          <div className="vor-wrapper">
+          <div className="vor--wrapper">
             <p>
               Powered by{" "}
               <a

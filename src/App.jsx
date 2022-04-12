@@ -1,4 +1,4 @@
-import { useEffect } from "react";
+import { useEffect, useState } from "react";
 import {
   BrowserRouter as Router,
   Switch,
@@ -6,28 +6,28 @@ import {
   NavLink,
 } from "react-router-dom";
 import { useMoralis } from "react-moralis";
-import "antd/dist/antd.css";
 import Account from "./components/Account";
 import Chains from "./components/Chains";
 import Community from "./components/Community";
 import NFTBalance from "./components/NFTBalance/";
 import Blockie from "./components/Blockie";
-import Sale from "./components/Sale";
 import GamesV1 from "./components/TexasHoldemV1";
 import Withdrawable from "./components/Withdrawable";
 import RefundableGames from "./components/TexasHoldemV1/RefundableGames";
 import { History } from "./components/TexasHoldemV1/History/History";
+import GameComingSoon from "./components/TexasHoldemV1/GameComingSoon";
+import Logout from "./components/Logout";
+import Hamburgermenu from "./components/HamburgerMenu/Hamburgermenu";
 import Home from "./pages/Home";
 import HomeL2 from "./pages/HomeL2";
 import GamePlay from "./pages/GamePlay";
-import GameComingSoon from "./components/TexasHoldemV1/GameComingSoon";
-import "./App.scss";
 import { getEllipsisTxt } from "./helpers/formatters";
-import Logout from "./components/Logout";
 import { logo } from "./logo";
-import { getChainType, getGameIsLive } from "./helpers/networks";
+import { getChainType, getGameIsLive, getHehIsLive } from "./helpers/networks";
 import ScrollToTop from "./ScrollToTop";
-import { ethers } from "ethers";
+import "antd/dist/antd.css";
+import "./App.scss";
+import Marketplace from "./pages/Marketplace";
 
 const App = () => {
   const {
@@ -39,13 +39,22 @@ const App = () => {
     account,
   } = useMoralis();
 
+  const [gameIsLive, setGameIsLive] = useState(false);
+  const [hehIsLive, setHehIsLive] = useState(false);
+  const [chainType, setChainType] = useState("l1");
+
   useEffect(() => {
     if (isAuthenticated && !isWeb3Enabled && !isWeb3EnableLoading) enableWeb3();
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [isAuthenticated, isWeb3Enabled]);
 
-  const chainType = getChainType(chainId);
-  const gameIsLive = getGameIsLive(chainId);
+  useEffect(() => {
+    if (chainId) {
+      setGameIsLive(getGameIsLive(chainId));
+      setHehIsLive(getHehIsLive(chainId));
+      setChainType(getChainType(chainId));
+    }
+  }, [chainId]);
 
   return (
     <Router>
@@ -57,13 +66,13 @@ const App = () => {
               <NavLink to="/Marketplace">Marketplace</NavLink>
               <NavLink to="/NFTwallet">NFT Wallet</NavLink>
               <NavLink to="/Rules">Rules</NavLink>
-              <Community />
+              <Community isMobile={false} />
             </div>
             {isAuthenticated && (
               <>
                 <NavLink
                   to="/Play"
-                  className="btn-play"
+                  className="btn--play"
                   style={{ marginRight: "35px" }}
                 >
                   Play
@@ -109,6 +118,7 @@ const App = () => {
             )}
             {!isAuthenticated && <Account />}
           </div>
+          <Hamburgermenu isAuthenticated={isAuthenticated} />
         </div>
       </div>
       <>
@@ -119,15 +129,15 @@ const App = () => {
               {chainType === "l2" && <HomeL2 />}
             </Route>
             <Route path="/Marketplace">
-              {gameIsLive && chainType && <Sale />}
-              {(!gameIsLive || !chainType) && <GameComingSoon />}
+              {hehIsLive && chainType && <Marketplace />}
+              {(!hehIsLive || !chainType) && <GameComingSoon />}
             </Route>
             <Route path="/Rules">
               <GamePlay />
             </Route>
             <Route path="/NFTwallet">
-              {gameIsLive && chainType && <NFTBalance />}
-              {(!gameIsLive || !chainType) && <GameComingSoon />}
+              {hehIsLive && chainType && <NFTBalance />}
+              {(!hehIsLive || !chainType) && <GameComingSoon />}
             </Route>
             {isAuthenticated && (
               <>
@@ -152,6 +162,10 @@ const App = () => {
   );
 };
 
-export const Logo = () => <NavLink to="/">{logo()}</NavLink>;
+export const Logo = () => (
+  <NavLink to="/" className="logo">
+    {logo()}
+  </NavLink>
+);
 
 export default App;

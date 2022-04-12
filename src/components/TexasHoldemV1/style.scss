@@ -461,7 +461,7 @@
             }
         }
 
-        .river_stage-sub_title {
+        .river_stage-subtitle {
             font-family   : Redtone;
             font-style    : normal;
             font-weight   : bold;
@@ -531,7 +531,7 @@
                 letter-spacing: 0.075em;
             }
 
-            .sub_title {
+            .subtitle {
                 font-family   : "DM Sans", sans-serif;
                 font-style    : normal;
                 font-weight   : bold;
@@ -838,4 +838,22 @@
     text-align : center;
     padding    : 0;
     margin     : 100px auto;
+}
+
+.coming-soon--wrapper {
+    &>img {
+        display     : block;
+        margin-left : auto;
+        margin-right: auto;
+        max-width   : 100%;
+    }
+
+    @media (max-width: 425px) {
+        &>.title {
+            font-size    : 35px;
+            line-height  : 42px;
+            margin-bottom: 32px;
+        }
+
+    }
 }

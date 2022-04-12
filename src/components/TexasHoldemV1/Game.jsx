@@ -310,7 +310,7 @@ export default function Game({ gameId }) {
 
                 {lastRoundPlayed !== 6 && (
                   <>
-                    <p className="river_stage-sub_title">Available Hands</p>
+                    <p className="river_stage-subtitle">Available Hands</p>
                     {playableHands.length && (
                       <Form.Item
                         name={"final_token"}
@@ -344,7 +344,7 @@ export default function Game({ gameId }) {
                   </>
                 )}
 
-                <p className="river_stage-sub_title">
+                <p className="river_stage-subtitle">
                   {getRoundStatusText(gameData.status)}
                 </p>
 
@@ -392,7 +392,7 @@ export default function Game({ gameId }) {
                 <p className="title">
                   Waiting for all players to submit their final hand.
                 </p>
-                <p className="sub_title">Winners revealed in:</p>
+                <p className="subtitle">Winners revealed in:</p>
               </div>
             )}
 

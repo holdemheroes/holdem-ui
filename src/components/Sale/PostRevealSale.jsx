@@ -2,13 +2,14 @@ import React, { useState, useEffect } from "react";
 import { Pagination, Checkbox, Slider } from 'antd';
 import NFTList from "./NFTList";
 import { useMoralis } from "react-moralis";
+import { MAX_TOTAL_SUPPLY } from "../../helpers/constant";
 
-export default function PostRevealSale({ pricePerToken, canMint, mintedTokens }) {
+export default function PostRevealSale({ pricePerToken, mintedTokens, l1 }) {
 
   const [currentItems, setCurrentItems] = useState(null);
-  const [tokensPerPage, setTokensPerPage] = useState(10);
+  const [tokensPerPage, setTokensPerPage] = useState(12);
   const [pageNumber, setPageNumber] = useState(1);
-  const [minted, setMinted] = useState(false);
+  const [minted, setMinted] = useState(true);
   const [tokens, setTokens] = useState([]);
   const [shape, setShape] = useState(["Offsuit", "Suited", "Pair"]);
   const [ranksRange, setRanksRange] = useState([1, 169]);
@@ -29,7 +30,7 @@ export default function PostRevealSale({ pricePerToken, canMint, mintedTokens })
     query.containedIn("shape", shape)
       .greaterThanOrEqualTo("rank", parseInt(ranksRange[0]))
       .lessThanOrEqualTo("rank", parseInt(ranksRange[1]))
-      .limit(1326)
+      .limit(MAX_TOTAL_SUPPLY)
       .find()
       .then((result) => {
         for (let i = 0; i < result.length; i++) {
@@ -86,13 +87,14 @@ export default function PostRevealSale({ pricePerToken, canMint, mintedTokens })
 
   return (
     <>
-      <div className="sales-header">
-        <p className="title">NFT Marketplace</p>
-        <ul className="tabs" onClick={switchTab}>
-          <li><p className={!minted ? "active" : ""}>Not minted</p></li>
-          <li><p className={minted ? "active" : ""}>Minted</p></li>
-        </ul>
-      </div>
+      {
+        l1 && <div className="sales-header">
+          <ul className="tabs" onClick={switchTab}>
+            <li><p className={!minted ? "active" : ""}>Not minted</p></li>
+            <li><p className={minted ? "active" : ""}>Minted</p></li>
+          </ul>
+        </div>
+      }
 
       <div className="sales-main">
         <div className="filter_sidebar">
@@ -110,7 +112,7 @@ export default function PostRevealSale({ pricePerToken, canMint, mintedTokens })
         </div>
 
         <div className="nft_list-wrapper">
-          <NFTList currentTokens={currentItems} canMint={canMint} mintedTokens={mintedTokens} pricePerToken={pricePerToken} />
+          <NFTList currentTokens={currentItems} mintedTokens={mintedTokens} pricePerToken={pricePerToken} />
 
           {tokens.length ?
             <div>

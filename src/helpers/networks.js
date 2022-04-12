@@ -5,6 +5,7 @@ export const networkConfigs = {
     currencySymbol: "ETH",
     blockExplorerUrl: "https://etherscan.io",
     openSeaUrl: "https://opensea.io",
+    playingCardsAddress: "",
     holdemHeroesAddress: "",
     texasHoldemV1Address: "",
     chainType: "l1",
@@ -16,6 +17,7 @@ export const networkConfigs = {
     currencySymbol: "ETH",
     blockExplorerUrl: "https://rinkeby.etherscan.io",
     openSeaUrl: "https://testnets.opensea.io",
+    playingCardsAddress: "",
     holdemHeroesAddress: "",
     texasHoldemV1Address: "",
     chainType: "l1",
@@ -28,6 +30,7 @@ export const networkConfigs = {
     currencySymbol: "ETH",
     blockExplorerUrl: "http://localhost",
     openSeaUrl: "http://localhost",
+    playingCardsAddress: "",
     holdemHeroesAddress: "",
     texasHoldemV1Address: "",
     chainType: "l1",
@@ -40,6 +43,7 @@ export const networkConfigs = {
     currencySymbol: "ETH",
     blockExplorerUrl: "http://localhost",
     openSeaUrl: "http://localhost",
+    playingCardsAddress: "",
     holdemHeroesAddress: "",
     texasHoldemV1Address: "",
     chainType: "l1",
@@ -52,6 +56,7 @@ export const networkConfigs = {
     currencySymbol: "MATIC",
     blockExplorerUrl: "https://polygonscan.com",
     openSeaUrl: "https://opensea.io",
+    playingCardsAddress: "",
     holdemHeroesAddress: "",
     texasHoldemV1Address: "",
     chainType: "l2",
@@ -64,6 +69,7 @@ export const networkConfigs = {
     currencySymbol: "MATIC",
     blockExplorerUrl: "https://mumbai.polygonscan.com/",
     openSeaUrl: "https://testnets.opensea.io",
+    playingCardsAddress: "",
     holdemHeroesAddress: "",
     texasHoldemV1Address: "",
     chainType: "l2",
@@ -74,6 +80,8 @@ export const networkConfigs = {
 export const getCurrencySymbol = (chain) => networkConfigs[chain]?.currencySymbol || "NATIVE";
 
 export const getExplorer = (chain) => networkConfigs[chain]?.blockExplorerUrl;
+
+export const getPlayingCardsAddress = (chain) => networkConfigs[chain]?.playingCardsAddress;
 
 export const getHoldemHeroesAddress = (chain) => networkConfigs[chain]?.holdemHeroesAddress;
 
@@ -86,3 +94,5 @@ export const getChainType = (chain) => networkConfigs[chain]?.chainType;
 export const getBakendObjPrefix = (chain) => networkConfigs[chain]?.prefix;
 
 export const getGameIsLive = (chain) => (networkConfigs[chain]?.texasHoldemV1Address !== "");
+
+export const getHehIsLive = (chain) => (networkConfigs[chain]?.holdemHeroesAddress !== "");

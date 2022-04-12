@@ -6,8 +6,7 @@ import { getHoldemHeroesAddress } from "../helpers/networks";
 export const useNFTSaleInfo = () => {
   const { isInitialized, chainId } = useMoralis();
 
-  const getPriceFunc = (parseInt(process.env.REACT_APP_HEH_VERSION, 10) === 1) ? "NFT_MINT_PRICE" : "getNftPrice"
-  const abi = (parseInt(process.env.REACT_APP_HEH_VERSION, 10) === 1) ? abis.heh_old : abis.heh_nft;
+  const abi = abis.heh_nft;
   const contractAddress = getHoldemHeroesAddress(chainId);
 
   const [fetched, setFetched] = useState(false);
@@ -18,11 +17,19 @@ export const useNFTSaleInfo = () => {
   };
 
   const {
-    data: startTime,
-    fetch: startTimeFetch,
+    data: targetEms,
+    fetch: targetEmsFetch,
   } = useWeb3ExecuteFunction({
     ...options,
-    functionName: "SALE_START_TIMESTAMP",
+    functionName: "targetEMS",
+  });
+
+  const {
+    data: startBlockNum,
+    fetch: startBlockNumFetch,
+  } = useWeb3ExecuteFunction({
+    ...options,
+    functionName: "SALE_START_BLOCK_NUM",
   });
 
   const {
@@ -54,7 +61,7 @@ export const useNFTSaleInfo = () => {
     fetch: pricePerTokenFetch,
   } = useWeb3ExecuteFunction({
     ...options,
-    functionName: getPriceFunc,
+    functionName: "getNftPrice",
   });
 
   const {
@@ -66,39 +73,49 @@ export const useNFTSaleInfo = () => {
   });
 
   useEffect(() => {
-    if (isInitialized && !fetched) {
-      setFetched(true);
-      refresh();
+    if (isInitialized && chainId && !fetched) {
+      initData();
     }
 
-    if (startTime !== null &&
+    if (startBlockNum !== null &&
       revealTime !== null &&
       startingIndex !== null &&
       maxPerTxOrOwner !== null &&
       pricePerToken !== null &&
-      totalSupply !== null) {
+      totalSupply !== null &&
+      targetEms !== null) {
       setDataInitialised(true);
     }
     // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [isInitialized, fetched, startTime, revealTime, startingIndex, maxPerTxOrOwner, pricePerToken, totalSupply]);
+  }, [chainId, isInitialized, fetched, startBlockNum, revealTime, startingIndex, maxPerTxOrOwner, pricePerToken, totalSupply, targetEms]);
 
-  const refresh = () => {
-    startTimeFetch();
+  const initData = () => {
+    startBlockNumFetch();
     revealTimeFetch();
     startingIndexFetch();
     maxPerTxOrOwnerFetch();
     pricePerTokenFetch();
     totalSupplyFetch();
+    targetEmsFetch();
+    setFetched(true);
   };
 
   return {
-    refresh,
+    startBlockNumFetch,
+    revealTimeFetch,
+    startingIndexFetch,
+    maxPerTxOrOwnerFetch,
+    pricePerTokenFetch,
+    totalSupplyFetch,
+    targetEmsFetch,
     dataInitialised,
-    startTime,
+    startBlockNum,
     revealTime,
     startingIndex,
     maxPerTxOrOwner,
     pricePerToken,
     totalSupply,
+    targetEms,
+    initData,
   };
 };

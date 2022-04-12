@@ -3,21 +3,39 @@ import { useGetUserWithdrawable } from "../hooks/useGetUserWithdrawable";
 import { n4 } from "../helpers/formatters";
 import { openNotification } from "../helpers/notifications";
 import abis from "../helpers/contracts";
-import { getCurrencySymbol, getTexasHoldemV1Address } from "../helpers/networks"
+import { getCurrencySymbol, getGameIsLive, getTexasHoldemV1Address } from "../helpers/networks"
+import { useEffect, useState } from "react"
 
 function Withdrawable() {
 
   const { Moralis, chainId } = useMoralis();
 
+  const [gameIsLive, setGameIsLive] = useState(false);
+  const [contractAddress, setContractAddress] = useState(null);
+  const [currencySymbol, setCurrencySymbol] = useState(null);
+
+  useEffect(() => {
+    if(chainId) {
+      const isLive = getGameIsLive( chainId );
+      setGameIsLive( isLive );
+      setCurrencySymbol(getCurrencySymbol(chainId));
+      if(isLive) {
+        setContractAddress(getTexasHoldemV1Address(chainId));
+      }
+    }
+  }, [chainId])
+
   const { balance } = useGetUserWithdrawable();
 
   const abi = abis.texas_holdem_v1;
-  const contractAddress = getTexasHoldemV1Address(chainId);
-  const currencySymbol = getCurrencySymbol(chainId)
 
   const options = {
     contractAddress, abi,
   };
+
+  if(!gameIsLive) {
+    return <></>
+  }
 
   const handleWithdraw = async () => {
     const opts = {
@@ -45,7 +63,7 @@ function Withdrawable() {
   return (
     <>
       <button onClick={() => handleWithdraw()}
-        className="btn-withdrawable btn-shadow btn-hover-pointer">
+        className="btn-withdrawable btn--shadow btn--hover-pointer">
         Withdraw {`${n4.format(
           Moralis.Units.FromWei(balance === null ? "0" : balance, 18)
         )} ${currencySymbol}`}</button>
