@@ -13,10 +13,11 @@ export default function HomeL2() {
       <div className="main-wrapper">
         <div className="section__nft-poker--wrapper" id="section__nft-poker">
           <div className="section__nft-poker">
-            <div>
-              <p>NFT Poker</p>
-              <p>
-                Holdem Heroes is the on-chain NFT Poker game.
+            <div className="section__nft-poker--left">
+              <p className="title">NFT Poker</p>
+              <p className="desc">
+                Holdem Heroes is the on-chain NFT Poker game. <br />
+                Mint the {MAX_TOTAL_SUPPLY} Hole Card combinations as NFTs.{" "}
                 <br />
                 Mint the {MAX_TOTAL_SUPPLY} Hole Card combinations as NFTs.
                 <br />
@@ -32,17 +33,19 @@ export default function HomeL2() {
                 </a>
                 .
               </p>
-              <div className="mint-poker-hands--wrapper">
-                <div className="mint-poker-hands">
-                  <p>
-                    Tokens will be Airdropped on Polygon!
-                    <br />
-                    Switch to Eth chain to Mint!
-                  </p>
+              <div className="video-container--16x9 mobile">
+                <div className="inner-wrapper">
+                  <iframe
+                    src="https://www.youtube.com/embed/IRiglLJ_1Ak"
+                    frameBorder="0"
+                    allow="autoplay; encrypted-media"
+                    allowFullScreen
+                    title="video"
+                  />
                 </div>
               </div>
             </div>
-            <div>
+            <div className="section__nft-poker--right">
               <div className="video-container--16x9">
                 <div className="inner-wrapper">
                   <iframe
@@ -63,9 +66,9 @@ export default function HomeL2() {
         </div>
 
         <div className="section__open-source">
-          <div>
-            <p>Open Source Poker NFTs</p>
-            <div>
+          <div className="section__open-source--text">
+            <p className="title">Open Source Poker NFTs</p>
+            <div className="desc">
               <p>
                 The 52 cards and {MAX_TOTAL_SUPPLY} card pair NFTs are available
                 for open source use.
@@ -106,7 +109,7 @@ export default function HomeL2() {
               </p>
             </div>
           </div>
-          <div>
+          <div className="section__open-source--img">
             <img src="../../assets/images/cardshq.png" alt="" />
           </div>
         </div>
@@ -121,9 +124,9 @@ export default function HomeL2() {
                 sizes="(max-width: 479px) 100vw, (max-width: 767px) 90vw, (max-width: 991px) 650px, (max-width: 2765px) 60vw, 1659px"
                 alt=""
               />
-              <div>
-                <p>Gameplay</p>
-                <div>
+              <div className="game-play__text">
+                <p className="title">Gameplay</p>
+                <div className="desc">
                   <p>
                     Poker gameplay starts immediately after the NFT sale
                     concludes. We are proud to be one of few projects with NFT
@@ -146,7 +149,7 @@ export default function HomeL2() {
                     multiple games in parallel.
                   </p>
                 </div>
-                <div>
+                <div className="game-play__btn-group">
                   <NavLink to="/Play" className="btn--play">
                     Play Now
                   </NavLink>
@@ -186,7 +189,7 @@ export default function HomeL2() {
               </div>
             </div>
 
-            <div>
+            <div className="animation-btn-group">
               <AnimateButton>
                 <a href="#section__nft-poker" rel="noreferrer">
                   Mint Poker Nfts
