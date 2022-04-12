@@ -4,7 +4,6 @@ import "./style.scss";
 import AnimateButton from "../../components/AnimateButton";
 import Timeline from "../../components/Timeline";
 import { useNFTSaleInfo } from "../../hooks/useNFTSaleInfo";
-import { useMyNFTHands } from "../../hooks/useMyNFTHands";
 import { useChainData } from "../../hooks/useChainData";
 import Countdown from "react-countdown";
 import { useMoralis } from "react-moralis";
@@ -28,9 +27,9 @@ export default function Home() {
     startBlockNum,
     revealTime,
     startingIndex,
-    maxPerTxOrOwner,
     pricePerToken,
     totalSupply,
+    maxPerTxOrOwner,
     dataInitialised: nftSaleDataInitialised,
     startingIndexFetch,
     pricePerTokenFetch,
@@ -41,14 +40,11 @@ export default function Home() {
   const { Moralis, chainId, account, isAuthenticated, isWeb3Enabled } =
     useMoralis();
   const { currentBlock, refresh: refreshCurrentBlock } = useChainData();
-  const { NFTHands } = useMyNFTHands();
 
   const [saleStartBlockDiff, setSaleStartBlockDiff] = useState(null);
   const [revealTimeDiff, setRevealTimeDiff] = useState(null);
   const [saleStartTime, setSaleStartTime] = useState(0);
   const [saleTimeInitialised, setSaleTimeInitialised] = useState(false);
-
-  const [maxNumToMint, setMaxNumToMint] = useState(0);
   const [hehContractAddress, setHehContractAddress] = useState(null);
   const [hehContract, setHehContract] = useState(null);
   const [hehIsLive, setHehIsLive] = useState(false);
@@ -102,16 +98,6 @@ export default function Home() {
       clearTimeout(timeout);
     };
   });
-
-  useEffect(() => {
-    setMaxNumToMint(
-      Math.min(
-        maxPerTxOrOwner - NFTHands.length,
-        MAX_TOTAL_SUPPLY - totalSupply,
-        6
-      )
-    );
-  }, [maxPerTxOrOwner, NFTHands, totalSupply]);
 
   useEffect(() => {
     (async () => {
@@ -278,7 +264,7 @@ export default function Home() {
                               <div className="input-area">
                                 <select id="mint_num" name={"mint_amount"}>
                                   {Array.from(
-                                    { length: maxNumToMint },
+                                    { length: maxPerTxOrOwner.toNumber() },
                                     (_, i) => i + 1
                                   ).map((item, i) => (
                                     <option value={item} key={i}>
@@ -293,18 +279,14 @@ export default function Home() {
                                 placeholder="Price per token"
                               /> Each
                               </div>
-                              <p>* Max {maxNumToMint} NFTs per address</p>
+                              <p>* Max {maxPerTxOrOwner.toNumber()} NFTs per address</p>
                               <button
                                 className="btn-shadow btn-hover-pointer btn--mint"
                                 form="mint-form"
                                 disabled={
-                                  !maxNumToMint ||
-                                  !(
-                                    saleStartBlockDiff <= 0 &&
-                                    revealTimeDiff > 0 &&
-                                    startIdx === 0 &&
-                                    totalSupply < MAX_TOTAL_SUPPLY
-                                  )
+                                  saleStartBlockDiff > 0 ||
+                                  revealTimeDiff <= 0 ||
+                                  totalSupply >= MAX_TOTAL_SUPPLY
                                 }
                               >
                                 {saleStartBlockDiff > 0 ? (
