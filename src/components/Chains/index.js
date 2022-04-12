@@ -6,30 +6,30 @@ import { useMoralis } from "react-moralis"
 import { extractErrorMessage, openNotification } from "../../helpers/notifications"
 
 const menuItems = [
-  {
-    key: "0x1",
-    value: "Mainnet",
-    icon: <ETHLogo size="S" />,
-    iconL: <ETHLogo size="L" />,
-  },
   // {
-  //   key: "0x4",
-  //   value: "Rinkeby",
+  //   key: "0x1",
+  //   value: "Mainnet",
   //   icon: <ETHLogo size="S" />,
   //   iconL: <ETHLogo size="L" />,
   // },
+  {
+    key: "0x4",
+    value: "Rinkeby",
+    icon: <ETHLogo size="S" />,
+    iconL: <ETHLogo size="L" />,
+  },
   // {
   //   key: "0x89",
   //   value: "Polygon",
   //   icon: <PolygonLogo />,
   //   iconL: <PolygonLogo />,
   // },
-  // {
-  //   key: "0x13881",
-  //   value: "Polygon Mumbai",
-  //   icon: <PolygonLogo />,
-  //   iconL: <PolygonLogo />,
-  // },
+  {
+    key: "0x13881",
+    value: "Polygon Mumbai",
+    icon: <PolygonLogo />,
+    iconL: <PolygonLogo />,
+  },
 ];
 
 function Chains() {
