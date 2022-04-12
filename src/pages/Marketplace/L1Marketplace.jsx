@@ -89,7 +89,7 @@ export default function L1Marketplace() {
               </div>
             </div>
           </>
-        ) : startingIndex === 0 ? (
+        ) : startingIndex.toNumber() === 0 ? (
           <p className="desc">Waiting for Reveal & Distribution</p>
         ) : (
           <PostRevealSale
