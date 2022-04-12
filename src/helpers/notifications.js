@@ -18,6 +18,14 @@ export const openNotification = ({ message, description, type }) => {
         className: "notification error"
       });
       break;
+    case "warn":
+      notification.warn({
+        placement: "bottomRight",
+        message,
+        description,
+        className: "notification warning"
+      });
+      break;
     default:
       notification.open({
         placement: "bottomRight",
