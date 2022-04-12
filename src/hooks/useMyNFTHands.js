@@ -14,8 +14,9 @@ export const useMyNFTHands = (options) => {
   const { resolveLink } = useIPFS();
 
   const [NFTHands, setNFTHands] = useState([]);
-  const [hehContractAddress, setHehContractAddress] = useState(getHoldemHeroesAddress(chainId));
-  const [texasHoldemAddress, setTexasHoldemAddress] = useState(getTexasHoldemV1Address(chainId));
+  const [handsFetched, setHandsFetched] = useState(false);
+  const [hehContractAddress, setHehContractAddress] = useState(null);
+  const [texasHoldemAddress, setTexasHoldemAddress] = useState(null);
   const [gameIsLive, setGameIsLive] = useState(false);
 
   const {
@@ -30,13 +31,18 @@ export const useMyNFTHands = (options) => {
   );
 
   useEffect(() => {
-    if(chainId && startingIndex && walletAddress) {
+    if(chainId && !hehContractAddress && !texasHoldemAddress) {
       setHehContractAddress( getHoldemHeroesAddress( chainId ) )
       setTexasHoldemAddress( getTexasHoldemV1Address( chainId ) )
       setGameIsLive( getGameIsLive( chainId ) )
+    }
+  }, [chainId, hehContractAddress, texasHoldemAddress]);
+
+  useEffect(() => {
+    if(hehContractAddress && texasHoldemAddress && startingIndex && walletAddress) {
       if(startingIndex?.toNumber() > 0) {
         // Tokens and hands have been revealed. Load from Moralis's parsed & cached list
-        getMyNFTHands()
+        getMyNFTHands();
       } else {
         // Still in pre-reveal phase. Get user's balance and set null values.
         // This should prevent Moralis trying to cache pre-reveal tokens, which will
@@ -55,15 +61,15 @@ export const useMyNFTHands = (options) => {
                 metadata: null,
                 image: null,
               }
-              myNfts.push(nft)
+              myNfts.push(nft);
             }
-            setNFTHands(myNfts)
+            setNFTHands(myNfts);
+            setHandsFetched(true);
           })
           .catch((e) => console.log(e.message));
       }
     }
-    // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [chainId, startingIndex, walletAddress])
+  }, [hehContractAddress, texasHoldemAddress, startingIndex, walletAddress]);
 
   useEffect(() => {
     if (data?.result) {
@@ -88,9 +94,10 @@ export const useMyNFTHands = (options) => {
         }
       }
       setNFTHands(NFTs);
+      setHandsFetched(true);
     }
     // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [data, gameIsLive, texasHoldemAddress]);
+  }, [data, gameIsLive]);
 
   // attaches useful data regarding Hand ID and associated Card IDs for gameplay.
   // Only called once the game contract is live
@@ -119,5 +126,5 @@ export const useMyNFTHands = (options) => {
       .catch((e) => console.log(e.message));
   }
 
-  return { getMyNFTHands, NFTHands, error, isLoading };
+  return { getMyNFTHands, NFTHands, error, isLoading, handsFetched };
 };
