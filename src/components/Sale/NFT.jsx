@@ -6,8 +6,9 @@ import { Card, Image, Tooltip } from "antd";
 import NFTMeta from "../NFTMeta/NFTMeta";
 import { decodeNftUriToJson } from "../../helpers/nft";
 import { openNotification } from "helpers/notifications";
+import { weiToEthDp } from "../../helpers/formatters"
 
-export default function NFT({ tokenId, canMint, mintedTokens, pricePerToken }) {
+export default function NFT({ tokenId, mintedTokens, pricePerToken }) {
   const { Moralis, chainId } = useMoralis();
   const [nftData, setNftData] = useState(null);
   const [nftOwner, setNftOwner] = useState(null);
@@ -59,11 +60,12 @@ export default function NFT({ tokenId, canMint, mintedTokens, pricePerToken }) {
   const nft = decodeNftUriToJson(nftData);
 
   const postRevealMint = async (t) => {
+    const mintPrice = Moralis.Units.ETH(weiToEthDp(pricePerToken, 5))
     const options = {
       contractAddress,
       functionName: "mintNFTPostReveal",
       abi,
-      msgValue: String(pricePerToken),
+      msgValue: String(mintPrice),
       params: {
         tokenId: String(t)
       },
@@ -89,14 +91,11 @@ export default function NFT({ tokenId, canMint, mintedTokens, pricePerToken }) {
 
   let block = null;
   if (nftOwner === "no") {
-    if (canMint) {
-      block = <Tooltip title={`Mint NFT #${tokenId}`}>
-        <a href={"/"} onClick={(e) => { e.preventDefault(); postRevealMint(tokenId); }}>Mint</a>
-      </Tooltip>;
-    } else {
-      block = <p>Mint limit reached. Wait for open market</p>;
-    }
-
+    block = <Tooltip title={`Mint NFT #${tokenId}`}>
+      <a href={"/"} onClick={(e) => { e.preventDefault(); postRevealMint(tokenId); }}>
+        Mint Ξ{weiToEthDp(pricePerToken, 5)}
+      </a>
+    </Tooltip>;
   } else {
     const os = `${getOpenSeaUrl(chainId)}/assets/${contractAddress}/${tokenId}`;
     block = <a href={os} target={"_blank"} rel={"noreferrer"} className="minted">View on OpenSea</a>;

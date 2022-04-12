@@ -8,7 +8,7 @@ import { svgToImgSrc } from "../../helpers/nft";
 export const PlayingCard = ({ cardId, width = 100 }) => {
 
   const { chainId } = useMoralis();
-  const abi = abis.heh_nft;
+  const abi = abis.playing_cards;
   const contractAddress = getPlayingCardsAddress(chainId);
 
   const [cardSvg, setCardSvg] = useState(null);
