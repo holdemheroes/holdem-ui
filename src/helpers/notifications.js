@@ -77,7 +77,7 @@ export const extractErrorMessage = (e) => {
           return "Invalid Token ID"
         default:
           // otherwise, just return the parsed message
-          return errObj.message
+          return errObj.message.replace("execution reverted: ", "")
       }
     } catch(pErr) {
       // couldn't turn into JSON. Just return original message
