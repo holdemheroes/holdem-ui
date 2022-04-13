@@ -309,7 +309,7 @@ export const Leaderboard = ({ gameId, showWinnings = false, claimWinner }) => {
             ),
         };
 
-        if (showWinnings) {
+        if (showWinnings && winnings[leaderboard[i]?.player]) {
           const w = Moralis.Units.FromWei(
             BigNumber.from(winnings[leaderboard[i].player]),
             18
