@@ -312,7 +312,10 @@ export default function Home() {
                         )
                       ) : (
                         <p className="connect-wallet-to-mint">
-                          Mint Sale coming soon!
+                          Public Sale in <Countdown
+                          date={1649926800 * 1000}
+                          renderer={simpleTextRenderer}
+                        />
                         </p>
                       )
                     )
