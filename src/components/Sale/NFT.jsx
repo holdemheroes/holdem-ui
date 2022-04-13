@@ -5,7 +5,7 @@ import { getHoldemHeroesAddress, getOpenSeaUrl } from "../../helpers/networks";
 import { Card, Image, Tooltip } from "antd";
 import NFTMeta from "../NFTMeta/NFTMeta";
 import { decodeNftUriToJson } from "../../helpers/nft";
-import { openNotification } from "helpers/notifications";
+import { extractErrorMessage, openNotification } from "helpers/notifications"
 import { weiToEthDp } from "../../helpers/formatters"
 
 export default function NFT({ tokenId, mintedTokens, pricePerToken }) {
@@ -81,7 +81,7 @@ export default function NFT({ tokenId, mintedTokens, pricePerToken }) {
     } catch(e) {
       openNotification({
         message: "🔊 Error",
-        description: `📃 ${e.message}`,
+        description: `📃 ${extractErrorMessage(e.message)}`,
         type: "error"
       });
       console.log(e);
