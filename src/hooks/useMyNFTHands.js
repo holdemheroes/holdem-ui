@@ -69,6 +69,7 @@ export const useMyNFTHands = (options) => {
           .catch((e) => console.log(e.message));
       }
     }
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [hehContractAddress, texasHoldemAddress, startingIndex, walletAddress]);
 
   useEffect(() => {

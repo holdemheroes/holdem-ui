@@ -31,7 +31,7 @@ export const useNFTSaleInfo = () => {
       }
       setOptions(opts)
     }
-  }, [chainId, contractAddress]);
+  }, [chainId, contractAddress, abi]);
 
   const targetEmsFetch = async () => {
     if(chainId && contractAddress && options) {
