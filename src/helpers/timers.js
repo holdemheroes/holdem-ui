@@ -62,7 +62,7 @@ export const simpleTextRenderer = ({ days, hours, minutes, seconds, completed })
     // Render a countdown
     return (
       <>
-        {days < 10 ? "0" + days : days}d, {hours < 10 ? "0" + hours : hours}:{minutes < 10 ? "0" + minutes : minutes}:{seconds < 10 ? "0" + seconds : seconds}
+        {days > 0 ? days+"d, ": ""}{hours < 10 ? "0" + hours : hours}:{minutes < 10 ? "0" + minutes : minutes}:{seconds < 10 ? "0" + seconds : seconds}
       </>
     );
   }
