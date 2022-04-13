@@ -68,7 +68,7 @@ export default function Home() {
     if (currentBlock > 0 && startBlockNum && !saleTimeInitialised && revealTime) {
       const now = Math.floor(Date.now() / 1000);
       const blockDiff = startBlockNum.toNumber() - currentBlock;
-      const start = now + blockDiff * 15;
+      const start = now + (blockDiff * 15) + 5;
       setSaleStartTime(start); // estimate based on 1 block every 15 seconds
       setSaleStartBlockDiff(blockDiff);
       setRevealTimeDiff(revealTime - now);
@@ -290,10 +290,13 @@ export default function Home() {
                                 }
                               >
                                 {saleStartBlockDiff > 0 ? (
-                                  <Countdown
-                                    date={saleStartTime * 1000}
-                                    renderer={simpleTextRenderer}
-                                  />
+                                  <>
+                                    <Countdown
+                                      date={saleStartTime * 1000}
+                                      renderer={simpleTextRenderer}
+                                    />{" "}
+                                    ({saleStartBlockDiff} Blocks)
+                                  </>
                                 ) : (
                                   "Mint"
                                 )}
@@ -351,8 +354,7 @@ export default function Home() {
           <div className="price-chart-area">
             {saleStartBlockDiff <= 0 &&
               revealTimeDiff > 0 &&
-              startIdx === 0 &&
-              totalSupply < MAX_TOTAL_SUPPLY && <PriceEChart />}
+              startIdx === 0 && <PriceEChart />}
           </div>
 
           <Timeline />
