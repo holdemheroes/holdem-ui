@@ -4,8 +4,11 @@ import App from "./App";
 import { MoralisProvider } from "react-moralis";
 import "./index.scss";
 
-const APP_ID = process.env.REACT_APP_MORALIS_APPLICATION_ID || null;
-const SERVER_URL = process.env.REACT_APP_MORALIS_SERVER_URL || null;
+// const APP_ID = process.env.REACT_APP_MORALIS_APPLICATION_ID || null;
+// const SERVER_URL = process.env.REACT_APP_MORALIS_SERVER_URL || null;
+// TODO: CHANGE ME
+const APP_ID = process.env.REACT_APP_TEST_MORALIS_APPLICATION_ID || null;
+const SERVER_URL = process.env.REACT_APP_TEST_MORALIS_SERVER_URL || null;
 
 const Application = () => {
   if (APP_ID && SERVER_URL)

@@ -24,12 +24,12 @@ const menuItems = [
   //   icon: <PolygonLogo />,
   //   iconL: <PolygonLogo />,
   // },
-  {
-    key: "0x13881",
-    value: "Polygon Mumbai",
-    icon: <PolygonLogo />,
-    iconL: <PolygonLogo />,
-  },
+  // {
+  //   key: "0x13881",
+  //   value: "Polygon Mumbai",
+  //   icon: <PolygonLogo />,
+  //   iconL: <PolygonLogo />,
+  // },
 ];
 
 function Chains() {
