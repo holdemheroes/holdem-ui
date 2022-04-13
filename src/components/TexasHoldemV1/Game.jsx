@@ -133,9 +133,8 @@ export default function Game({ gameId }) {
       });
     } catch (e) {
       openNotification({
-        message: "🔊",
-        description: "The round has already ended",
-        // description: `📃 ${e.message}`,
+        message: "🔊 Error",
+        description: extractErrorMessage(e.message),
         type: "error",
       });
       console.log(e);
@@ -176,8 +175,8 @@ export default function Game({ gameId }) {
         return estimate;
       })
       .then(function (estimate) {
-        // increase gas limit to compensate for NFT price fluctuations
-        const gasLimit = estimate.add(BigNumber.from("100000"));
+        // increase gas limit to compensate for leaderboard state fluctuations
+        const gasLimit = estimate.add(BigNumber.from("200000"));
         ethersContract
           .playFinalHand(String(values.final_token), values.river_cards, String(gameId), { from: account, gasLimit })
           .then(function (tx) {
@@ -228,7 +227,7 @@ export default function Game({ gameId }) {
     } catch (e) {
       openNotification({
         message: "🔊 Error",
-        description: `📃 ${e.message}`,
+        description: `📃 ${extractErrorMessage(e.message)}`,
         type: "error",
       });
       console.log(e);
@@ -443,8 +442,10 @@ export default function Game({ gameId }) {
                   claimWinner={claimWinner}
                 />
                 <p className="desc">
-                  {isWinner &&
-                    "You are a winner - Distribute the pot below to claim your winnings"}
+                  {
+                    isWinner ? ("You are a winner - Distribute the pot below to claim your winnings")
+                      : ("Game has ended! Waiting for winnings distribution")
+                  }
                 </p>
                 {isWinner && (
                   <Button
