@@ -97,4 +97,17 @@
         text-align    : center;
         padding-bottom: 50px;
     }
+
+    .game_history_river_cards {
+        display        : flex;
+        align-items    : center;
+        justify-content: center;
+        margin-top     : 35px;
+        margin-bottom  : 55px;
+
+        &>div {
+            text-align: center;
+            margin    : 0 30px;
+        }
+    }
 }
