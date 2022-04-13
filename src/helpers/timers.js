@@ -57,7 +57,7 @@ export const largeTextRenderer = ({ days, hours, minutes, seconds, completed }) 
 export const simpleTextRenderer = ({ days, hours, minutes, seconds, completed }) => {
   if (completed) {
     // Render a completed state
-    return null;
+    return "00:00:00";
   } else {
     // Render a countdown
     return (
