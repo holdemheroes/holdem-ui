@@ -3,7 +3,7 @@ import useChain from "../../hooks/useChain";
 import { ETHLogo, PolygonLogo } from "./Logos";
 import "./style.scss";
 import { useMoralis } from "react-moralis"
-import { extractErrorMessage, openNotification } from "../../helpers/notifications"
+import { openNotification } from "../../helpers/notifications"
 
 const menuItems = [
   // {
