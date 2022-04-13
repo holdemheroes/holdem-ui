@@ -266,7 +266,7 @@ export default function Home() {
                               <div className="input-area">
                                 <select id="mint_num" name={"mint_amount"}>
                                   {Array.from(
-                                    { length: maxPerTxOrOwner.toNumber() },
+                                    { length: 6 },
                                     (_, i) => i + 1
                                   ).map((item, i) => (
                                     <option value={item} key={i}>
@@ -281,7 +281,7 @@ export default function Home() {
                                 placeholder="Price per token"
                               /> Each
                               </div>
-                              <p>* Max {maxPerTxOrOwner.toNumber()} NFTs per address</p>
+                              <p>* Max {6} NFTs per address</p>
                               <button
                                 className="btn-shadow btn-hover-pointer btn--mint"
                                 form="mint-form"
