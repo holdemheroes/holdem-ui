@@ -3,7 +3,7 @@ import { useEffect, useState } from "react";
 import { Spin } from "antd";
 import { GameHistoryCompleted } from "./GameHistoryCompleted";
 import { GameHistoryRefunded } from "./GameHistoryRefunded";
-import { getBakendObjPrefix } from "../../../helpers/networks"
+import { getBakendObjPrefix } from "../../../helpers/networks";
 
 export const GameHistoryContainer = ({ gameId, gamesInProgress }) => {
 
@@ -13,6 +13,7 @@ export const GameHistoryContainer = ({ gameId, gamesInProgress }) => {
   const [gameStartedData, setGameStartedData] = useState(null);
   const [gameEndedData, setGameEndedData] = useState(null);
   const [gameStartedDataInitialised, setGameStartedDataInitialised] = useState(false);
+  const [gameIsInProgress, setGameIsInProgress] = useState(false);
 
   const [gameIsFinished, setGameIsFinished] = useState(null);
   const [gameIsFinishedLoading, setGameIsFinishedLoading] = useState(false);
@@ -121,18 +122,28 @@ export const GameHistoryContainer = ({ gameId, gamesInProgress }) => {
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [gameId, gameIsFinished, gameIsRefunded, gameIsRefundedLoading, gameIsRefundedFetched]);
 
-
-  // first check if it's in progress
-  if (gamesInProgress.includes(String(gameId))) {
-    return (
-      <div className="game_history_main_body">
-        <p className="desc">Game #{gameId} has not yet ended. Historical data will be displayed once it has ended.</p>
-      </div>
-    );
-  }
+  // check if it's in progress
+  useEffect(() => {
+    if(gameId && gamesInProgress) {
+      for(let i = 0; i <= gamesInProgress.length; i += 1) {
+        if(gamesInProgress[i]?.toString() === String(gameId)) {
+          setGameIsInProgress(true);
+        }
+      }
+    }
+  }, [gameId, gamesInProgress]);
 
   if (gameIsFinished === null || gameIsRefunded === null) {
     return <Spin className="spin_loader" />;
+  }
+
+  // check if it's in progress
+  if (gameIsInProgress) {
+    return (
+      <div className="game_history_main_body">
+        <p className="desc">Game #{gameId?.toString()} has not yet ended. Historical data will be displayed once it has ended.</p>
+      </div>
+    );
   }
 
   return (
