@@ -22,6 +22,8 @@ import { flipCardRenderer, simpleTextRenderer } from "../../helpers/timers";
 import { weiToEthDp } from "../../helpers/formatters";
 import PriceEChart from "../../components/Sale/PriceEchart";
 
+const PUBLIC_SALE_START_TIME = parseInt(process.env.REACT_APP_PUBLIC_SALE_START_TIME, 10) || 0;
+
 export default function Home() {
   const {
     startBlockNum,
@@ -312,7 +314,19 @@ export default function Home() {
                         )
                       ) : (
                         <p className="connect-wallet-to-mint">
-                          Mint Sale coming soon!
+                          {
+                            PUBLIC_SALE_START_TIME > 0 ? (
+                              <p className="connect-wallet-to-mint">
+                                Public Sale in <Countdown
+                                date={PUBLIC_SALE_START_TIME * 1000}
+                                renderer={simpleTextRenderer}
+                              />
+                              </p>
+                            ) : (
+                              "Mint Sale coming soon!"
+                            )
+                          }
+
                         </p>
                       )
                     )
