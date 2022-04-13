@@ -133,9 +133,8 @@ export default function Game({ gameId }) {
       });
     } catch (e) {
       openNotification({
-        message: "🔊",
-        description: "The round has already ended",
-        // description: `📃 ${e.message}`,
+        message: "🔊 Error",
+        description: extractErrorMessage(e.message),
         type: "error",
       });
       console.log(e);
@@ -228,7 +227,7 @@ export default function Game({ gameId }) {
     } catch (e) {
       openNotification({
         message: "🔊 Error",
-        description: `📃 ${e.message}`,
+        description: `📃 ${extractErrorMessage(e.message)}`,
         type: "error",
       });
       console.log(e);
@@ -443,8 +442,10 @@ export default function Game({ gameId }) {
                   claimWinner={claimWinner}
                 />
                 <p className="desc">
-                  {isWinner &&
-                    "You are a winner - Distribute the pot below to claim your winnings"}
+                  {
+                    isWinner ? ("You are a winner - Distribute the pot below to claim your winnings")
+                      : ("Game has ended! Waiting for winnings distribution")
+                  }
                 </p>
                 {isWinner && (
                   <Button
