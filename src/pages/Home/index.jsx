@@ -17,7 +17,7 @@ import { Roadmap } from "../../roadmap";
 import { BigNumber } from "@ethersproject/bignumber";
 import { getHehIsLive } from "../../helpers/networks";
 import { Spin, Tooltip } from "antd";
-import { MAX_TOTAL_SUPPLY } from "../../helpers/constant";
+import { MAX_TOTAL_SUPPLY, MAX_PER_WALLET_OR_TX } from "../../helpers/constant";
 import { flipCardRenderer, simpleTextRenderer } from "../../helpers/timers";
 import { weiToEthDp } from "../../helpers/formatters";
 import PriceEChart from "../../components/Sale/PriceEchart";
@@ -32,7 +32,6 @@ export default function Home() {
     startingIndex,
     pricePerToken,
     totalSupply,
-    maxPerTxOrOwner,
     dataInitialised: nftSaleDataInitialised,
     startingIndexFetch,
     pricePerTokenFetch,
@@ -267,7 +266,7 @@ export default function Home() {
                               <div className="input-area">
                                 <select id="mint_num" name={"mint_amount"}>
                                   {Array.from(
-                                    { length: maxPerTxOrOwner.toNumber() },
+                                    { length: MAX_PER_WALLET_OR_TX },
                                     (_, i) => i + 1
                                   ).map((item, i) => (
                                     <option value={item} key={i}>
@@ -282,7 +281,7 @@ export default function Home() {
                                 placeholder="Price per token"
                               /> Each
                               </div>
-                              <p>* Max {maxPerTxOrOwner.toNumber()} NFTs per address</p>
+                              <p>* Max {MAX_PER_WALLET_OR_TX} NFTs per address</p>
                               <button
                                 className="btn-shadow btn-hover-pointer btn--mint"
                                 form="mint-form"
