@@ -21,6 +21,7 @@ import { MAX_TOTAL_SUPPLY } from "../../helpers/constant";
 import { flipCardRenderer, simpleTextRenderer } from "../../helpers/timers";
 import { weiToEthDp } from "../../helpers/formatters";
 import PriceEChart from "../../components/Sale/PriceEchart";
+import Account from "../../components/Account"
 
 const PUBLIC_SALE_START_TIME = parseInt(process.env.REACT_APP_PUBLIC_SALE_START_TIME, 10) || 0;
 
@@ -234,9 +235,9 @@ export default function Home() {
               <div className="mint-poker-hands--wrapper">
                 <div className="mint-poker-hands">
                   {
-                    chainId === null ? (
+                    chainId === null || !isAuthenticated ? (
                       <p className="connect-wallet-to-mint">
-                        Connect Wallet to Mint!
+                        <Account />
                       </p>
                     ) : (
                       hehIsLive ? (
