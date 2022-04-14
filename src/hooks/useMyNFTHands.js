@@ -39,7 +39,7 @@ export const useMyNFTHands = (options) => {
   }, [chainId, hehContractAddress, texasHoldemAddress]);
 
   useEffect(() => {
-    if(hehContractAddress && texasHoldemAddress && startingIndex && walletAddress) {
+    if(hehContractAddress && startingIndex && walletAddress) {
       if(startingIndex?.toNumber() > 0) {
         // Tokens and hands have been revealed. Load from Moralis's parsed & cached list
         getMyNFTHands();
@@ -70,7 +70,7 @@ export const useMyNFTHands = (options) => {
       }
     }
     // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [hehContractAddress, texasHoldemAddress, startingIndex, walletAddress]);
+  }, [hehContractAddress, startingIndex, walletAddress]);
 
   useEffect(() => {
     if (data?.result) {
