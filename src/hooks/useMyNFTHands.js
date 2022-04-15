@@ -12,9 +12,9 @@ export const useMyNFTHands = (options) => {
   const { resolveLink } = useIPFS();
 
   const [NFTHands, setNFTHands] = useState([]);
-  const [hehContractAddress, setHehContractAddress] = useState(getHoldemHeroesAddress( chainId ));
-  const [texasHoldemAddress, setTexasHoldemAddress] = useState(getTexasHoldemV1Address( chainId ));
-  const [gameIsLive, setGameIsLive] = useState(getGameIsLive( chainId ));
+  const [hehContractAddress, setHehContractAddress] = useState(getHoldemHeroesAddress(chainId));
+  const [texasHoldemAddress, setTexasHoldemAddress] = useState(getTexasHoldemV1Address(chainId));
+  const [gameIsLive, setGameIsLive] = useState(false);
 
   const {
     fetch: getMyNFTHands,
@@ -23,23 +23,18 @@ export const useMyNFTHands = (options) => {
     isLoading,
   } = useMoralisWeb3ApiCall(
     account.getNFTsForContract,
-    { chain: chainId, token_address: hehContractAddress, address: walletAddress, ...options },
+    { chain: chainId, token_address: hehContractAddress, address: walletAddress, ...options }
   );
 
   useEffect(() => {
-    if(chainId && !hehContractAddress && !texasHoldemAddress) {
+    if(chainId) {
       setHehContractAddress( getHoldemHeroesAddress( chainId ) )
       setTexasHoldemAddress( getTexasHoldemV1Address( chainId ) )
       setGameIsLive( getGameIsLive( chainId ) )
-    }
-  }, [chainId, hehContractAddress, texasHoldemAddress]);
-
-  useEffect(() => {
-    if(hehContractAddress && walletAddress) {
-      getMyNFTHands();
+      getMyNFTHands()
     }
     // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [hehContractAddress, walletAddress]);
+  }, [chainId])
 
   useEffect(() => {
     if (data?.result) {
@@ -49,8 +44,6 @@ export const useMyNFTHands = (options) => {
           NFT.metadata = JSON.parse(NFT.metadata);
           NFT.image = resolveLink(NFT.metadata?.image);
         }
-
-        // set some reference data for games - helps reduce multiple calls to contract during gameplay
         if (NFT?.token_id && gameIsLive) {
           fetchHandData(NFT.token_id)
             .then((d) => {
@@ -68,8 +61,6 @@ export const useMyNFTHands = (options) => {
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [data, gameIsLive]);
 
-  // attaches useful data regarding Hand ID and associated Card IDs for gameplay.
-  // Only called once the game contract is live
   const fetchHandData = async (tokenId) => {
     return await Moralis.executeFunction({
       contractAddress: texasHoldemAddress,
