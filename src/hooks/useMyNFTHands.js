@@ -12,7 +12,6 @@ export const useMyNFTHands = (options) => {
   const { resolveLink } = useIPFS();
 
   const [NFTHands, setNFTHands] = useState([]);
-  const [handsFetched, setHandsFetched] = useState(false);
   const [hehContractAddress, setHehContractAddress] = useState(getHoldemHeroesAddress( chainId ));
   const [texasHoldemAddress, setTexasHoldemAddress] = useState(getTexasHoldemV1Address( chainId ));
   const [gameIsLive, setGameIsLive] = useState(getGameIsLive( chainId ));
@@ -65,7 +64,6 @@ export const useMyNFTHands = (options) => {
         }
       }
       setNFTHands(NFTs);
-      setHandsFetched(true);
     }
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [data, gameIsLive]);
@@ -85,5 +83,5 @@ export const useMyNFTHands = (options) => {
       .catch((e) => console.log(e.message));
   };
 
-  return { getMyNFTHands, NFTHands, error, isLoading, handsFetched };
+  return { getMyNFTHands, NFTHands, error, isLoading };
 };
