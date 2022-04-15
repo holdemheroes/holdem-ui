@@ -2,10 +2,21 @@ import React from "react";
 import { useMoralis } from "react-moralis";
 import Countdown from "react-countdown";
 import { getDealRequestedText, getRoundStatusText } from "../../helpers/formatters";
+import { BigNumber } from "@ethersproject/bignumber"
 
 export const GameMetaData = ({ gameId, gameData, feesPaid, playersPerRound, numFinalHands, numHands, gameHasEnded, countdown = false }) => {
 
   const { Moralis } = useMoralis();
+
+  const myTotalBet = () => {
+    const bet = BigNumber.from(feesPaid[2]?.me || "0").add(BigNumber.from(feesPaid[4]?.me || "0"));
+    return Moralis.Units.FromWei(bet.toString(), 18);
+  }
+
+  const totalPot = () => {
+    const bet = BigNumber.from(feesPaid[2]?.total || "0").add(BigNumber.from(feesPaid[4]?.total || "0"));
+    return Moralis.Units.FromWei(bet.toString(), 18);
+  }
 
   const columns_r = [
     {
@@ -29,9 +40,9 @@ export const GameMetaData = ({ gameId, gameData, feesPaid, playersPerRound, numF
       key: "river",
     },
     {
-      title: "Total Pot",
-      dataIndex: "total_pot",
-      key: "total_pot",
+      title: "Totals",
+      dataIndex: "totals",
+      key: "totals",
     },
   ];
 
@@ -41,8 +52,8 @@ export const GameMetaData = ({ gameId, gameData, feesPaid, playersPerRound, numF
       item: "My Bet",
       flop: Moralis.Units.FromWei(feesPaid[2].me, 18),
       turn: Moralis.Units.FromWei(feesPaid[4].me, 18),
-      river: "",
-      total_pot: "",
+      river: gameData?.status === 6 ? myTotalBet() : "0",
+      totals: myTotalBet(),
     },
     {
       key: "Players",
@@ -50,7 +61,7 @@ export const GameMetaData = ({ gameId, gameData, feesPaid, playersPerRound, numF
       flop: playersPerRound[2].length,
       turn: playersPerRound[4].length,
       river: numFinalHands,
-      total_pot: "",
+      totals: numFinalHands,
     },
     {
       key: "Hands",
@@ -58,15 +69,15 @@ export const GameMetaData = ({ gameId, gameData, feesPaid, playersPerRound, numF
       flop: numHands[2],
       turn: numHands[4],
       river: numFinalHands,
-      total_pot: "",
+      totals: numFinalHands,
     },
     {
       key: "Total Bet",
       item: "Total Bet",
       flop: Moralis.Units.FromWei(feesPaid[2].total, 18),
       turn: Moralis.Units.FromWei(feesPaid[4].total, 18),
-      river: "",
-      total_pot: Moralis.Units.FromWei(gameData.totalPaidIn, 18),
+      river: gameData?.status === 6 ? totalPot() : "0",
+      totals: totalPot(),
     },
   ];
 
@@ -150,7 +161,7 @@ export const GameMetaData = ({ gameId, gameData, feesPaid, playersPerRound, numF
                   <td>{item.flop}</td>
                   <td>{item.turn}</td>
                   <td>{item.river}</td>
-                  <td>{item.total_pot}</td>
+                  <td>{item.totals}</td>
                 </tr>
               )
             })}

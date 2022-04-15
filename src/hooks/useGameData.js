@@ -298,7 +298,9 @@ export const useGameData = (gameId, backendPrefix) => {
       });
     }
 
-    setNumFinalHands(numFinalHands + 1);
+    if(data.attributes.confirmed) {
+      setNumFinalHands( numFinalHands + 1 );
+    }
   }
 
   function handleHandsPlayedData(results) {
