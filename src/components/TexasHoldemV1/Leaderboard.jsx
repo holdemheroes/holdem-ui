@@ -193,8 +193,13 @@ export const Leaderboard = ({ gameId, showWinnings = false, claimWinner }) => {
   useEffect(() => {
     const data = [];
     if (winningsInitialised && leaderboardInitialised) {
-      if (leaderboard.length && claimWinner)
-        claimWinner(leaderboard[0].player === account);
+      if (leaderboard.length && claimWinner) {
+        if(leaderboard.length > 1) {
+          claimWinner( leaderboard[0].player === account || leaderboard[1].player === account );
+        } else {
+          claimWinner( leaderboard[0].player === account );
+        }
+      }
       for (let i = 0; i < leaderboard.length; i += 1) {
         const h = (
           <>
