@@ -2,10 +2,16 @@ import React from "react";
 import { useMoralis } from "react-moralis";
 import Countdown from "react-countdown";
 import { getDealRequestedText, getRoundStatusText } from "../../helpers/formatters";
+import { BigNumber } from "@ethersproject/bignumber"
 
 export const GameMetaData = ({ gameId, gameData, feesPaid, playersPerRound, numFinalHands, numHands, gameHasEnded, countdown = false }) => {
 
   const { Moralis } = useMoralis();
+
+  const myTotalBet = () => {
+    const bet = BigNumber.from(feesPaid[2]?.me || "0").add(BigNumber.from(feesPaid[4].me?.me || "0"));
+    return Moralis.Units.FromWei(bet.toString(), 18);
+  }
 
   const columns_r = [
     {
@@ -29,7 +35,7 @@ export const GameMetaData = ({ gameId, gameData, feesPaid, playersPerRound, numF
       key: "river",
     },
     {
-      title: "Total Pot",
+      title: "Total",
       dataIndex: "total_pot",
       key: "total_pot",
     },
@@ -41,8 +47,8 @@ export const GameMetaData = ({ gameId, gameData, feesPaid, playersPerRound, numF
       item: "My Bet",
       flop: Moralis.Units.FromWei(feesPaid[2].me, 18),
       turn: Moralis.Units.FromWei(feesPaid[4].me, 18),
-      river: "",
-      total_pot: "",
+      river: gameData?.finalHand?.card1 >= 0 ? myTotalBet() : "0",
+      total_pot: myTotalBet(),
     },
     {
       key: "Players",
@@ -50,7 +56,7 @@ export const GameMetaData = ({ gameId, gameData, feesPaid, playersPerRound, numF
       flop: playersPerRound[2].length,
       turn: playersPerRound[4].length,
       river: numFinalHands,
-      total_pot: "",
+      total_pot: numFinalHands,
     },
     {
       key: "Hands",
@@ -58,14 +64,14 @@ export const GameMetaData = ({ gameId, gameData, feesPaid, playersPerRound, numF
       flop: numHands[2],
       turn: numHands[4],
       river: numFinalHands,
-      total_pot: "",
+      total_pot: numFinalHands,
     },
     {
       key: "Total Bet",
       item: "Total Bet",
       flop: Moralis.Units.FromWei(feesPaid[2].total, 18),
       turn: Moralis.Units.FromWei(feesPaid[4].total, 18),
-      river: "",
+      river: Moralis.Units.FromWei(gameData.totalPaidIn, 18),
       total_pot: Moralis.Units.FromWei(gameData.totalPaidIn, 18),
     },
   ];
