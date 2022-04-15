@@ -13,9 +13,9 @@ export const useMyNFTHands = (options) => {
 
   const [NFTHands, setNFTHands] = useState([]);
   const [handsFetched, setHandsFetched] = useState(false);
-  const [hehContractAddress, setHehContractAddress] = useState(null);
-  const [texasHoldemAddress, setTexasHoldemAddress] = useState(null);
-  const [gameIsLive, setGameIsLive] = useState(false);
+  const [hehContractAddress, setHehContractAddress] = useState(getHoldemHeroesAddress( chainId ));
+  const [texasHoldemAddress, setTexasHoldemAddress] = useState(getTexasHoldemV1Address( chainId ));
+  const [gameIsLive, setGameIsLive] = useState(getGameIsLive( chainId ));
 
   const {
     fetch: getMyNFTHands,
