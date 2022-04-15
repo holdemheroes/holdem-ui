@@ -25,7 +25,6 @@ export const useMyNFTHands = (options) => {
   } = useMoralisWeb3ApiCall(
     account.getNFTsForContract,
     { chain: chainId, token_address: hehContractAddress, address: walletAddress, ...options },
-    { autoFetch: false }
   );
 
   useEffect(() => {
