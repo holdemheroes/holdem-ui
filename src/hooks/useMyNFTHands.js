@@ -6,12 +6,13 @@ import abis from "../helpers/contracts";
 
 export const useMyNFTHands = (options) => {
   const { account } = useMoralisWeb3Api();
-  const { Moralis, chainId, account: walletAddress } = useMoralis();
+  const { Moralis, chainId, account: walletAddress, isAuthenticated } = useMoralis();
 
   const thAbi = abis.texas_holdem_v1;
   const { resolveLink } = useIPFS();
 
   const [NFTHands, setNFTHands] = useState([]);
+  const [dataInitialiseRequested, setDataInitialiseRequested] = useState(false);
   const [hehContractAddress, setHehContractAddress] = useState(getHoldemHeroesAddress(chainId));
   const [texasHoldemAddress, setTexasHoldemAddress] = useState(getTexasHoldemV1Address(chainId));
   const [gameIsLive, setGameIsLive] = useState(false);
@@ -23,18 +24,22 @@ export const useMyNFTHands = (options) => {
     isLoading,
   } = useMoralisWeb3ApiCall(
     account.getNFTsForContract,
-    { chain: chainId, token_address: hehContractAddress, address: walletAddress, ...options }
+    { chain: chainId, token_address: hehContractAddress, address: walletAddress, ...options },
+    { autoFetch: false }
   );
 
   useEffect(() => {
     if(chainId) {
-      setHehContractAddress( getHoldemHeroesAddress( chainId ) )
-      setTexasHoldemAddress( getTexasHoldemV1Address( chainId ) )
-      setGameIsLive( getGameIsLive( chainId ) )
-      getMyNFTHands()
+      setHehContractAddress( getHoldemHeroesAddress( chainId ) );
+      setTexasHoldemAddress( getTexasHoldemV1Address( chainId ) );
+      setGameIsLive( getGameIsLive( chainId ) );
+      if(!dataInitialiseRequested && !isLoading && isAuthenticated) {
+        getMyNFTHands();
+        setDataInitialiseRequested(true);
+      }
     }
     // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [chainId])
+  }, [chainId, dataInitialiseRequested, isLoading, isAuthenticated])
 
   useEffect(() => {
     if (data?.result) {
