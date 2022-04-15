@@ -7,10 +7,10 @@ import { NavLink } from "react-router-dom";
 import { useMoralis } from "react-moralis"
 
 export default function NFTBalance() {
-  const { NFTHands, isLoading, handsFetched } = useMyNFTHands();
+  const { NFTHands, isLoading } = useMyNFTHands();
   const { chainId } = useMoralis();
 
-  if (isLoading || !handsFetched) {
+  if (isLoading) {
     return <Spin className="spin_loader" />;
   }
 
