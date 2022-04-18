@@ -70,7 +70,7 @@ export default function Home() {
     if (currentBlock > 0 && startBlockNum && !saleTimeInitialised && revealTime) {
       const now = Math.floor(Date.now() / 1000);
       const blockDiff = startBlockNum.toNumber() - currentBlock;
-      const start = now + (blockDiff * 15) + 5;
+      const start = now + Math.round(blockDiff * 13.5) + 5;
       setSaleStartTime(start); // estimate based on 1 block every 15 seconds
       setSaleStartBlockDiff(blockDiff);
       setRevealTimeDiff(revealTime - now);
