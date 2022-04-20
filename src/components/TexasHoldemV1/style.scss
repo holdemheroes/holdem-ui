@@ -857,3 +857,19 @@
 
     }
 }
+
+.play--desktop {
+    display: block;
+
+    @media (max-width: 1024px) {
+        display: none;
+    }
+}
+
+.play--mobile {
+    display: none;
+
+    @media (max-width: 1024px) {
+        display: block;
+    }
+}

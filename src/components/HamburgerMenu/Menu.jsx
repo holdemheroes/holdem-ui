@@ -14,6 +14,11 @@ const Menu = ({ open, setOpen, isAuthenticated }) => {
       <NavLink to="/Rules" onClick={() => setOpen(false)}>
         Rules
       </NavLink>
+      {isAuthenticated && (
+        <NavLink to="/Play" onClick={() => setOpen(false)}>
+          Play
+        </NavLink>
+      )}
       <Community isMobile={true} />
       {!isAuthenticated && <Account />}
     </div>

@@ -66,7 +66,7 @@ export const extractErrorMessage = (e) => {
         case "execution reverted: > max per tx":
           return "Cannot mint more than maximum"
         case "execution reverted: > mint limit":
-          return "Blind mint limit reached for this wallet"
+          return "Sorry! You have reached the Blind mint limit for this wallet"
         case "execution reverted: exceeds supply":
           return "Cannot mint more than supply!"
         case "execution reverted: not revealed":
@@ -77,7 +77,7 @@ export const extractErrorMessage = (e) => {
           return "Invalid Token ID"
         default:
           // otherwise, just return the parsed message
-          return errObj.message
+          return errObj.message.replace("execution reverted: ", "")
       }
     } catch(pErr) {
       // couldn't turn into JSON. Just return original message

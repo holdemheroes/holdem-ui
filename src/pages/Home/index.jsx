@@ -17,10 +17,13 @@ import { Roadmap } from "../../roadmap";
 import { BigNumber } from "@ethersproject/bignumber";
 import { getHehIsLive } from "../../helpers/networks";
 import { Spin, Tooltip } from "antd";
-import { MAX_TOTAL_SUPPLY } from "../../helpers/constant";
+import { MAX_TOTAL_SUPPLY, MAX_PER_WALLET_OR_TX } from "../../helpers/constant";
 import { flipCardRenderer, simpleTextRenderer } from "../../helpers/timers";
 import { weiToEthDp } from "../../helpers/formatters";
 import PriceEChart from "../../components/Sale/PriceEchart";
+import Account from "../../components/Account"
+
+const PUBLIC_SALE_START_TIME = parseInt(process.env.REACT_APP_PUBLIC_SALE_START_TIME, 10) || 0;
 
 export default function Home() {
   const {
@@ -29,7 +32,6 @@ export default function Home() {
     startingIndex,
     pricePerToken,
     totalSupply,
-    maxPerTxOrOwner,
     dataInitialised: nftSaleDataInitialised,
     startingIndexFetch,
     pricePerTokenFetch,
@@ -68,7 +70,7 @@ export default function Home() {
     if (currentBlock > 0 && startBlockNum && !saleTimeInitialised && revealTime) {
       const now = Math.floor(Date.now() / 1000);
       const blockDiff = startBlockNum.toNumber() - currentBlock;
-      const start = now + blockDiff * 15;
+      const start = now + Math.round(blockDiff * 13.5) + 5;
       setSaleStartTime(start); // estimate based on 1 block every 15 seconds
       setSaleStartBlockDiff(blockDiff);
       setRevealTimeDiff(revealTime - now);
@@ -232,9 +234,9 @@ export default function Home() {
               <div className="mint-poker-hands--wrapper">
                 <div className="mint-poker-hands">
                   {
-                    chainId === null ? (
+                    chainId === null || !isAuthenticated ? (
                       <p className="connect-wallet-to-mint">
-                        Connect Wallet to Mint!
+                        <Account />
                       </p>
                     ) : (
                       hehIsLive ? (
@@ -264,7 +266,7 @@ export default function Home() {
                               <div className="input-area">
                                 <select id="mint_num" name={"mint_amount"}>
                                   {Array.from(
-                                    { length: maxPerTxOrOwner.toNumber() },
+                                    { length: MAX_PER_WALLET_OR_TX },
                                     (_, i) => i + 1
                                   ).map((item, i) => (
                                     <option value={item} key={i}>
@@ -279,7 +281,7 @@ export default function Home() {
                                 placeholder="Price per token"
                               /> Each
                               </div>
-                              <p>* Max {maxPerTxOrOwner.toNumber()} NFTs per address</p>
+                              <p>* Max {MAX_PER_WALLET_OR_TX} NFTs per address</p>
                               <button
                                 className="btn-shadow btn-hover-pointer btn--mint"
                                 form="mint-form"
@@ -290,10 +292,13 @@ export default function Home() {
                                 }
                               >
                                 {saleStartBlockDiff > 0 ? (
-                                  <Countdown
-                                    date={saleStartTime * 1000}
-                                    renderer={simpleTextRenderer}
-                                  />
+                                  <>
+                                    <Countdown
+                                      date={saleStartTime * 1000}
+                                      renderer={simpleTextRenderer}
+                                    />{" "}
+                                    ({saleStartBlockDiff} Blocks)
+                                  </>
                                 ) : (
                                   "Mint"
                                 )}
@@ -309,7 +314,19 @@ export default function Home() {
                         )
                       ) : (
                         <p className="connect-wallet-to-mint">
-                          Mint Sale coming soon!
+                          {
+                            PUBLIC_SALE_START_TIME > 0 ? (
+                              <p className="connect-wallet-to-mint">
+                                Public Sale in <Countdown
+                                date={PUBLIC_SALE_START_TIME * 1000}
+                                renderer={simpleTextRenderer}
+                              />
+                              </p>
+                            ) : (
+                              "Mint Sale coming soon!"
+                            )
+                          }
+
                         </p>
                       )
                     )
@@ -351,8 +368,7 @@ export default function Home() {
           <div className="price-chart-area">
             {saleStartBlockDiff <= 0 &&
               revealTimeDiff > 0 &&
-              startIdx === 0 &&
-              totalSupply < MAX_TOTAL_SUPPLY && <PriceEChart />}
+              startIdx === 0 && <PriceEChart />}
           </div>
 
           <Timeline />

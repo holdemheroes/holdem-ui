@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react"
 import { useMoralis } from "react-moralis";
 import { Button, Checkbox, Form, Radio, Spin, Tooltip } from "antd";
 import { PlayingCard } from "../PlayingCards/PlayingCard";
@@ -7,21 +7,24 @@ import { Hand } from "./Hand";
 import { GameMetaData } from "./GameMetaData";
 import { useGameData } from "../../hooks/useGameData";
 import abis from "../../helpers/contracts";
-import { openNotification } from "../../helpers/notifications";
+import { extractErrorMessage, openNotification } from "../../helpers/notifications"
 import {
   getBakendObjPrefix,
   getTexasHoldemV1Address,
 } from "../../helpers/networks";
 import { getRoundStatusText } from "../../helpers/formatters";
+import { BigNumber } from "@ethersproject/bignumber"
 
 export default function Game({ gameId }) {
   const stageName = ["", "flop", "", "turn", "", "river"];
 
-  const { Moralis, chainId } = useMoralis();
+  const { Moralis, chainId, account } = useMoralis();
   const backendPrefix = getBakendObjPrefix(chainId);
 
   const abi = abis.texas_holdem_v1;
   const contractAddress = getTexasHoldemV1Address(chainId);
+
+  const [ethersContract, setEthersContract] = useState(null);
 
   const options = {
     contractAddress,
@@ -43,14 +46,32 @@ export default function Game({ gameId }) {
     eliminatedInRiver,
   } = useGameData(gameId, backendPrefix);
 
-  if (eliminatedInRiver && !gameHasEnded) {
-    openNotification({
-      message: "Hand eliminated",
-      description:
-        "Your hand was a part of the community cards and can not be played",
-      type: "error",
-    });
-  }
+  useEffect(() => {
+    (async () => {
+      if(chainId && !ethersContract) {
+        const ethers = Moralis.web3Library;
+        const web3Provider = await Moralis.enableWeb3();
+        const c = new ethers.Contract(
+          contractAddress,
+          abi,
+          web3Provider.getSigner()
+        );
+        setEthersContract(c);
+      }
+    })();
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [chainId, ethersContract, contractAddress]);
+
+  useEffect(() => {
+    if (eliminatedInRiver && !gameHasEnded) {
+      openNotification({
+        message: "Hand eliminated",
+        description:
+          "Your hand was a part of the community cards and can not be played",
+        type: "error",
+      });
+    }
+  }, [eliminatedInRiver, gameHasEnded]);
 
   const [potentialFinalRiver, setPotentialFinalRiver] = useState([]);
   const [potentialFinalToken, setPotentialFinalToken] = useState([]);
@@ -112,9 +133,8 @@ export default function Game({ gameId }) {
       });
     } catch (e) {
       openNotification({
-        message: "🔊",
-        description: "The round has already ended",
-        // description: `📃 ${e.message}`,
+        message: "🔊 Error",
+        description: extractErrorMessage(e.message),
         type: "error",
       });
       console.log(e);
@@ -122,8 +142,6 @@ export default function Game({ gameId }) {
   };
 
   const handlePlayFinalHand = async (values) => {
-    console.log(values);
-
     if (!values.river_cards) {
       openNotification({
         message: "🔊 Error",
@@ -151,34 +169,40 @@ export default function Game({ gameId }) {
       return;
     }
 
-    const opts = {
-      ...options,
-      functionName: "playFinalHand",
-      params: {
-        _tokenId: String(values.final_token),
-        _gameId: String(gameId),
-        cardIds: values.river_cards,
-      },
-    };
-
-    try {
-      const tx = await Moralis.executeFunction({
-        awaitReceipt: false,
-        ...opts,
+    ethersContract.estimateGas
+      .playFinalHand(String(values.final_token), values.river_cards, String(gameId), { from: account })
+      .then(function (estimate) {
+        return estimate;
+      })
+      .then(function (estimate) {
+        // increase gas limit to compensate for leaderboard state fluctuations
+        const gasLimit = estimate.add(BigNumber.from("200000"));
+        ethersContract
+          .playFinalHand(String(values.final_token), values.river_cards, String(gameId), { from: account, gasLimit })
+          .then(function (tx) {
+            openNotification({
+              message: "🔊 Final Hand Played",
+              description: `📃 Tx Hash: ${tx.hash}`,
+              type: "success",
+            });
+          })
+          .catch(function (e) {
+            openNotification({
+              message: "🔊 Error",
+              description: `📃 ${extractErrorMessage(e)}`,
+              type: "error",
+            });
+            console.log(e);
+          });
+      })
+      .catch(function (e) {
+        openNotification({
+          message: "🔊 Error",
+          description: `📃 ${extractErrorMessage(e)}`,
+          type: "error",
+        });
+        console.log(e);
       });
-      openNotification({
-        message: "🔊 Final Hand Played",
-        description: `📃 Tx Hash: ${tx.hash}`,
-        type: "success",
-      });
-    } catch (e) {
-      openNotification({
-        message: "🔊 Error",
-        description: `📃 ${e.message}`,
-        type: "error",
-      });
-      console.log(e);
-    }
   };
 
   const handleEndGame = async () => {
@@ -203,7 +227,7 @@ export default function Game({ gameId }) {
     } catch (e) {
       openNotification({
         message: "🔊 Error",
-        description: `📃 ${e.message}`,
+        description: `📃 ${extractErrorMessage(e.message)}`,
         type: "error",
       });
       console.log(e);
@@ -418,8 +442,10 @@ export default function Game({ gameId }) {
                   claimWinner={claimWinner}
                 />
                 <p className="desc">
-                  {isWinner &&
-                    "You are a winner - Distribute the pot below to claim your winnings"}
+                  {
+                    isWinner ? ("You are a winner - Distribute the pot below to claim your winnings")
+                      : ("Game has ended! Waiting for winnings distribution")
+                  }
                 </p>
                 {isWinner && (
                   <Button

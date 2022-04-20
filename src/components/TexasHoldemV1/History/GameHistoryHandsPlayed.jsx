@@ -25,6 +25,10 @@ export const GameHistoryHandsPlayed = ({ gameId, round1Price, round2Price, finis
   const [handsPlayedInitialisedTurn, setHandsPlayedInitialisedTurn] = useState(false);
   const [highestRoundPlayed, setHighestRoundPlayed] = useState(0);
 
+  const [riverCards, setRiverCards] = useState(null);
+  const [riverCardsLoading, setRiverCardsLoading] = useState(false);
+  const [riverCardsFetched, setRiverCardsFetched] = useState(false);
+
   const columns = [
     {
       title: '#',
@@ -131,6 +135,28 @@ export const GameHistoryHandsPlayed = ({ gameId, round1Price, round2Price, finis
     }
   }
 
+  function fetchRiverCards() {
+    setRiverCardsLoading(true);
+    const THCardDealt = Moralis.Object.extend(`${backendPrefix}THCardDealt`);
+    const queryTHCardDealt = new Moralis.Query(THCardDealt);
+    queryTHCardDealt
+      .equalTo("gameId", String(gameId));
+    queryTHCardDealt.find()
+      .then((result) => {
+        setRiverCardsFetched(true);
+        const r = [];
+        if (result.length > 0) {
+          for(let i = 0; i < result.length; i += 1) {
+            r.push(result[i].get("cardId"))
+          }
+          setRiverCards(r);
+        } else {
+          setRiverCards([]);
+        }
+      })
+      .catch((e) => console.log(e.message));
+  }
+
   useEffect(() => {
     if (!handsPlayedInitialisedFlop) {
       setHandsPlayedInitialisedFlop(true);
@@ -175,6 +201,14 @@ export const GameHistoryHandsPlayed = ({ gameId, round1Price, round2Price, finis
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [totalWinningsInitialised, totalFeesPaidFlop, totalFeesPaidTurn]);
 
+
+  // fetch River cards
+  useEffect(() => {
+    if(gameId && !riverCards && !riverCardsFetched && !riverCardsLoading) {
+      fetchRiverCards()
+    }
+  }, [gameId, riverCards, riverCardsLoading, riverCardsFetched])
+
   if (!handsPlayedInitialisedFlop && !handsPlayedInitialisedTurn && !totalWinningsInitialised) {
     return <Spin className="spin_loader" />;
   }
@@ -196,6 +230,23 @@ export const GameHistoryHandsPlayed = ({ gameId, round1Price, round2Price, finis
 
       {
         !finished && <p className="desc">Highest Round Played: {getDealRequestedText(highestRoundPlayed)}</p>
+      }
+
+      {
+        riverCards && <>
+          <p className="subtitle">River Cards Dealt</p>
+          <div className={"game_history_river_cards"}>
+            {riverCards.map((item, idx) => (
+              <div key={`history_river_col_${item}_${gameId}`}>
+                <PlayingCard
+                  cardId={item}
+                  key={`history_card_in_river${item}_${gameId}`}
+                  width={80}
+                />
+              </div>
+            ))}
+          </div>
+        </>
       }
 
       <p className="subtitle">Hands played in Flop</p>
