@@ -1,65 +1,95 @@
 .timeline-wrapper {
-    margin-top: 50px;
+    margin-top: 100px;
 
     @media (max-width: 1024px) {
         display: none;
     }
 
     .timeline {
-        width          : 60%;
-        margin         : 0 auto;
-        position       : relative;
+        list-style-type: none;
         display        : flex;
-        justify-content: space-between;
         align-items    : center;
+        justify-content: center;
+    }
 
-        .line {
-            position  : absolute;
-            top       : 50%;
-            transform : translateY(-50%);
-            width     : 100%;
-            min-height: 2px;
-            background: linear-gradient(to right, rgba(255, 255, 255, 1) 0%, rgba(255, 255, 255, 0.15) 25%, rgba(255, 255, 255, 1) 50%, rgba(255, 255, 255, 0.15) 75%, rgba(255, 255, 255, 1) 100%);
-        }
+    .li {
+        transition: all 200ms ease-in;
+    }
 
-        .timestop {
-            position        : relative;
+    .timestamp {
+        width         : 300px;
+        padding-top   : 40px;
+        display       : flex;
+        flex-direction: column;
+        align-items   : center;
+        border-top    : 2px solid #D6DCE0;
+        position      : relative;
+        transition    : all 200ms ease-in;
+
+        &:before {
+            content         : '';
             width           : 25px;
             height          : 25px;
-            border-radius   : 50%;
             background-color: white;
+            border-radius   : 25px;
+            border          : 1px solid #ddd;
+            position        : absolute;
+            top             : 0;
+            left            : 50%;
+            transform       : translate(-50%, -50%);
+            transition      : all 200ms ease-in;
+        }
+
+        .date {
+            color        : white;
+            text-align   : center;
+            font-family  : "Josefin Sans", sans-serif;
+            font-weight  : bold;
+            font-size    : 37px;
+            line-height  : 37px;
+            margin-bottom: 16px;
+        }
+
+        .title {
+            color      : white;
+            text-align : center;
+            font-family: Karla, sans-serif;
+            font-size  : 25px;
+            line-height: 29px;
         }
     }
 
-    .description {
-        display        : flex;
-        justify-content: space-between;
-        align-items    : center;
-        width          : calc(60% + 275px);
-        margin-left    : auto;
-        margin-right   : auto;
-        margin-top     : 40px;
+    .li.complete {
+        .timestamp {
+            border-top: 2px solid #133cce;
 
-        .text {
-            width: 300px;
-
-            p {
-                text-align: center;
-                color     : white;
+            &:before {
+                background-color: #133cce;
+                border          : none;
+                transition      : all 200ms ease-in;
             }
+        }
+    }
 
-            .date {
-                font-family  : "Josefin Sans", sans-serif;
-                font-weight  : bold;
-                font-size    : 37px;
-                line-height  : 37px;
-                margin-bottom: 16px;
-            }
+    @media (min-device-width: 320px) and (max-device-width: 700px) {
+        .timeline {
+            list-style-type: none;
+            display        : block;
+        }
 
-            .title {
-                font-family: Karla, sans-serif;
-                font-size  : 25px;
-                line-height: 29px;
+        .li {
+            transition: all 200ms ease-in;
+            display   : flex;
+            width     : inherit;
+        }
+
+        .timestamp {
+            width: 100px;
+
+            &:before {
+                left      : -8%;
+                top       : 30%;
+                transition: all 200ms ease-in;
             }
         }
     }
