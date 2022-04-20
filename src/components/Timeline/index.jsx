@@ -1,35 +1,52 @@
-// import { useState, useEffect } from "react";
+import { useState, useEffect } from "react";
 import "./style.scss";
 
 export default function Timeline() {
+  const now = new Date();
+  const y = now.getFullYear();
+  const m = now.getMonth();
+  const d = now.getDate();
 
-    return (
-        <div className="timeline-wrapper">
-            <div className="timeline">
-                <div className="line"></div>
-
-                <div className="timestop">
-                </div>
-                <div className="timestop">
-                </div>
-                <div className="timestop">
-                </div>
-            </div>
-
-            <div className="description">
-                <div className="text">
-                    <p className="date"></p>
-                    <p className="title">NFT Minting<br />on Ethereum</p>
-                </div>
-                <div className="text">
-                    <p className="date"></p>
-                    <p className="title">Card Reveal +<br />Polygon Card Airdrop</p>
-                </div>
-                <div className="text">
-                    <p className="date"></p>
-                    <p className="title">Poker Games Live <br />on both chains</p>
-                </div>
-            </div>
-        </div>
-    );
+  return (
+    <div className="timeline-wrapper">
+      <ul class="timeline" id="timeline">
+        <li
+          class={`li ${
+            y == 2022 && m == 3 && d >= 20 && d < 23 ? "complete" : ""
+          }`}
+        >
+          <div class="timestamp">
+            <p className="date">Apr 20</p>
+            <p className="title">
+              NFT Minting
+              <br />
+              on Ethereum
+            </p>
+          </div>
+        </li>
+        <li
+          class={`li ${
+            y == 2022 && m == 3 && d >= 23 && d < 26 ? "complete" : ""
+          }`}
+        >
+          <div class="timestamp">
+            <p className="date">Apr 23</p>
+            <p className="title">
+              Card Reveal +<br />
+              Polygon Card Airdrop
+            </p>
+          </div>
+        </li>
+        <li class={`li ${y == 2022 && m == 3 && d >= 26 ? "complete" : ""}`}>
+          <div class="timestamp">
+            <p className="date">Apr 26</p>
+            <p className="title">
+              Poker Games Live <br />
+              on both chains
+            </p>
+          </div>
+        </li>
+      </ul>
+    </div>
+  );
 }
