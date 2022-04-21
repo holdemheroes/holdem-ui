@@ -2,17 +2,19 @@ import React, { useState, useEffect } from "react";
 import { useMoralis } from "react-moralis";
 import abis from "../../helpers/contracts";
 import { getHoldemHeroesAddress, getOpenSeaUrl } from "../../helpers/networks";
-import { Card, Image, Tooltip } from "antd";
+import { Card, Image, Spin, Tooltip } from "antd"
 import NFTMeta from "../NFTMeta/NFTMeta";
 import { decodeNftUriToJson } from "../../helpers/nft";
 import { extractErrorMessage, openNotification } from "helpers/notifications"
-import { weiToEthDp } from "../../helpers/formatters"
+import { usePostRevealPrice } from "../../hooks/usePostRevealPrice"
 
-export default function NFT({ tokenId, mintedTokens, pricePerToken }) {
+export default function NFT({ tokenId, mintedTokens }) {
   const { Moralis, chainId } = useMoralis();
+
+  const { price, fetched: priceIsFetched } = usePostRevealPrice(tokenId);
+
   const [nftData, setNftData] = useState(null);
   const [nftOwner, setNftOwner] = useState(null);
-  const [setError] = useState(null);
   const abi = abis.heh_nft;
   const contractAddress = getHoldemHeroesAddress(chainId);
 
@@ -43,7 +45,7 @@ export default function NFT({ tokenId, mintedTokens, pricePerToken }) {
         }).then((response) =>
           setNftOwner(response)
         ).catch((error) =>
-          setError(error)
+          console.log(error)
         );
       }
     } else {
@@ -60,12 +62,11 @@ export default function NFT({ tokenId, mintedTokens, pricePerToken }) {
   const nft = decodeNftUriToJson(nftData);
 
   const postRevealMint = async (t) => {
-    const mintPrice = Moralis.Units.ETH(weiToEthDp(pricePerToken, 5))
     const options = {
       contractAddress,
       functionName: "mintNFTPostReveal",
       abi,
-      msgValue: String(mintPrice),
+      msgValue: price?.toString() || "0",
       params: {
         tokenId: String(t)
       },
@@ -91,11 +92,18 @@ export default function NFT({ tokenId, mintedTokens, pricePerToken }) {
 
   let block = null;
   if (nftOwner === "no") {
-    block = <Tooltip title={`Mint NFT #${tokenId}`}>
-      <a href={"/"} onClick={(e) => { e.preventDefault(); postRevealMint(tokenId); }}>
-        Mint Ξ{weiToEthDp(pricePerToken, 5)}
-      </a>
-    </Tooltip>;
+    if(priceIsFetched && price !== null) {
+      block = <Tooltip title={`Mint NFT #${tokenId}`}>
+        <a href={"/"} onClick={( e ) => {
+          e.preventDefault()
+          postRevealMint( tokenId )
+        }}>
+          Mint Ξ{Moralis.Units.FromWei(price?.toString() || "0" )}
+        </a>
+      </Tooltip>
+    } else {
+      block = <Spin />
+    }
   } else {
     const os = `${getOpenSeaUrl(chainId)}/assets/${contractAddress}/${tokenId}`;
     block = <a href={os} target={"_blank"} rel={"noreferrer"} className="minted">View on OpenSea</a>;
