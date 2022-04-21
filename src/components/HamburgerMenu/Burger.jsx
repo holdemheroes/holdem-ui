@@ -1,4 +1,4 @@
-import { useState, useEffect, useRef } from "react";
+import React from "react";
 
 const Burger = ({ open, setOpen }) => {
   return (
