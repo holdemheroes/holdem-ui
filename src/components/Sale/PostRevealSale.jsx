@@ -4,7 +4,7 @@ import NFTList from "./NFTList";
 import { useMoralis } from "react-moralis";
 import { MAX_TOTAL_SUPPLY } from "../../helpers/constant";
 
-export default function PostRevealSale({ pricePerToken, mintedTokens, l1 }) {
+export default function PostRevealSale({ mintedTokens, l1 }) {
 
   const [currentItems, setCurrentItems] = useState(null);
   const [tokensPerPage, setTokensPerPage] = useState(12);
@@ -112,7 +112,7 @@ export default function PostRevealSale({ pricePerToken, mintedTokens, l1 }) {
         </div>
 
         <div className="nft_list-wrapper">
-          <NFTList currentTokens={currentItems} mintedTokens={mintedTokens} pricePerToken={pricePerToken} />
+          <NFTList currentTokens={currentItems} mintedTokens={mintedTokens} />
 
           {tokens.length ?
             <div>

@@ -1,4 +1,4 @@
-import { useState, useEffect } from "react";
+import React from "react";
 import "./style.scss";
 
 export default function Timeline() {
@@ -9,13 +9,13 @@ export default function Timeline() {
 
   return (
     <div className="timeline-wrapper">
-      <ul class="timeline" id="timeline">
+      <ul className="timeline" id="timeline">
         <li
           class={`li ${
-            y == 2022 && m == 3 && d >= 20 && d < 23 ? "complete" : ""
+            y === 2022 && m === 3 && d >= 20 && d < 23 ? "complete" : ""
           }`}
         >
-          <div class="timestamp">
+          <div className="timestamp">
             <p className="date">Apr 20</p>
             <p className="title">
               NFT Minting
@@ -25,11 +25,11 @@ export default function Timeline() {
           </div>
         </li>
         <li
-          class={`li ${
-            y == 2022 && m == 3 && d >= 23 && d < 26 ? "complete" : ""
+          className={`li ${
+            y === 2022 && m === 3 && d >= 23 && d < 26 ? "complete" : ""
           }`}
         >
-          <div class="timestamp">
+          <div className="timestamp">
             <p className="date">Apr 23</p>
             <p className="title">
               Card Reveal +<br />
@@ -37,8 +37,8 @@ export default function Timeline() {
             </p>
           </div>
         </li>
-        <li class={`li ${y == 2022 && m == 3 && d >= 26 ? "complete" : ""}`}>
-          <div class="timestamp">
+        <li className={`li ${y === 2022 && m === 3 && d >= 26 ? "complete" : ""}`}>
+          <div className="timestamp">
             <p className="date">Apr 26</p>
             <p className="title">
               Poker Games Live <br />
