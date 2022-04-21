@@ -1,4 +1,4 @@
-import { useState, useEffect, useRef } from "react";
+import { useState, useRef } from "react";
 import Burger from "./Burger";
 import Menu from "./Menu";
 import "./style.scss";

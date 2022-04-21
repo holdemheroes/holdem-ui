@@ -12,9 +12,7 @@ export default function L1Marketplace() {
   const {
     startingIndex,
     revealTime,
-    pricePerToken,
     startingIndexFetch,
-    pricePerTokenFetch,
   } = useNFTSaleInfo();
 
   const { chainId } = useMoralis();
@@ -59,7 +57,6 @@ export default function L1Marketplace() {
   useEffect(() => {
     const timeout = setTimeout(() => {
       startingIndexFetch()
-      pricePerTokenFetch()
     }, 10000);
 
     return () => {
@@ -71,8 +68,7 @@ export default function L1Marketplace() {
     chainId === null ||
     backendPrefix === null ||
     startingIndex === null ||
-    revealTime === null ||
-    pricePerToken === null
+    revealTime === null
   ) {
     return <Spin className="spin_loader" />;
   }
@@ -93,7 +89,6 @@ export default function L1Marketplace() {
           <p className="desc">Waiting for Reveal & Distribution</p>
         ) : (
           <PostRevealSale
-            pricePerToken={pricePerToken}
             mintedTokens={minted}
             l1={true}
           />
