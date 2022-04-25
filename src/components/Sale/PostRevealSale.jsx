@@ -4,12 +4,12 @@ import NFTList from "./NFTList";
 import { useMoralis } from "react-moralis";
 import { MAX_TOTAL_SUPPLY } from "../../helpers/constant";
 
-export default function PostRevealSale({ mintedTokens, l1 }) {
+export default function PostRevealSale({ mintedTokens }) {
 
   const [currentItems, setCurrentItems] = useState(null);
   const [tokensPerPage, setTokensPerPage] = useState(12);
   const [pageNumber, setPageNumber] = useState(1);
-  const [minted, setMinted] = useState(true);
+  const [minted, setMinted] = useState(false);
   const [tokens, setTokens] = useState([]);
   const [shape, setShape] = useState(["Offsuit", "Suited", "Pair"]);
   const [ranksRange, setRanksRange] = useState([1, 169]);
@@ -87,14 +87,12 @@ export default function PostRevealSale({ mintedTokens, l1 }) {
 
   return (
     <>
-      {
-        l1 && <div className="sales-header">
-          <ul className="tabs" onClick={switchTab}>
-            <li><p className={!minted ? "active" : ""}>Not minted</p></li>
-            <li><p className={minted ? "active" : ""}>Minted</p></li>
-          </ul>
-        </div>
-      }
+      <div className="sales-header">
+        <ul className="tabs" onClick={switchTab}>
+          <li><p className={!minted ? "active" : ""}>Not minted</p></li>
+          <li><p className={minted ? "active" : ""}>Minted</p></li>
+        </ul>
+      </div>
 
       <div className="sales-main">
         <div className="filter_sidebar">
