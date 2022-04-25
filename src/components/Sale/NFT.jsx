@@ -1,7 +1,7 @@
 import React, { useState, useEffect } from "react";
 import { useMoralis } from "react-moralis";
 import abis from "../../helpers/contracts";
-import { getHoldemHeroesAddress, getOpenSeaUrl } from "../../helpers/networks";
+import { getCurrencySymbol, getHoldemHeroesAddress, getOpenSeaUrl } from "../../helpers/networks"
 import { Card, Image, Spin, Tooltip } from "antd"
 import NFTMeta from "../NFTMeta/NFTMeta";
 import { decodeNftUriToJson } from "../../helpers/nft";
@@ -98,7 +98,7 @@ export default function NFT({ tokenId, mintedTokens }) {
           e.preventDefault()
           postRevealMint( tokenId )
         }}>
-          Mint Ξ{Moralis.Units.FromWei(price?.toString() || "0" )}
+          Mint {Moralis.Units.FromWei(price?.toString() || "0" )} {getCurrencySymbol(chainId)}
         </a>
       </Tooltip>
     } else {
