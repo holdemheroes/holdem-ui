@@ -1,8 +1,7 @@
 import { useMoralis } from "react-moralis"
 import abis from "../helpers/contracts"
 import { useEffect, useState } from "react"
-import { getChainType, getHoldemHeroesAddress } from "../helpers/networks"
-import { BigNumber } from "@ethersproject/bignumber"
+import { getHoldemHeroesAddress } from "../helpers/networks"
 
 export const usePostRevealPrice = (tokenId) => {
   const { Moralis, isInitialized, chainId } = useMoralis();
@@ -28,23 +27,18 @@ export const usePostRevealPrice = (tokenId) => {
 
   const priceFetch = async () => {
     if(chainId && contractAddress && options) {
-      if ( getChainType( chainId ) === "l1" ) {
-        Moralis.executeFunction( {
-          functionName: "getPostRevealNftPrice",
-          params: {
-            "_tokenId": tokenId,
-          },
-          ...options
+      Moralis.executeFunction( {
+        functionName: "getPostRevealNftPrice",
+        params: {
+          "_tokenId": tokenId,
+        },
+        ...options
+      } )
+        .then( ( result ) => {
+          setPrice( result )
+          setFetched(true)
         } )
-          .then( ( result ) => {
-            setPrice( result )
-            setFetched(true)
-          } )
-          .catch( ( e ) => console.log( e.message ) );
-      } else {
-        setPrice( BigNumber.from( "0" ) )
-        setFetched(true)
-      }
+        .catch( ( e ) => console.log( e.message ) );
     }
   }
 
