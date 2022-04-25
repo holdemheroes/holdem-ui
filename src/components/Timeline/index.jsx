@@ -11,7 +11,7 @@ export default function Timeline() {
     <div className="timeline-wrapper">
       <ul className="timeline" id="timeline">
         <li
-          class={`li ${
+          className={`li ${
             y === 2022 && m === 3 && d >= 20 && d < 23 ? "complete" : ""
           }`}
         >
