@@ -35,7 +35,7 @@ export default function L1Marketplace() {
   }, [revealTime]);
 
   const { data: mintedRes } = useMoralisQuery(
-    "EthHEHTransfer",
+    `${backendPrefix}HEHTransfer`,
     (query) =>
       query
         .equalTo("from", "0x0000000000000000000000000000000000000000")
