@@ -58,7 +58,7 @@ export const networkConfigs = {
     openSeaUrl: "https://opensea.io",
     playingCardsAddress: "0xC3a3D9f2263A82b740B921FBB386eC5820FDDf9e",
     holdemHeroesAddress: "0xfe54470e3e7676bA20A6FF27f0358651d0525CAa",
-    texasHoldemV1Address: "",
+    texasHoldemV1Address: "0x1ED2b5820C8BB558a99696b3C140000926Df8F2f",
     chainType: "l2",
     prefix: "Polygon",
   },
